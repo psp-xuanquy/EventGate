@@ -1,0 +1,6 @@
+@EventGate_HostAddress = http://localhost:5077
+
+GET {{EventGate_HostAddress}}/eventgate/
+Accept: application/json
+
+###
