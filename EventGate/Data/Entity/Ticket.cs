@@ -7,11 +7,9 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string TicketID { get; set; } = Guid.NewGuid().ToString();
-        public string Seat { get; set; }
-        public string Gate { get; set; }
+        public string TicketName { get; set; }
         public decimal Price { get; set; }
-        public string QRCode { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime TicketDate { get; set; }
         public bool IsUsed { get; set; }
 
         [ForeignKey("Event")]

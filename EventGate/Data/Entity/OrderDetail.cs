@@ -7,8 +7,8 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string OrderDetailID { get; set; } = Guid.NewGuid().ToString();
-        public decimal UnitPrice { get; set; }
         public int Quantity { get; set; }
+        public decimal Price { get; set; }
 
         [ForeignKey("Order")]
         public string OrderID { get; set; }

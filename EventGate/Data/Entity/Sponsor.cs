@@ -8,11 +8,11 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string SponsorID { get; set; } = Guid.NewGuid().ToString();
-        public string Name { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string Address { get; set; }
-        public string Website { get; set; }
+        public string SponsorName { get; set; }
+        public string SponsorPhone { get; set; }
+        public string SponsorEmail { get; set; }
+        public string SponsorAddress { get; set; }
+        public string SponsorWebsite { get; set; }
 
         [ForeignKey("ContactPerson")]
         public string ContactPersonID { get; set; }

@@ -64,11 +64,6 @@ namespace EventGate.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<User>()
-            //    .HasOne(u => u.Role)
-            //    .WithMany(r => r.Users)
-            //    .HasForeignKey(u => u.RoleID);
-
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
                 .WithMany(u => u.Orders)
@@ -100,7 +95,7 @@ namespace EventGate.Data
                 .HasForeignKey(ef => ef.EventID);
 
             modelBuilder.Entity<Blog>()
-                .HasOne(b => b.Author) 
+                .HasOne(b => b.Author)
                 .WithMany(u => u.Blogs)
                 .HasForeignKey(b => b.AuthorID);
 
@@ -148,7 +143,7 @@ namespace EventGate.Data
 
             modelBuilder.Entity<EventRule>()
                 .HasOne(er => er.EventType)
-                .WithMany(et => et.EventRules) 
+                .WithMany(et => et.EventRules)
                 .HasForeignKey(er => er.EventTypeID);
 
             modelBuilder.Entity<EventFinancials>()

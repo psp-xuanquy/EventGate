@@ -6,9 +6,10 @@ namespace EventGate.Data.Entity
     public class EventFeedback
     {
         [Key]
-        public string EventFeedbackID { get; set; } = Guid.NewGuid().ToString();
+        public string FeedbackID { get; set; } = Guid.NewGuid().ToString();
         public string Content { get; set; }
         public DateTime SubmittedDate { get; set; }
+        public int Rating { get; set; }
 
         [ForeignKey("User")]
         public string UserID { get; set; }
