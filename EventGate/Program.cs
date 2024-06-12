@@ -1,13 +1,19 @@
-using EventGate.Data;
+﻿using EventGate.Data;
 using EventGate.Data.Entity;
 using EventGate.Services.JWT;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Models; 
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -33,34 +39,15 @@ namespace EventGate
             });
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = "JWT Authorization header using the Bearer scheme",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "Bearer"
-                });
 
-            });
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });
-            });
-
-            // Inject DbContext
+            // Register DbContext
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
             // Add Identity services
             builder.Services.AddIdentityCore<User>()
                 .AddRoles<IdentityRole>()
-                .AddSignInManager()
+                .AddSignInManager<SignInManager<User>>() // Add SignInManager
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -77,6 +64,7 @@ namespace EventGate
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultProvider;
 
             }).Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromMinutes(15));
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -87,12 +75,6 @@ namespace EventGate
             {
                 option.TokenValidationParameters = new TokenValidationParameters
                 {
-                    //ValidateIssuer = true,
-                    //ValidateAudience = true,
-                    //ValidateLifetime = true,
-                    //ValidateIssuerSigningKey = true,
-                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                    //ValidAudience = builder.Configuration["Jwt:Audience"],
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
@@ -119,20 +101,28 @@ namespace EventGate
             {
                 options.ClientId = builder.Configuration["Google:ClientID"];
                 options.ClientSecret = builder.Configuration["Google:ClientSecret"];
-                //options.ClaimActions.MapJsonKey("urn:google:picture", "picture", "url");
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                //options.Events = new OAuthEvents
-                //{
-                //    OnRedirectToAuthorizationEndpoint = context =>
-                //    {
-                //        context.Response.StatusCode = 401; // Set the status code to 401 instead of redirecting
-                //        return Task.CompletedTask;
-                //    }
-                //};
             });
 
             // Register necessary services
             builder.Services.AddDataProtection();
+
+            // Add Swagger services
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });
+            });
 
             var app = builder.Build();
 
@@ -143,12 +133,14 @@ namespace EventGate
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventGate API v1"));
             }
-
-            IConfiguration configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -159,10 +151,8 @@ namespace EventGate
 
             app.UseEndpoints(endpoints =>
             {
-                _ = endpoints.MapControllers();
+                endpoints.MapControllers();
             });
-
-            app.MapControllers();
 
             app.Run();
         }

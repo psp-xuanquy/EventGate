@@ -1,0 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace EventGate.Data.Entity
+{
+    public class Chat
+    {
+        [Key]
+        public string ChatID { get; set; } = Guid.NewGuid().ToString();
+        public string Message { get; set; }
+        public DateTime SentDate { get; set; }
+
+        [ForeignKey("Sender")]
+        public string SenderID { get; set; }
+        public User Sender { get; set; }
+
+        [ForeignKey("Receiver")]
+        public string ReceiverID { get; set; }
+        public User Receiver { get; set; }
+
+        public ICollection<ChatHistory> ChatHistories { get; set; }
+    }
+}

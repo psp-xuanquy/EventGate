@@ -3,18 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventGate.Data.Entity
 {
-    public class EventClub
+    public class UserEvent
     {
         [Key]
-        public string EventClubID { get; set; } = Guid.NewGuid().ToString();
+        public string UserEventID { get; set; } = Guid.NewGuid().ToString();
+
+        [ForeignKey("User")]
+        public string UserID { get; set; }
+        public User User { get; set; }
 
         [ForeignKey("Event")]
         public string EventID { get; set; }
         public Event Event { get; set; }
-
-        [ForeignKey("Club")]
-        public string ClubID { get; set; }
-        public Club Club { get; set; }
     }
 }
-    

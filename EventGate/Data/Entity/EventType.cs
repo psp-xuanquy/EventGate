@@ -10,5 +10,6 @@ namespace EventGate.Data.Entity
 
         public ICollection<Event> Events { get; set; }
         public ICollection<EventRule> EventRules { get; set; }
+        public ICollection<EventHistory> EventHistories { get; set; }
     }
 }

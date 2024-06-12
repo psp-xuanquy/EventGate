@@ -8,9 +8,9 @@ namespace EventGate.Data.Entity
         [Key]
         public string OrderDetailID { get; set; } = Guid.NewGuid().ToString();
         public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public decimal UnitPrice { get; set; }
 
-        [ForeignKey("Order")]
+        [ForeignKey("Order")]   
         public string OrderID { get; set; }
         public Order Order { get; set; }
 

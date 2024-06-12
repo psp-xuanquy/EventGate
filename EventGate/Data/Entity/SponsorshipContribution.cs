@@ -7,7 +7,7 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string ContributionID { get; set; } = Guid.NewGuid().ToString();
-        public decimal Amount { get; set; }
+        public decimal AmountSponsored { get; set; }
         public DateTime ContributionDate { get; set; }
 
         [ForeignKey("Sponsor")]

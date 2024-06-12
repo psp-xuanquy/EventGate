@@ -10,7 +10,7 @@ namespace EventGate.Data.Entity
         public string Image { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public DateTime DatePosted { get; set; }
+        public DateTime UploadedDate { get; set; }
 
         [ForeignKey("Author")]
         public string AuthorID { get; set; }

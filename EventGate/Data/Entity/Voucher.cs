@@ -1,0 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace EventGate.Data.Entity
+{
+    public class Voucher
+    {
+        [Key]
+        public string VoucherID { get; set; } = Guid.NewGuid().ToString();
+        public string Code { get; set; }
+        public decimal Discount { get; set; }
+        public DateTime ExpirationDate { get; set; }
+        public bool IsActive { get; set; } = true;
+
+        [ForeignKey("User")]
+        public string UserID { get; set; }
+        public User User { get; set; }
+
+        [ForeignKey("Event")]
+        public string EventID { get; set; }
+        public Event Event { get; set; }
+    }
+}
