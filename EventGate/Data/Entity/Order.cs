@@ -8,14 +8,14 @@ namespace EventGate.Data.Entity
         [Key]
         public string OrderID { get; set; } = Guid.NewGuid().ToString();
         public DateTime OrderDate { get; set; }
-        public string PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
         public bool Status { get; set; }
         public decimal TotalPrice { get; set; }
 
         [ForeignKey("User")]
-        public string UserID { get; set; }
-        public User User { get; set; }
+        public string? UserID { get; set; }
+        public User? User { get; set; }
 
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

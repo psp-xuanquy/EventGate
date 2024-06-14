@@ -7,17 +7,22 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string ChatID { get; set; } = Guid.NewGuid().ToString();
-        public string Message { get; set; }
+        public string? Message { get; set; }
         public DateTime SentDate { get; set; }
+        public bool IsDeleted { get; set; }
+
+        [ForeignKey("ChatRoom")]
+        public string? ChatRoomID { get; set; }
+        public ChatRoom? ChatRoom { get; set; }
 
         [ForeignKey("Sender")]
-        public string SenderID { get; set; }
-        public User Sender { get; set; }
+        public string? SenderID { get; set; }
+        public User? Sender { get; set; }
 
         [ForeignKey("Receiver")]
-        public string ReceiverID { get; set; }
-        public User Receiver { get; set; }
+        public string? ReceiverID { get; set; }
+        public User? Receiver { get; set; }
 
-        public ICollection<ChatHistory> ChatHistories { get; set; }
+        public ICollection<ChatHistory>? ChatHistories { get; set; }
     }
 }

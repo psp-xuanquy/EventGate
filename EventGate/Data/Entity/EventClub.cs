@@ -9,12 +9,12 @@ namespace EventGate.Data.Entity
         public string EventClubID { get; set; } = Guid.NewGuid().ToString();
 
         [ForeignKey("Event")]
-        public string EventID { get; set; }
-        public Event Event { get; set; }
+        public string? EventID { get; set; }
+        public Event? Event { get; set; }
 
         [ForeignKey("Club")]
-        public string ClubID { get; set; }
-        public Club Club { get; set; }
+        public string? ClubID { get; set; }
+        public Club? Club { get; set; }
     }
 }
     

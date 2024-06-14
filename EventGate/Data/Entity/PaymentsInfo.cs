@@ -6,14 +6,16 @@ namespace EventGate.Data.Entity
     public class PaymentsInfo
     {
         [Key]
-        public string PaymentsInfoID { get; set; }
-        public string BankName { get; set; }
-        public string AccountHolderName { get; set; }
-        public string AccountNumber { get; set; }
-        public string BankBranch { get; set; }
+        public string? PaymentsInfoID { get; set; }
+        public string? AccountHolderName { get; set; }
+        public string? AccountNumber { get; set; }
+        public string? BankName { get; set; }
+        public string? BankBranch { get; set; }
+        public decimal TotalPayments { get; set; }
+        public DateTime ValidDate { get; set; }
 
         [ForeignKey("Event")]
-        public string EventID { get; set; }
-        public Event Event { get; set; }
+        public string? EventID { get; set; }
+        public Event? Event { get; set; }
     }
 }

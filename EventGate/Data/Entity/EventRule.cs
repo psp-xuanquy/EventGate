@@ -7,10 +7,10 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string RuleID { get; set; } = Guid.NewGuid().ToString();
-        public string RuleDescription { get; set; }
+        public string? RuleDescription { get; set; }
 
         [ForeignKey("EventType")]
-        public string EventTypeID { get; set; }
-        public EventType EventType { get; set; }
+        public string? EventTypeID { get; set; }
+        public EventType? EventType { get; set; }
     }
 }

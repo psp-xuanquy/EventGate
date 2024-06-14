@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventGate.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240612175723_SecondUpdate")]
-    partial class SecondUpdate
+    [Migration("20240614182322_AddInitialMigrate")]
+    partial class AddInitialMigrate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,19 +32,18 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AuthorID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("EventID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UploadedDate")
@@ -54,6 +53,8 @@ namespace EventGate.Migrations
 
                     b.HasIndex("AuthorID");
 
+                    b.HasIndex("EventID");
+
                     b.ToTable("Blogs", "dbo");
                 });
 
@@ -62,22 +63,27 @@ namespace EventGate.Migrations
                     b.Property<string>("ChatID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChatRoomID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReceiverID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SenderID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ChatID");
+
+                    b.HasIndex("ChatRoomID");
 
                     b.HasIndex("ReceiverID");
 
@@ -95,19 +101,15 @@ namespace EventGate.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ChatID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReceiverID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SenderID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("SentDate")
@@ -129,28 +131,40 @@ namespace EventGate.Migrations
                     b.ToTable("ChatHistories", "dbo");
                 });
 
+            modelBuilder.Entity("EventGate.Data.Entity.ChatRoom", b =>
+                {
+                    b.Property<string>("ChatRoomID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoomName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ChatRoomID");
+
+                    b.ToTable("ChatRooms", "dbo");
+                });
+
             modelBuilder.Entity("EventGate.Data.Entity.Club", b =>
                 {
                     b.Property<string>("ClubID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LogoClub")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MemberQuantity")
+                    b.Property<int?>("MemberQuantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PresidentID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ClubID");
@@ -166,37 +180,37 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventTypeID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("LinkStream")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PosterImage")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("QRCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("QRCode")
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("TicketQuantity")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TicketDueDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("EventID");
 
@@ -229,11 +243,9 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Rating")
@@ -243,7 +255,6 @@ namespace EventGate.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("FeedbackID");
@@ -260,42 +271,35 @@ namespace EventGate.Migrations
                     b.Property<string>("EventHistoryID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime?>("ArchivedDate")
+                    b.Property<DateTime>("ArchiveDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventTypeID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PosterImage")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("PosterImage")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("QRCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("QRCode")
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TicketQuantity")
                         .HasColumnType("int");
@@ -315,11 +319,9 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventTypeID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RuleDescription")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RuleID");
@@ -335,7 +337,6 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventTypeName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("EventTypeID");
@@ -352,7 +353,6 @@ namespace EventGate.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")
@@ -362,7 +362,6 @@ namespace EventGate.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderID");
@@ -378,14 +377,12 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("OrderID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("TicketID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("TicketID1")
@@ -411,29 +408,31 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AccountHolderName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AccountNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BankBranch")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("BankName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("TotalPayments")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("ValidDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("PaymentsInfoID");
 
                     b.HasIndex("EventID")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[EventID] IS NOT NULL");
 
                     b.ToTable("PaymentsInfos", "dbo");
                 });
@@ -447,7 +446,6 @@ namespace EventGate.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PointID");
@@ -457,104 +455,26 @@ namespace EventGate.Migrations
                     b.ToTable("Points", "dbo");
                 });
 
-            modelBuilder.Entity("EventGate.Data.Entity.Role", b =>
+            modelBuilder.Entity("EventGate.Data.Entity.Seat", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("SeatID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ConcurrencyStamp")
+                    b.Property<string>("Hall")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NormalizedName")
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Row")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("SeatID");
 
-                    b.ToTable("Roles", "dbo");
-                });
-
-            modelBuilder.Entity("EventGate.Data.Entity.Sponsor", b =>
-                {
-                    b.Property<string>("SponsorID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ContactPersonID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SponsorAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SponsorEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SponsorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SponsorPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SponsorWebsite")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SponsorID");
-
-                    b.HasIndex("ContactPersonID");
-
-                    b.ToTable("Sponsors", "dbo");
-                });
-
-            modelBuilder.Entity("EventGate.Data.Entity.SponsorshipContribution", b =>
-                {
-                    b.Property<string>("ContributionID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("AmountSponsored")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("ContributionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EventID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SponsorID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TypeID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ContributionID");
-
-                    b.HasIndex("EventID");
-
-                    b.HasIndex("SponsorID");
-
-                    b.HasIndex("TypeID");
-
-                    b.ToTable("SponsorshipContributions", "dbo");
-                });
-
-            modelBuilder.Entity("EventGate.Data.Entity.SponsorshipType", b =>
-                {
-                    b.Property<string>("TypeID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TypeID");
-
-                    b.ToTable("SponsorshipTypes", "dbo");
+                    b.ToTable("Seats", "dbo");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.Ticket", b =>
@@ -563,19 +483,31 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("EventID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("TicketName")
-                        .IsRequired()
+                    b.Property<DateTime>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Gate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TicketPrice")
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<byte[]>("QRCode")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("SeatID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("TicketID");
 
                     b.HasIndex("EventID");
+
+                    b.HasIndex("SeatID");
 
                     b.ToTable("Tickets", "dbo");
                 });
@@ -589,14 +521,13 @@ namespace EventGate.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedTime")
@@ -610,13 +541,13 @@ namespace EventGate.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("IdentityCard")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
@@ -633,10 +564,12 @@ namespace EventGate.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -661,7 +594,8 @@ namespace EventGate.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("VerificationToken")
                         .IsRequired()
@@ -675,7 +609,15 @@ namespace EventGate.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", "dbo");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", "dbo");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.UserEvent", b =>
@@ -696,47 +638,62 @@ namespace EventGate.Migrations
                     b.ToTable("UserEvents", "dbo");
                 });
 
+            modelBuilder.Entity("EventGate.Data.Entity.UserEventHistory", b =>
+                {
+                    b.Property<string>("UserEventHistoryID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ArchiveDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EventHistoryID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserHistoryID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserEventHistoryID");
+
+                    b.HasIndex("EventHistoryID");
+
+                    b.HasIndex("UserHistoryID");
+
+                    b.ToTable("UserEventHistories", "dbo");
+                });
+
             modelBuilder.Entity("EventGate.Data.Entity.UserHistory", b =>
                 {
                     b.Property<string>("UserHistoryID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ArchivedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Avatar")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IdentityCard")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mail")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Username")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserHistoryID");
@@ -752,14 +709,15 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Discount")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("EventID")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("EventID1")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ExpirationDate")
@@ -768,43 +726,191 @@ namespace EventGate.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserID")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ValidDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("VoucherID");
 
                     b.HasIndex("EventID");
+
+                    b.HasIndex("EventID1");
 
                     b.HasIndex("UserID");
 
                     b.ToTable("Vouchers", "dbo");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", "dbo");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RoleId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims", "dbo");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims", "dbo");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins", "dbo");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles", "dbo");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens", "dbo");
+                });
+
             modelBuilder.Entity("EventGate.Data.Entity.Blog", b =>
                 {
                     b.HasOne("EventGate.Data.Entity.User", "Author")
                         .WithMany("Blogs")
-                        .HasForeignKey("AuthorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AuthorID");
+
+                    b.HasOne("EventGate.Data.Entity.Event", "Event")
+                        .WithMany("Blogs")
+                        .HasForeignKey("EventID");
 
                     b.Navigation("Author");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.Chat", b =>
                 {
+                    b.HasOne("EventGate.Data.Entity.ChatRoom", "ChatRoom")
+                        .WithMany()
+                        .HasForeignKey("ChatRoomID");
+
                     b.HasOne("EventGate.Data.Entity.User", "Receiver")
                         .WithMany()
                         .HasForeignKey("ReceiverID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EventGate.Data.Entity.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ChatRoom");
 
                     b.Navigation("Receiver");
 
@@ -816,20 +922,17 @@ namespace EventGate.Migrations
                     b.HasOne("EventGate.Data.Entity.Chat", "Chat")
                         .WithMany("ChatHistories")
                         .HasForeignKey("ChatID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EventGate.Data.Entity.User", "Receiver")
                         .WithMany()
                         .HasForeignKey("ReceiverID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EventGate.Data.Entity.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("EventGate.Data.Entity.User", null)
                         .WithMany("ChatHistories")
@@ -846,9 +949,7 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.User", "President")
                         .WithMany()
-                        .HasForeignKey("PresidentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PresidentID");
 
                     b.Navigation("President");
                 });
@@ -857,9 +958,7 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.EventType", "EventType")
                         .WithMany("Events")
-                        .HasForeignKey("EventTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventTypeID");
 
                     b.Navigation("EventType");
                 });
@@ -887,15 +986,11 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.Event", "Event")
                         .WithMany("EventFeedbacks")
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventID");
 
                     b.HasOne("EventGate.Data.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("EventFeedbacks")
+                        .HasForeignKey("UserID");
 
                     b.Navigation("Event");
 
@@ -907,14 +1002,12 @@ namespace EventGate.Migrations
                     b.HasOne("EventGate.Data.Entity.Event", "Event")
                         .WithMany("EventHistories")
                         .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("EventGate.Data.Entity.EventType", "EventType")
                         .WithMany("EventHistories")
                         .HasForeignKey("EventTypeID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Event");
 
@@ -925,9 +1018,7 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.EventType", "EventType")
                         .WithMany("EventRules")
-                        .HasForeignKey("EventTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventTypeID");
 
                     b.Navigation("EventType");
                 });
@@ -935,10 +1026,8 @@ namespace EventGate.Migrations
             modelBuilder.Entity("EventGate.Data.Entity.Order", b =>
                 {
                     b.HasOne("EventGate.Data.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Orders")
+                        .HasForeignKey("UserID");
 
                     b.Navigation("User");
                 });
@@ -947,15 +1036,11 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.Order", "Order")
                         .WithMany("OrderDetails")
-                        .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderID");
 
                     b.HasOne("EventGate.Data.Entity.Ticket", "Ticket")
                         .WithMany()
-                        .HasForeignKey("TicketID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TicketID");
 
                     b.HasOne("EventGate.Data.Entity.Ticket", null)
                         .WithMany("OrderDetails")
@@ -970,9 +1055,7 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.Event", "Event")
                         .WithOne("PaymentsInfo")
-                        .HasForeignKey("EventGate.Data.Entity.PaymentsInfo", "EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventGate.Data.Entity.PaymentsInfo", "EventID");
 
                     b.Navigation("Event");
                 });
@@ -981,60 +1064,24 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("EventGate.Data.Entity.Sponsor", b =>
-                {
-                    b.HasOne("EventGate.Data.Entity.User", "ContactPerson")
-                        .WithMany()
-                        .HasForeignKey("ContactPersonID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ContactPerson");
-                });
-
-            modelBuilder.Entity("EventGate.Data.Entity.SponsorshipContribution", b =>
-                {
-                    b.HasOne("EventGate.Data.Entity.Event", "Event")
-                        .WithMany("SponsorshipContributions")
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventGate.Data.Entity.Sponsor", "Sponsor")
-                        .WithMany("SponsorshipContributions")
-                        .HasForeignKey("SponsorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EventGate.Data.Entity.SponsorshipType", "SponsorshipType")
-                        .WithMany("SponsorshipContributions")
-                        .HasForeignKey("TypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Sponsor");
-
-                    b.Navigation("SponsorshipType");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.Ticket", b =>
                 {
                     b.HasOne("EventGate.Data.Entity.Event", "Event")
                         .WithMany("Tickets")
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventID");
+
+                    b.HasOne("EventGate.Data.Entity.Seat", "Seat")
+                        .WithMany()
+                        .HasForeignKey("SeatID");
 
                     b.Navigation("Event");
+
+                    b.Navigation("Seat");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.UserEvent", b =>
@@ -1056,13 +1103,26 @@ namespace EventGate.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("EventGate.Data.Entity.UserEventHistory", b =>
+                {
+                    b.HasOne("EventGate.Data.Entity.EventHistory", "EventHistory")
+                        .WithMany("UserEventHistories")
+                        .HasForeignKey("EventHistoryID");
+
+                    b.HasOne("EventGate.Data.Entity.UserHistory", "UserHistory")
+                        .WithMany("UserEventHistories")
+                        .HasForeignKey("UserHistoryID");
+
+                    b.Navigation("EventHistory");
+
+                    b.Navigation("UserHistory");
+                });
+
             modelBuilder.Entity("EventGate.Data.Entity.UserHistory", b =>
                 {
                     b.HasOne("EventGate.Data.Entity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("UserHistories")
+                        .HasForeignKey("UserID");
 
                     b.Navigation("User");
                 });
@@ -1071,19 +1131,70 @@ namespace EventGate.Migrations
                 {
                     b.HasOne("EventGate.Data.Entity.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EventID");
+
+                    b.HasOne("EventGate.Data.Entity.Event", null)
+                        .WithMany("Vouchers")
+                        .HasForeignKey("EventID1");
 
                     b.HasOne("EventGate.Data.Entity.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
                     b.Navigation("Event");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
+                {
+                    b.HasOne("EventGate.Data.Entity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
+                {
+                    b.HasOne("EventGate.Data.Entity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EventGate.Data.Entity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
+                {
+                    b.HasOne("EventGate.Data.Entity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.Chat", b =>
@@ -1098,20 +1209,26 @@ namespace EventGate.Migrations
 
             modelBuilder.Entity("EventGate.Data.Entity.Event", b =>
                 {
+                    b.Navigation("Blogs");
+
                     b.Navigation("EventClubs");
 
                     b.Navigation("EventFeedbacks");
 
                     b.Navigation("EventHistories");
 
-                    b.Navigation("PaymentsInfo")
-                        .IsRequired();
-
-                    b.Navigation("SponsorshipContributions");
+                    b.Navigation("PaymentsInfo");
 
                     b.Navigation("Tickets");
 
                     b.Navigation("UserEvents");
+
+                    b.Navigation("Vouchers");
+                });
+
+            modelBuilder.Entity("EventGate.Data.Entity.EventHistory", b =>
+                {
+                    b.Navigation("UserEventHistories");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.EventType", b =>
@@ -1128,16 +1245,6 @@ namespace EventGate.Migrations
                     b.Navigation("OrderDetails");
                 });
 
-            modelBuilder.Entity("EventGate.Data.Entity.Sponsor", b =>
-                {
-                    b.Navigation("SponsorshipContributions");
-                });
-
-            modelBuilder.Entity("EventGate.Data.Entity.SponsorshipType", b =>
-                {
-                    b.Navigation("SponsorshipContributions");
-                });
-
             modelBuilder.Entity("EventGate.Data.Entity.Ticket", b =>
                 {
                     b.Navigation("OrderDetails");
@@ -1149,7 +1256,18 @@ namespace EventGate.Migrations
 
                     b.Navigation("ChatHistories");
 
+                    b.Navigation("EventFeedbacks");
+
+                    b.Navigation("Orders");
+
                     b.Navigation("UserEvents");
+
+                    b.Navigation("UserHistories");
+                });
+
+            modelBuilder.Entity("EventGate.Data.Entity.UserHistory", b =>
+                {
+                    b.Navigation("UserEventHistories");
                 });
 #pragma warning restore 612, 618
         }

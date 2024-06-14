@@ -24,7 +24,7 @@ namespace EventGate.Data.Entity
     {
         public const string ADMIN = "Admin";
         public const string STAFF = "Staff";
-        public const string CLUB = "Club";
+        //public const string CLUB = "Club";
         //public const string SPONSOR = "Sponsor";
         public const string MEMBER = "Member";
     }

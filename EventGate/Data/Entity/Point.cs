@@ -10,7 +10,7 @@ namespace EventGate.Data.Entity
         public int Points { get; set; }
 
         [ForeignKey("User")]
-        public string UserID { get; set; }
-        public User User { get; set; }
+        public string? UserID { get; set; }
+        public User? User { get; set; }
     }
 }

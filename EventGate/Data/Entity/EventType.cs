@@ -6,10 +6,10 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string EventTypeID { get; set; } = Guid.NewGuid().ToString();
-        public string EventTypeName { get; set; }
+        public string? EventTypeName { get; set; }
 
-        public ICollection<Event> Events { get; set; }
-        public ICollection<EventRule> EventRules { get; set; }
-        public ICollection<EventHistory> EventHistories { get; set; }
+        public ICollection<Event>? Events { get; set; }
+        public ICollection<EventRule>? EventRules { get; set; }
+        public ICollection<EventHistory>? EventHistories { get; set; }
     }
 }

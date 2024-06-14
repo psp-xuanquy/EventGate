@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models; 
+using Microsoft.OpenApi.Models;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -40,6 +40,8 @@ namespace EventGate
 
             builder.Services.AddControllers();
 
+            builder.Services.AddHttpContextAccessor();
+
             // Register DbContext
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
@@ -47,7 +49,7 @@ namespace EventGate
             // Add Identity services
             builder.Services.AddIdentityCore<User>()
                 .AddRoles<IdentityRole>()
-                .AddSignInManager<SignInManager<User>>() // Add SignInManager
+                .AddSignInManager<SignInManager<User>>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -62,7 +64,6 @@ namespace EventGate
                 options.User.RequireUniqueEmail = false;
                 options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultProvider;
-
             }).Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromMinutes(15));
 
             builder.Services.AddAuthentication(options =>
@@ -108,7 +109,6 @@ namespace EventGate
             builder.Services.AddDataProtection();
 
             // Add Swagger services
-            builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -127,16 +127,10 @@ namespace EventGate
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventGate API v1"));
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                app.UseHsts();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();

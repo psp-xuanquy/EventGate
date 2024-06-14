@@ -1,27 +1,35 @@
 ﻿using EventGate.Data.Entity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Data.Entity.Validation;
 using System.IO;
 
 namespace EventGate.Data
 {
-    public class AppDbContext : DbContext, IAppDbContext
+    public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
-        private readonly IConfiguration _configuration;
+        IConfiguration _configuration;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration) : base(options)
+        public AppDbContext()
+        {
+
+        }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration)
+            : base(options)
         {
             _configuration = configuration;
         }
 
-        public DbSet<User> Users { get; set; }
+        public DatabaseFacade DatabaseFacade => base.Database;
+
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Chat> Chats { get; set; }
         public DbSet<ChatHistory> ChatHistories { get; set; }
+        public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<Club> Clubs { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<EventClub> EventClubs { get; set; }
@@ -33,30 +41,21 @@ namespace EventGate.Data
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<PaymentsInfo> PaymentsInfos { get; set; }
         public DbSet<Point> Points { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Sponsor> Sponsors { get; set; }
-        public DbSet<SponsorshipContribution> SponsorshipContributions { get; set; }
-        public DbSet<SponsorshipType> SponsorshipTypes { get; set; }
+        public DbSet<Seat> Seats { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UserEvent> UserEvents { get; set; }
+        public DbSet<UserEventHistory> UserEventHistories { get; set; }
         public DbSet<UserHistory> UserHistories { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
 
-        public DatabaseFacade DatabaseFacade => base.Database;
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!_configuration.GetSection("ConnectionStrings").Exists())
+            if (!optionsBuilder.IsConfigured)
             {
-                var configuration = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"), options => options.EnableRetryOnFailure());
-            }
-            else
-            {
-                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("Default"), options => options.EnableRetryOnFailure());
+                var configuration = _configuration ?? throw new InvalidOperationException("Configuration is null.");
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"), 
+                    options => options.EnableRetryOnFailure());
             }
         }
 
@@ -86,11 +85,13 @@ namespace EventGate.Data
                 .HasKey(ue => new { ue.UserID, ue.EventID });
 
             modelBuilder.Entity<UserEvent>()
-                .HasOne(ue => ue.User).WithMany(u => u.UserEvents)
+                .HasOne(ue => ue.User)
+                .WithMany(u => u.UserEvents)
                 .HasForeignKey(ue => ue.UserID);
 
             modelBuilder.Entity<UserEvent>()
-                .HasOne(ue => ue.Event).WithMany(e => e.UserEvents)
+                .HasOne(ue => ue.Event)
+                .WithMany(e => e.UserEvents)
                 .HasForeignKey(ue => ue.EventID);
 
             modelBuilder.Entity<Event>()
@@ -118,30 +119,15 @@ namespace EventGate.Data
                 .WithOne(ec => ec.Event)
                 .HasForeignKey(ec => ec.EventID);
 
-            modelBuilder.Entity<Event>()
-                .HasMany(e => e.SponsorshipContributions)
-                .WithOne(sc => sc.Event)
-                .HasForeignKey(sc => sc.EventID);
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Blogs)
+                .WithOne(b => b.Author)
+                .HasForeignKey(b => b.AuthorID);
 
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Blogs).
-                WithOne(b => b.Author).
-                HasForeignKey(b => b.AuthorID);
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.ChatHistories).
-                WithOne(ch => ch.Sender).
-                HasForeignKey(ch => ch.SenderID);
-
-            //modelBuilder.Entity<Chat>()
-            //    .HasOne(c => c.Sender)
-            //    .WithMany().HasForeignKey(c => c.SenderID)
-            //    .OnDelete(DeleteBehavior.Restrict);
-
-            //modelBuilder.Entity<Chat>()
-            //    .HasOne(c => c.Receiver)
-            //    .WithMany().HasForeignKey(c => c.ReceiverID)
-            //    .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(u => u.ChatHistories)
+                .WithOne(ch => ch.Sender)
+                .HasForeignKey(ch => ch.SenderID);
 
             modelBuilder.Entity<ChatHistory>()
                 .HasOne(ch => ch.Chat)
@@ -178,20 +164,6 @@ namespace EventGate.Data
                 .WithOne(ue => ue.User)
                 .HasForeignKey(ue => ue.UserID);
 
-            modelBuilder.Entity<SponsorshipContribution>()
-                .HasOne(sc => sc.Sponsor)
-                .WithMany(s => s.SponsorshipContributions)
-                .HasForeignKey(sc => sc.SponsorID);
-
-            modelBuilder.Entity<SponsorshipContribution>()
-                .HasOne(sc => sc.SponsorshipType)
-                .WithMany(st => st.SponsorshipContributions)
-                .HasForeignKey(sc => sc.TypeID);
-
-            modelBuilder.Entity<Sponsor>()
-                .HasOne(s => s.ContactPerson)
-                .WithMany().HasForeignKey(s => s.ContactPersonID);
-
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
@@ -199,21 +171,24 @@ namespace EventGate.Data
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Ticket)
-                .WithMany().HasForeignKey(od => od.TicketID);
+                .WithMany()
+                .HasForeignKey(od => od.TicketID);
 
             modelBuilder.Entity<Voucher>()
                 .HasOne(v => v.User)
-                .WithMany().HasForeignKey(v => v.UserID);
+                .WithMany()
+                .HasForeignKey(v => v.UserID);
 
             modelBuilder.Entity<Voucher>()
                 .HasOne(v => v.Event)
-                .WithMany().HasForeignKey(v => v.EventID);
+                .WithMany()
+                .HasForeignKey(v => v.EventID);
 
             modelBuilder.Entity<EventHistory>()
                 .HasOne(eh => eh.EventType)
                 .WithMany(et => et.EventHistories)
                 .HasForeignKey(eh => eh.EventTypeID)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventHistory>()
                 .HasOne(eh => eh.Event)
@@ -235,15 +210,11 @@ namespace EventGate.Data
             {
                 return base.SaveChanges();
             }
-            catch (DbUpdateException ex)
+            catch (DbUpdateException)
             {
                 throw;
             }
-            catch (DbEntityValidationException ex)
-            {
-                throw;
-            }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

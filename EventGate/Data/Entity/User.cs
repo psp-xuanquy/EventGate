@@ -9,9 +9,9 @@ namespace EventGate.Data.Entity
 {
     public class User : IdentityUser
     {
-        public string Avatar { get; set; }
-        public string Address { get; set; }
-        public string IdentityCard { get; set; }
+        public string? Avatar { get; set; }
+        public string? Address { get; set; }
+        public string? IdentityCard { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public bool IsDeleted { get; set; } = false;
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -26,8 +26,11 @@ namespace EventGate.Data.Entity
         public DateTime? VerificationTokenExpires { get; set; }
         public bool isConfirmed { get; set; }
 
-        public ICollection<Blog> Blogs { get; set; }
-        public ICollection<UserEvent> UserEvents { get; set; }
-        public ICollection<ChatHistory> ChatHistories { get; set; }
+        public ICollection<Order>? Orders { get; set; }
+        public ICollection<Blog>? Blogs { get; set; }
+        public ICollection<UserEvent>? UserEvents { get; set; }
+        public ICollection<EventFeedback>? EventFeedbacks { get; set; }
+        public ICollection<UserHistory>? UserHistories { get; set; }
+        public ICollection<ChatHistory>? ChatHistories { get; set; }
     }
 }

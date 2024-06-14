@@ -11,11 +11,11 @@ namespace EventGate.Data.Entity
         public decimal UnitPrice { get; set; }
 
         [ForeignKey("Order")]   
-        public string OrderID { get; set; }
-        public Order Order { get; set; }
+        public string? OrderID { get; set; }
+        public Order? Order { get; set; }
 
         [ForeignKey("Ticket")]
-        public string TicketID { get; set; }
-        public Ticket Ticket { get; set; }
+        public string? TicketID { get; set; }
+        public Ticket? Ticket { get; set; }
     }
 }
