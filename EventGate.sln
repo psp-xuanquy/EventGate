@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventGate", "EventGate\EventGate.csproj", "{AAB85974-E0AF-4537-94B8-93915752AEBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventGate.API", "EventGate\EventGate.API.csproj", "{AAB85974-E0AF-4537-94B8-93915752AEBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventGate.Business", "EventGate.Business\EventGate.Business.csproj", "{D18C27AD-EAA9-4181-815E-C0F2520A04F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventGate.Data", "EventGate.Data\EventGate.Data.csproj", "{2863529A-158B-4239-AB1F-B8EC97A9EC93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{AAB85974-E0AF-4537-94B8-93915752AEBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAB85974-E0AF-4537-94B8-93915752AEBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAB85974-E0AF-4537-94B8-93915752AEBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D18C27AD-EAA9-4181-815E-C0F2520A04F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D18C27AD-EAA9-4181-815E-C0F2520A04F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D18C27AD-EAA9-4181-815E-C0F2520A04F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D18C27AD-EAA9-4181-815E-C0F2520A04F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2863529A-158B-4239-AB1F-B8EC97A9EC93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2863529A-158B-4239-AB1F-B8EC97A9EC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2863529A-158B-4239-AB1F-B8EC97A9EC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2863529A-158B-4239-AB1F-B8EC97A9EC93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

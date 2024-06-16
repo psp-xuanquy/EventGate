@@ -1,4 +1,5 @@
-﻿using EventGate.Security;
+﻿
+using EventGate.Security;
 using System.Globalization;
 using System.Text;
 

@@ -1,5 +1,9 @@
-﻿using EventGate.Data;
+﻿using EventGate.Business.Mappers;
+using EventGate.Business.Services;
+using EventGate.Data;
+using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
+using EventGate.Data.Repositories;
 using EventGate.Services.JWT;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -53,6 +57,12 @@ namespace EventGate
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Add Scoped
+            builder.Services.AddScoped<IUserPropository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IMapper<User, UserDTORequest>, UserMapper>();
+
+
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -88,7 +98,7 @@ namespace EventGate
                     OnTokenValidated = context =>
                     {
                         var token = context.SecurityToken as JwtSecurityToken;
-                        if (token != null && !JwtGenerator.IsTokenValid(token.RawData))
+                        if (token != null && !Business.Services.JwtGenerator.IsTokenValid(token.RawData))
                         {
                             context.Fail("Token is invalid.");
                         }
@@ -104,6 +114,8 @@ namespace EventGate
                 options.ClientSecret = builder.Configuration["Google:ClientSecret"];
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
+
+
 
             // Register necessary services
             builder.Services.AddDataProtection();
