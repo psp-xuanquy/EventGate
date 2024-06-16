@@ -20,9 +20,9 @@ namespace EventGate.Data.Entity
         public DateTime? DeletedTime { get; set; }
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? LastUpdatedTime { get; set; }
-        public string ResetToken { get; set; }
+        public string? ResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
-        public string VerificationToken { get; set; }
+        public string? VerificationToken { get; set; }
         public DateTime? VerificationTokenExpires { get; set; }
         public bool isConfirmed { get; set; }
 
