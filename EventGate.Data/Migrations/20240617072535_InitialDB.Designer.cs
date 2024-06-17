@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace EventGate.Migrations
+namespace EventGate.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240614182322_AddInitialMigrate")]
-    partial class AddInitialMigrate
+    [Migration("20240617072535_InitialDB")]
+    partial class InitialDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -581,7 +581,6 @@ namespace EventGate.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ResetToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetTokenExpires")
@@ -598,7 +597,6 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("VerificationToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("VerificationTokenExpires")

@@ -11,17 +11,22 @@ namespace EventGate.Data
 {
     public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
-        IConfiguration _configuration;
+        //IConfiguration _configuration;
 
         public AppDbContext()
         {
 
         }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration)
-            : base(options)
+        //public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration)
+        //    : base(options)
+        //{
+        //    _configuration = configuration;
+        //}
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            _configuration = configuration;
+
         }
 
         public DatabaseFacade DatabaseFacade => base.Database;
@@ -49,15 +54,29 @@ namespace EventGate.Data
         public DbSet<UserHistory> UserHistories { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        var configuration = _configuration ?? throw new InvalidOperationException("Configuration is null.");
+        //        optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"), 
+        //            options => options.EnableRetryOnFailure());
+        //    }
+        //}
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var configuration = _configuration ?? throw new InvalidOperationException("Configuration is null.");
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"), 
-                    options => options.EnableRetryOnFailure());
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
             }
         }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -210,15 +229,16 @@ namespace EventGate.Data
             {
                 return base.SaveChanges();
             }
-            catch (DbUpdateException)
+            catch (DbUpdateException ex)
             {
-                throw;
+                throw new ApplicationException("Error saving changes.", ex);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new ApplicationException("Unexpected error occurred.", ex);
             }
         }
+
 
         public EntityEntry Add(object entity)
         {

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace EventGate.Migrations
+namespace EventGate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddInitialMigrate : Migration
+    public partial class InitialDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -43,9 +43,9 @@ namespace EventGate.Migrations
                     CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ResetToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ResetTokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    VerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    VerificationToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VerificationTokenExpires = table.Column<DateTime>(type: "datetime2", nullable: true),
                     isConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
