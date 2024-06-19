@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace EventGate.Migrations
+namespace EventGate.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -578,7 +578,6 @@ namespace EventGate.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("ResetToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetTokenExpires")
@@ -595,7 +594,6 @@ namespace EventGate.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("VerificationToken")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("VerificationTokenExpires")
