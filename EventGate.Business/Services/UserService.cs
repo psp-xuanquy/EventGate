@@ -200,7 +200,7 @@ namespace EventGate.Business.Services
             result.ErrorMessage = "Add Successfully";
             return result;
 
-            return result;
+
         }
     }
 }
