@@ -1,9 +1,12 @@
 ﻿using EventGate.Business.Mappers;
+using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services;
+using EventGate.Business.Services.Interface;
 using EventGate.Data;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
+using EventGate.Data.Repositories.Interface;
 using EventGate.Services.JWT;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -57,10 +60,30 @@ namespace EventGate
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+            builder.Services.AddAutoMapper(typeof(Mapper));
+
             // Add Scoped
             builder.Services.AddScoped<IUserPropository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IMapper<User, UserDTORequest>, UserMapper>();
+
+            builder.Services.AddScoped<IClubRepository, ClubRepository>();
+            builder.Services.AddScoped<IClubService, ClubService>();
+
+            //builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+            //builder.Services.AddScoped<ITicketService, TicketService>();
+
+            //builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+            //builder.Services.AddScoped<ISeatService, SeatService>();
+
+            //builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+            //builder.Services.AddScoped<IVoucherService, VoucherService>();
+
+            //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            //builder.Services.AddScoped<IOrderService, OrderService>();
+
+            //builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            //builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
 
             builder.Services.Configure<IdentityOptions>(options =>

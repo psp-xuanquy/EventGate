@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventGate.Business.Services
+namespace EventGate.Business.Services.Interface
 {
     public interface IUserService
     {

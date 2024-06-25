@@ -1,5 +1,6 @@
 ﻿
 using EventGate.Data.Entity;
+using EventGate.Data.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

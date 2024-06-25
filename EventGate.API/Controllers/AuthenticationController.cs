@@ -1,5 +1,5 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
-using EventGate.Business.Services;
+using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -10,6 +10,29 @@ namespace EventGate.Business.Services
     {
         public T Data { get; set; }
         public bool IsSuccess { get; set; }
+        public int Status { get; set; }
         public string ErrorMessage { get; set; }
+
+        public ServiceResult()
+        {
+            IsSuccess = false;
+            Status = -1;
+            ErrorMessage = "Action fail";
+        }
+
+        public ServiceResult(int status, string message)
+        {
+            IsSuccess = false;
+            Status = status;
+            ErrorMessage = message;
+        }
+
+        public ServiceResult(int status, string message, T data)
+        {
+            IsSuccess = true;
+            Status = status;
+            ErrorMessage = message;
+            Data = data;
+        }
     }
 }
