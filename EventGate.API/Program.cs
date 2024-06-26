@@ -44,8 +44,9 @@ namespace EventGate
                     });
             });
 
+            
+            
             builder.Services.AddControllers();
-
             builder.Services.AddHttpContextAccessor();
 
             // Register DbContext
@@ -59,12 +60,17 @@ namespace EventGate
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
+
             // Add Scoped
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
+
+            //-- User -- 
+            builder.Services.AddAutoMapper(typeof(UserMapper));
             builder.Services.AddScoped<IUserPropository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IMapper<User, UserDTORequest>, UserMapper>();
+
+          
 
             builder.Services.AddScoped<IClubRepository, ClubRepository>();
             builder.Services.AddScoped<IClubService, ClubService>();
@@ -122,7 +128,6 @@ namespace EventGate
             });
 
 
-
             // Register necessary services
             builder.Services.AddDataProtection();
 
@@ -139,7 +144,8 @@ namespace EventGate
                     Scheme = "Bearer"
                 });
 
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });
+                c.EnableAnnotations();  //hien thi example nhap nhu the nao cho register
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });          
             });
 
             var app = builder.Build();
