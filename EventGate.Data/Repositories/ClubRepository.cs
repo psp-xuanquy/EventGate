@@ -17,70 +17,66 @@ namespace EventGate.Data.Repositories
         {
             _context = context;
         }
-        
+
+        // Get All Club
         public async Task<List<Club>> GetAllAsync()
         {
             return await _context.Clubs
+                .Where(c => c.DeletedTime == null)
                 .Include(c => c.President)
                 .ToListAsync();
         }
 
+        // Get Club By ID
         public async Task<Club> GetByIdAsync(string clubId)
         {
-            var club = await _context.Clubs
+            return await _context.Clubs
+                .Where(c => c.DeletedTime == null)
                 .Include(c => c.President)
                 .FirstOrDefaultAsync(c => c.ClubID == clubId);
-
-            if (club == null)
-            {
-                throw new Exception($"Club with ID ( {clubId} ) does not exist");
-            }
-            return club;
         }
 
-        public async Task<int> AddAsync(Club addClub)
+        // Get Club By Name
+        public async Task<Club> GetByNameAsync(string clubName)
         {
-            var existingClub = await _context.Clubs.FirstOrDefaultAsync(c => c.ClubID == addClub.ClubID);
-            if (existingClub != null)
-            {
-                throw new Exception("Club already exists");
-            }
-            if (existingClub != null && existingClub.MemberQuantity <= 0)
-            {
-                throw new Exception("The number of members must be greater than 0");
-            }
+            return await _context.Clubs.FirstOrDefaultAsync(c => c.Name == clubName && c.DeletedTime == null)!;
+        }
+
+        // Add Club 
+        public async Task<int> AddAsync(string user, Club addClub)
+        {
+            addClub.CreatedBy = user;
+            addClub.LastUpdatedBy = user;
+            addClub.LastUpdatedTime = DateTime.Now;
 
             await _context.Clubs.AddAsync(addClub);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateAsync(string clubId, Club updateClub)
+        // Update Club
+        public async Task<int> UpdateAsync(string user, string clubId, Club updateClub)
         {
-            var existingClub = await _context.Clubs.FirstOrDefaultAsync(c => c.ClubID == clubId);
-            if (existingClub == null)
-            {
-                throw new Exception($"Club with ID ( {clubId} ) does not exist");
-            }
+            var existingClub = await _context.Clubs.FirstOrDefaultAsync(c => c.ClubID == clubId && c.DeletedTime == null);
 
             existingClub.Name = updateClub.Name;
             existingClub.MemberQuantity = updateClub.MemberQuantity;
             existingClub.LogoClub = updateClub.LogoClub;
             existingClub.Description = updateClub.Description;
             existingClub.PresidentID = updateClub.PresidentID;
+            existingClub.LastUpdatedBy = user;
+            existingClub.LastUpdatedTime = DateTime.Now;
 
-            //_context.Clubs.Update(updateClub);
             return await _context.SaveChangesAsync();
         }
 
-        public async Task<int> DeleteAsync(string clubId)
+        // Delete Club
+        public async Task<int> DeleteAsync(string user, string clubId)
         {
-            var club = await _context.Clubs.FirstOrDefaultAsync(c => c.ClubID == clubId);
-            if (club == null)
-            {
-                throw new Exception($"Club with ID ( {clubId} ) does not exist");
-            }
+            var clubToDelete = await _context.Clubs.FirstOrDefaultAsync(c => c.ClubID == clubId && c.DeletedTime == null);
 
-            _context.Clubs.Remove(club);
+            clubToDelete.DeletedBy = user;
+            clubToDelete.DeletedTime = DateTime.Now;
+
             return await _context.SaveChangesAsync();
         }
     }

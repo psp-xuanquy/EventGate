@@ -9,13 +9,14 @@ namespace EventGate.Business.Models.DTOs.Request
 {
     public class TicketDTO
     {
-        public string TicketID { get; set; }
+        //public string TicketID { get; set; }
 
         public string Gate { get; set; }
 
         public byte[] QRCode { get; set; }
 
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
+        [Required(ErrorMessage = "Price is required")]
         public decimal Price { get; set; }
 
         [Required(ErrorMessage = "Expiration Date is required")]
@@ -26,8 +27,10 @@ namespace EventGate.Business.Models.DTOs.Request
 
         public bool IsUsed { get; set; }
 
+        [Required(ErrorMessage = "SeatID is required")]
         public string SeatID { get; set; }
 
+        [Required(ErrorMessage = "EventID is required")]
         public string EventID { get; set; }
     }
 }

@@ -10,10 +10,10 @@ namespace EventGate.Business.Services.Interface
 {
     public interface ITicketService
     {
-        Task<ServiceResult<int>> AddAsync(TicketDTO ticketDTO);
-        Task<ServiceResult<int>> UpdateAsync(TicketDTO ticketDTO);
-        Task<ServiceResult<int>> DeleteAsync(string ticketId);
-        Task<ServiceResult<Ticket>> GetByIdAsync(string ticketId);
-        Task<ServiceResult<IEnumerable<Ticket>>> GetAllAsync();
+        Task<List<TicketDTO>> GetAllTicketsAsync();
+        Task<TicketDTO> GetTicketByIdAsync(string ticketId);
+        Task<int> AddTicketAsync(string user, TicketDTO addTicketDto);
+        Task<int> UpdateTicketAsync(string user, string ticketId, TicketDTO updateTicketDto);
+        Task<int> DeleteTicketAsync(string user, string ticketId);
     }
 }

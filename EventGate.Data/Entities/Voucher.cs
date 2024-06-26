@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EventGate.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventGate.Data.Entity
 {
-    public class Voucher
+    public class Voucher : AbstractEntity
     {
         [Key]
         public string VoucherID { get; set; } = Guid.NewGuid().ToString();

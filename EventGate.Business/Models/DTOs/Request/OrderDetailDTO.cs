@@ -9,7 +9,7 @@ namespace EventGate.Business.Models.DTOs.Request
 {
     public class OrderDetailDTO
     {
-        public string OrderDetailID { get; set; }
+        //public string OrderDetailID { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than zero")]
         public int Quantity { get; set; }
@@ -18,8 +18,10 @@ namespace EventGate.Business.Models.DTOs.Request
         [Range(0.01, double.MaxValue, ErrorMessage = "Unit price must be greater than zero")]
         public decimal UnitPrice { get; set; }
 
+        [Required(ErrorMessage = "OrderID is required")]
         public string OrderID { get; set; }
 
+        [Required(ErrorMessage = "TicketID is required")]
         public string TicketID { get; set; }
     }
 }

@@ -18,55 +18,66 @@ namespace EventGate.Data.Repositories
             _context = context;
         }
 
-        public async Task<int> AddAsync(Ticket ticket)
+        // Get all Ticket
+        public async Task<List<Ticket>> GetAllAsync()
         {
-            var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticket.TicketID);
-            if (existingTicket != null)
-            {
-                throw new Exception("Ticket already exists");
-            }
-
-            await _context.Tickets.AddAsync(ticket);
-            return await _context.SaveChangesAsync();
+            return await _context.Tickets
+                .Where(c => c.DeletedTime == null)
+                .ToListAsync();
         }
 
-        public async Task<int> UpdateAsync(Ticket ticket)
-        {
-            var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticket.TicketID);
-            if (existingTicket == null)
-            {
-                throw new Exception("Ticket does not exist");
-            }
-
-            _context.Tickets.Update(ticket);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> DeleteAsync(string ticketId)
-        {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId);
-            if (ticket == null)
-            {
-                throw new Exception("Ticket does not exist");
-            }
-
-            _context.Tickets.Remove(ticket);
-            return await _context.SaveChangesAsync();
-        }
-
+        // Get Ticket by ID
         public async Task<Ticket> GetByIdAsync(string ticketId)
         {
-            var ticket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId);
-            if (ticket == null)
-            {
-                throw new Exception("Ticket does not exist");
-            }
-            return ticket;
+            return await _context.Tickets
+                .Where(c => c.DeletedTime == null)
+                .FirstOrDefaultAsync(t => t.TicketID == ticketId);
         }
 
-        public async Task<IEnumerable<Ticket>> GetAllAsync()
+        // Add Ticket
+        public async Task<int> AddAsync(string user, Ticket addTicket)
         {
-            return await _context.Tickets.ToListAsync();
+            addTicket.CreatedBy = user;
+            addTicket.LastUpdatedBy = user;
+            addTicket.LastUpdatedTime = DateTime.Now;
+
+            await _context.Tickets.AddAsync(addTicket);
+            return await _context.SaveChangesAsync();
+        }
+
+        // Update Ticket
+        public async Task<int> UpdateAsync(string user, string ticketId, Ticket updateTicket)
+        {
+            var existingTicket= await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId && t.DeletedTime == null);
+
+            existingTicket.Gate = updateTicket.Gate;
+            existingTicket.QRCode = updateTicket.QRCode;
+            existingTicket.Price = updateTicket.Price;
+            existingTicket.ExpirationDate= updateTicket.ExpirationDate;
+            existingTicket.IsUsed = updateTicket.IsUsed;
+            existingTicket.SeatID = updateTicket.SeatID;
+            existingTicket.EventID = updateTicket.EventID;
+            existingTicket.LastUpdatedBy = user;
+            existingTicket.LastUpdatedTime = DateTime.Now;
+
+            return await _context.SaveChangesAsync();
+        }
+
+        // Delete Ticket
+        public async Task<int> DeleteAsync(string user, string ticketId)
+        {
+            var ticketToDelete = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId);
+
+            ticketToDelete.DeletedBy = user;
+            ticketToDelete.DeletedTime = DateTime.Now;
+
+            return await _context.SaveChangesAsync();
+        }
+
+        // Check if Seat is associated with another Ticket
+        public async Task<bool> IsSeatAssociatedWithAnotherTicketAsync(string seatId)
+        {
+            return await _context.Tickets.AnyAsync(t => t.SeatID == seatId && t.DeletedTime == null);
         }
     }
 }

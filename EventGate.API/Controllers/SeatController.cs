@@ -2,6 +2,8 @@
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace EventGate.API.Controllers
 {
@@ -17,77 +19,84 @@ namespace EventGate.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllSeats()
+        [SwaggerOperation(Summary = "This API is used to 'Get All Seats'")]
+        public async Task<IActionResult> GetAllSeatsAsync()
         {
-            var result = await _seatService.GetAllAsync();
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var seats = await _seatService.GetAllSeatsAsync();
+                return Ok(seats);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{seatId}")]
-        public async Task<IActionResult> GetSeatById(string seatId)
+        [SwaggerOperation(Summary = "This API is used to 'Get Seat by ID'")]
+        public async Task<IActionResult> GetSeatByIdAsync(string seatId)
         {
-            var result = await _seatService.GetByIdAsync(seatId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var seat = await _seatService.GetSeatByIdAsync(seatId);
+                if (seat == null)
+                {
+                    return NotFound();
+                }
+                return Ok(seat);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSeat([FromBody] SeatDTO seatDTO)
+        [SwaggerOperation(Summary = "This API is used to 'Add Seat'")]
+        public async Task<IActionResult> AddSeatAsync([FromBody] SeatDTO seatDto)
         {
-            var result = await _seatService.AddAsync(seatDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _seatService.AddSeatAsync(user, seatDto);
+                return Ok($"SUCCESS: Seat at Hall '{seatDto.Hall}' and Row '{seatDto.Row}' CREATED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateSeat([FromBody] SeatDTO seatDTO)
+        [HttpPut("{seatId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Update Seat'")]
+        public async Task<IActionResult> UpdateSeatAsync(string seatId, [FromBody] SeatDTO seatDto)
         {
-            var result = await _seatService.UpdateAsync(seatDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _seatService.UpdateSeatAsync(user, seatId, seatDto);
+                return Ok($"SUCCESS: Seat with ID '{seatId}' UPDATED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{seatId}")]
-        public async Task<IActionResult> DeleteSeat(string seatId)
+        [SwaggerOperation(Summary = "This API is used to 'Delete Seat'")]
+        public async Task<IActionResult> DeleteSeatAsync(string seatId)
         {
-            var result = await _seatService.DeleteAsync(seatId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _seatService.DeleteSeatAsync(user, seatId);
+                return Ok($"SUCCESS: Seat with ID '{seatId}' DELETED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
     }

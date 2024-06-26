@@ -1,12 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using EventGate.Data.Entities;
 
 namespace EventGate.Data.Entity
 {
-    public class UserEventHistory
+    public class UserEventHistory : AbstractEntity
     {
         [Key]
-        public string? UserEventHistoryID { get; set; }
+        public string? UserEventHistoryID { get; set; } = Guid.NewGuid().ToString();
         public DateTime ArchiveDate { get; set; }
 
         [ForeignKey("EventHistory")]

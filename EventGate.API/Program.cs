@@ -45,8 +45,9 @@ namespace EventGate
                     });
             });
 
+            
+            
             builder.Services.AddControllers();
-
             builder.Services.AddHttpContextAccessor();
 
             // Register DbContext
@@ -60,28 +61,36 @@ namespace EventGate
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            builder.Services.AddAutoMapper(typeof(Mapper));
 
             // Add Scoped
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            //-- User -- 
+            builder.Services.AddAutoMapper(typeof(UserMapper));
             builder.Services.AddScoped<IUserPropository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
-            builder.Services.AddScoped<IMapper<User, UserDTORequest>, UserMapper>();
 
+            //-- Club -- 
             builder.Services.AddScoped<IClubRepository, ClubRepository>();
             builder.Services.AddScoped<IClubService, ClubService>();
 
-            //builder.Services.AddScoped<ITicketRepository, TicketRepository>();
-            //builder.Services.AddScoped<ITicketService, TicketService>();
+            //-- Ticket -- 
+            builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+            builder.Services.AddScoped<ITicketService, TicketService>();
 
-            //builder.Services.AddScoped<ISeatRepository, SeatRepository>();
-            //builder.Services.AddScoped<ISeatService, SeatService>();
+            //-- Seat -- 
+            builder.Services.AddScoped<ISeatRepository, SeatRepository>();
+            builder.Services.AddScoped<ISeatService, SeatService>();
 
-            //builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
-            //builder.Services.AddScoped<IVoucherService, VoucherService>();
+            //-- Voucher -- 
+            builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+            builder.Services.AddScoped<IVoucherService, VoucherService>();
 
+            ////-- Order -- 
             //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             //builder.Services.AddScoped<IOrderService, OrderService>();
 
+            ////-- OrderDetail -- 
             //builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             //builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
@@ -139,7 +148,6 @@ namespace EventGate
             });
 
 
-
             // Register necessary services
             builder.Services.AddDataProtection();
 
@@ -156,7 +164,8 @@ namespace EventGate
                     Scheme = "Bearer"
                 });
 
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });
+                c.EnableAnnotations();  //hien thi example nhap nhu the nao cho register
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });          
             });
 
             var app = builder.Build();

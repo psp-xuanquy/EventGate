@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using EventGate.Data.Entities;
 
 namespace EventGate.Data.Entity
 {
-    public class EventFeedback
+    public class EventFeedback : AbstractEntity
     {
         [Key]
         public string FeedbackID { get; set; } = Guid.NewGuid().ToString();

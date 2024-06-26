@@ -10,10 +10,10 @@ namespace EventGate.Business.Services.Interface
 {
     public interface IVoucherService
     {
-        Task<ServiceResult<int>> AddAsync(VoucherDTO voucherDTO);
-        Task<ServiceResult<int>> UpdateAsync(VoucherDTO voucherDTO);
-        Task<ServiceResult<int>> DeleteAsync(string voucherId);
-        Task<ServiceResult<Voucher>> GetByIdAsync(string voucherId);
-        Task<ServiceResult<IEnumerable<Voucher>>> GetAllAsync();
+        Task<List<VoucherDTO>> GetAllVouchersAsync();
+        Task<VoucherDTO> GetVoucherByIdAsync(string voucherId);
+        Task<int> AddVoucherAsync(string user, VoucherDTO addVoucherDto);
+        Task<int> UpdateVoucherAsync(string user, string voucherId, VoucherDTO updateVoucherDto);
+        Task<int> DeleteVoucherAsync(string user, string voucherId);
     }
 }

@@ -1,4 +1,5 @@
-﻿using EventGate.Business.Mappers;
+﻿using AutoMapper;
+using EventGate.Business.Mappers;
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
@@ -14,133 +15,63 @@ namespace EventGate.Business.Services
     public class VoucherService : IVoucherService
     {
         private readonly IVoucherRepository _voucherRepository;
-        private readonly IMapper<Voucher, VoucherDTO> _voucherMapper;
+        private readonly IMapper _mapper;
 
-        public VoucherService(IVoucherRepository voucherRepository, IMapper<Voucher, VoucherDTO> voucherMapper)
+        public VoucherService(IVoucherRepository voucherRepository, IMapper mapper)
         {
             _voucherRepository = voucherRepository;
-            _voucherMapper = voucherMapper;
+            _mapper = mapper;
         }
 
-        public async Task<ServiceResult<int>> AddAsync(VoucherDTO voucherDTO)
+        // Get all Voucher
+        public async Task<List<VoucherDTO>> GetAllVouchersAsync()
         {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var voucher = _voucherMapper.Map(voucherDTO);
-                var affectedRows = await _voucherRepository.AddAsync(voucher);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Voucher added successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                result.Status = 500;
-            }
-
-            return result;
+            var vouchers = await _voucherRepository.GetAllAsync();
+            return _mapper.Map<List<VoucherDTO>>(vouchers);
         }
 
-        public async Task<ServiceResult<int>> UpdateAsync(VoucherDTO voucherDTO)
+        // Get Voucher by ID
+        public async Task<VoucherDTO> GetVoucherByIdAsync(string voucherId)
         {
-            var result = new ServiceResult<int>();
-
-            try
+            var voucher = await _voucherRepository.GetByIdAsync(voucherId);
+            if (voucher == null)
             {
-                var voucher = _voucherMapper.Map(voucherDTO);
-                var affectedRows = await _voucherRepository.UpdateAsync(voucher);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Voucher updated successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                throw new Exception($"Voucher with ID ( {voucherId} ) NOT FOUND");
             }
 
-            return result;
+            return _mapper.Map<VoucherDTO>(voucher);
         }
 
-        public async Task<ServiceResult<int>> DeleteAsync(string voucherId)
+        // Add Voucher
+        public async Task<int> AddVoucherAsync(string user, VoucherDTO addVoucherDto)
         {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var affectedRows = await _voucherRepository.DeleteAsync(voucherId);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Voucher deleted successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
+            var voucher = _mapper.Map<Voucher>(addVoucherDto);
+            return await _voucherRepository.AddAsync(user, voucher);
         }
 
-        public async Task<ServiceResult<IEnumerable<Voucher>>> GetAllAsync()
+        // Update Voucher
+        public async Task<int> UpdateVoucherAsync(string user, string voucherId, VoucherDTO updateVoucherDto)
         {
-            var result = new ServiceResult<IEnumerable<Voucher>>();
-
-            try
+            var ẽistingVoucher = await _voucherRepository.GetByIdAsync(voucherId);
+            if (ẽistingVoucher == null)
             {
-                var vouchers = await _voucherRepository.GetAllAsync();
-                result.IsSuccess = true;
-                result.Data = vouchers;
-                result.Status = 200;
-                result.ErrorMessage = "Retrieved all vouchers successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                throw new Exception($"Voucher with ID ( {voucherId} ) NOT FOUND");
             }
 
-            return result;
+            var voucher = _mapper.Map<Voucher>(updateVoucherDto);
+            return await _voucherRepository.UpdateAsync(user, voucherId, voucher);
         }
 
-        public async Task<ServiceResult<Voucher>> GetByIdAsync(string voucherId)
+        // Delete Voucher
+        public async Task<int> DeleteVoucherAsync(string user, string voucherId)
         {
-            var result = new ServiceResult<Voucher>();
-
-            try
+            var ẽistingVoucher = await _voucherRepository.GetByIdAsync(voucherId);
+            if (ẽistingVoucher == null)
             {
-                var voucher = await _voucherRepository.GetByIdAsync(voucherId);
-                if (voucher == null)
-                {
-                    result.IsSuccess = false;
-                    result.Status = 404;
-                    result.ErrorMessage = "Voucher not found";
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Data = voucher;
-                    result.Status = 200;
-                    result.ErrorMessage = "Retrieved voucher successfully";
-                }
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                throw new Exception($"Voucher with ID ( {voucherId} ) NOT FOUND");
             }
 
-            return result;
+            return await _voucherRepository.DeleteAsync(user, voucherId);
         }
     }
 }

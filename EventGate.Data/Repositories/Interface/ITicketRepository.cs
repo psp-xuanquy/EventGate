@@ -9,10 +9,11 @@ namespace EventGate.Data.Repositories.Interface
 {
     public interface ITicketRepository
     {
-        Task<int> AddAsync(Ticket ticket);
-        Task<int> UpdateAsync(Ticket ticket);
-        Task<int> DeleteAsync(string ticketId);
+        Task<List<Ticket>> GetAllAsync();
         Task<Ticket> GetByIdAsync(string ticketId);
-        Task<IEnumerable<Ticket>> GetAllAsync();
+        Task<int> AddAsync(string user, Ticket addTicket);
+        Task<int> UpdateAsync(string user, string ticketId, Ticket updateTicket);
+        Task<int> DeleteAsync(string user, string ticketId);
+        Task<bool> IsSeatAssociatedWithAnotherTicketAsync(string seatId);
     }
 }

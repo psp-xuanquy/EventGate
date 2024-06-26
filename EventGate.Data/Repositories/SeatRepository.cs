@@ -18,55 +18,69 @@ namespace EventGate.Data.Repositories
             _context = context;
         }
 
-        public async Task<int> AddAsync(Seat seat)
+        // Get all Seat
+        public async Task<List<Seat>> GetAllAsync()
         {
-            var existingSeat = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seat.SeatID);
-            if (existingSeat != null)
-            {
-                throw new Exception("Seat already exists");
-            }
-
-            await _context.Seats.AddAsync(seat);
-            return await _context.SaveChangesAsync();
+            return await _context.Seats
+                .Where(c => c.DeletedTime == null)
+                .OrderBy(s => s.Hall)  
+                .ThenBy(s => s.Row)   
+                .ThenBy(s => s.Number)
+                .ToListAsync();
         }
 
-        public async Task<int> UpdateAsync(Seat seat)
-        {
-            var existingSeat = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seat.SeatID);
-            if (existingSeat == null)
-            {
-                throw new Exception("Seat does not exist");
-            }
-
-            _context.Seats.Update(seat);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> DeleteAsync(string seatId)
-        {
-            var seat = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seatId);
-            if (seat == null)
-            {
-                throw new Exception("Seat does not exist");
-            }
-
-            _context.Seats.Remove(seat);
-            return await _context.SaveChangesAsync();
-        }
-
+        // Get Seat by ID
         public async Task<Seat> GetByIdAsync(string seatId)
         {
-            var seat = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seatId);
-            if (seat == null)
-            {
-                throw new Exception("Seat does not exist");
-            }
-            return seat;
+            return await _context.Seats
+                .Where(c => c.DeletedTime == null)
+                .FirstOrDefaultAsync(s => s.SeatID == seatId); ;
         }
 
-        public async Task<IEnumerable<Seat>> GetAllAsync()
+        // Get Seat by Hall, Row, Number
+        public async Task<Seat> GetByHallRowAndNumberAsync(string hall, string row, int number)
         {
-            return await _context.Seats.ToListAsync();
+            return await _context.Seats
+                .Where(s => s.Hall == hall && s.Row == row && s.Number == number && s.DeletedTime == null)
+                .FirstOrDefaultAsync();
+        }
+
+        // Add Seat
+        public async Task<int> AddAsync(string user, Seat addSeat)
+        {
+            addSeat.CreatedBy = user;
+            addSeat.LastUpdatedBy = user;
+            addSeat.LastUpdatedTime = DateTime.Now;
+
+            await _context.Seats.AddAsync(addSeat);
+            return await _context.SaveChangesAsync();
+        }
+
+        // Update Seat
+        public async Task<int> UpdateAsync(string user, string seatId, Seat updateSeat)
+        {
+            var existingSeat = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seatId && s.DeletedTime == null);
+
+            existingSeat.Hall = updateSeat.Hall;
+            existingSeat.Row = updateSeat.Row;
+            existingSeat.Number = updateSeat.Number;
+            existingSeat.IsAvailable = updateSeat.IsAvailable;
+            existingSeat.LastUpdatedBy = user;
+            existingSeat.LastUpdatedTime = DateTime.Now;
+
+            //_context.Seats.Update(updateSeat);
+            return await _context.SaveChangesAsync();
+        }
+
+        // Delete Seat
+        public async Task<int> DeleteAsync(string user, string seatId)
+        {
+            var seatToDelete = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seatId && s.DeletedTime == null);
+
+            seatToDelete.DeletedBy = user;
+            seatToDelete.DeletedTime = DateTime.Now;
+
+            return await _context.SaveChangesAsync();
         }
     }
 }

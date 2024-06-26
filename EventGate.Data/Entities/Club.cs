@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using EventGate.Data.Entities;
 
 namespace EventGate.Data.Entity
 {
-    public class Club
+    public class Club : AbstractEntity
     {
         [Key]
         public string ClubID { get; set; } = Guid.NewGuid().ToString();

@@ -1,13 +1,16 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System;
 using System.Threading.Tasks;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EventGate.API.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class ClubController : ControllerBase
     {
         private readonly IClubService _clubService;
@@ -18,6 +21,7 @@ namespace EventGate.API.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "This API is used to 'Get All Clubs'")]
         public async Task<IActionResult> GetAllClubsAsync()
         {
             try
@@ -32,6 +36,7 @@ namespace EventGate.API.Controllers
         }
 
         [HttpGet("{clubId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Get Club by ID'")]
         public async Task<IActionResult> GetClubByIdAsync(string clubId)
         {
             try
@@ -50,11 +55,13 @@ namespace EventGate.API.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(Summary = "This API is used to 'Add Club'")]
         public async Task<IActionResult> AddClubAsync([FromBody] ClubDTO clubDto)
         {
             try
             {
-                await _clubService.AddClubAsync(clubDto);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _clubService.AddClubAsync(user, clubDto);
                 return Ok($"SUCCESS: Club '{clubDto.Name}' CREATED successfully");
             }
             catch (Exception ex)
@@ -64,11 +71,13 @@ namespace EventGate.API.Controllers
         }
 
         [HttpPut("{clubId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Update Club'")]
         public async Task<IActionResult> UpdateClubAsync(string clubId, [FromBody] ClubDTO clubDto)
         {
             try
             {
-                await _clubService.UpdateClubAsync(clubId, clubDto);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _clubService.UpdateClubAsync(user, clubId, clubDto);
                 return Ok($"SUCCESS: Club with ID ( {clubId} ) UPDATED successfully");
             }
             catch (Exception ex)
@@ -78,11 +87,13 @@ namespace EventGate.API.Controllers
         }
 
         [HttpDelete("{clubId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Delete Club'")]
         public async Task<IActionResult> DeleteClubAsync(string clubId)
         {
             try
             {
-                await _clubService.DeleteClubAsync(clubId);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                await _clubService.DeleteClubAsync(user, clubId);
                 return Ok($"SUCCESS: Club with ID ( {clubId} ) DELETED successfully");
             }
             catch (Exception ex)

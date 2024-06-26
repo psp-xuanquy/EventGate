@@ -24,6 +24,7 @@ namespace EventGate.Business.Models.DTOs.Request
 
         public string? Description { get; set; }
 
+        [Required(ErrorMessage = "PresidentID is required")]
         public string? PresidentID { get; set; }
     }
 }

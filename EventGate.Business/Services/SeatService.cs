@@ -1,4 +1,5 @@
-﻿using EventGate.Business.Mappers;
+﻿using AutoMapper;
+using EventGate.Business.Mappers;
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
@@ -6,6 +7,7 @@ using EventGate.Data.Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,133 +16,74 @@ namespace EventGate.Business.Services
     public class SeatService : ISeatService
     {
         private readonly ISeatRepository _seatRepository;
-        private readonly IMapper<Seat, SeatDTO> _seatMapper;
+        private readonly IMapper _mapper;
 
-        public SeatService(ISeatRepository seatRepository, IMapper<Seat, SeatDTO> seatMapper)
+        public SeatService(ISeatRepository seatRepository, IMapper mapper)
         {
             _seatRepository = seatRepository;
-            _seatMapper = seatMapper;
+            _mapper = mapper;
         }
 
-        public async Task<ServiceResult<int>> AddAsync(SeatDTO seatDTO)
+        // Get all Seat
+        public async Task<List<SeatDTO>> GetAllSeatsAsync()
         {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var seat = _seatMapper.Map(seatDTO);
-                var affectedRows = await _seatRepository.AddAsync(seat);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Seat added successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                result.Status = 500;
-            }
-
-            return result;
+            var seats = await _seatRepository.GetAllAsync();
+            return _mapper.Map<List<SeatDTO>>(seats);
         }
 
-        public async Task<ServiceResult<int>> UpdateAsync(SeatDTO seatDTO)
+        // Get Seat by ID
+        public async Task<SeatDTO> GetSeatByIdAsync(string seatId)
         {
-            var result = new ServiceResult<int>();
-
-            try
+            var seat = await _seatRepository.GetByIdAsync(seatId);
+            if (seat == null)
             {
-                var seat = _seatMapper.Map(seatDTO);
-                var affectedRows = await _seatRepository.UpdateAsync(seat);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Seat updated successfully";
+                throw new Exception($"Seat with ID ( {seatId} ) NOT FOUND");
             }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
+            return _mapper.Map<SeatDTO>(seat);
         }
 
-        public async Task<ServiceResult<int>> DeleteAsync(string seatId)
+        // Add Seat
+        public async Task<int> AddSeatAsync(string user, SeatDTO addSeatDto)
         {
-            var result = new ServiceResult<int>();
-
-            try
+            var existingSeat = await _seatRepository.GetByHallRowAndNumberAsync(addSeatDto.Hall, addSeatDto.Row, addSeatDto.Number);
+            if (existingSeat != null)
             {
-                var affectedRows = await _seatRepository.DeleteAsync(seatId);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Seat deleted successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                throw new Exception($"Seat with Hall ({addSeatDto.Hall}), Row ({addSeatDto.Row}), Number ({addSeatDto.Number}) ALREADY EXISTS");
             }
 
-            return result;
+            var seat = _mapper.Map<Seat>(addSeatDto);
+            return await _seatRepository.AddAsync(user, seat);
         }
 
-        public async Task<ServiceResult<IEnumerable<Seat>>> GetAllAsync()
+        // Update Seat
+        public async Task<int> UpdateSeatAsync(string user, string seatId, SeatDTO updateSeatDto)
         {
-            var result = new ServiceResult<IEnumerable<Seat>>();
-
-            try
+            var existingSeat = await _seatRepository.GetByIdAsync(seatId);
+            if (existingSeat == null)
             {
-                var seats = await _seatRepository.GetAllAsync();
-                result.IsSuccess = true;
-                result.Data = seats;
-                result.Status = 200;
-                result.ErrorMessage = "Retrieved all seats successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                throw new Exception($"Seat with ID ({seatId}) NOT FOUND");
             }
 
-            return result;
+            var conflictingSeat = await _seatRepository.GetByHallRowAndNumberAsync(updateSeatDto.Hall, updateSeatDto.Row, updateSeatDto.Number);
+            if (conflictingSeat != null && conflictingSeat.SeatID != seatId)
+            {
+                throw new Exception($"Seat with Hall ({updateSeatDto.Hall}), Row ({updateSeatDto.Row}), Number ({updateSeatDto.Number}) ALREADY EXISTS");
+            }
+
+            var seat = _mapper.Map<Seat>(updateSeatDto);
+            return await _seatRepository.UpdateAsync(user, seatId, seat);
         }
 
-        public async Task<ServiceResult<Seat>> GetByIdAsync(string seatId)
+        // Delete Seat
+        public async Task<int> DeleteSeatAsync(string user, string seatId)
         {
-            var result = new ServiceResult<Seat>();
-
-            try
+            var existingSeat = await _seatRepository.GetByIdAsync(seatId);
+            if (existingSeat == null)
             {
-                var seat = await _seatRepository.GetByIdAsync(seatId);
-                if (seat == null)
-                {
-                    result.IsSuccess = false;
-                    result.Status = 404;
-                    result.ErrorMessage = "Seat not found";
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Data = seat;
-                    result.Status = 200;
-                    result.ErrorMessage = "Retrieved seat successfully";
-                }
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                throw new Exception($"Seat with ID ({seatId}) NOT FOUND");
             }
 
-            return result;
+            return await _seatRepository.DeleteAsync(user, seatId);
         }
     }
 }

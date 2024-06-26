@@ -2,6 +2,8 @@
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace EventGate.API.Controllers
 {
@@ -17,77 +19,84 @@ namespace EventGate.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTickets()
+        [SwaggerOperation(Summary = "This API is used to 'Get All Tickets'")]
+        public async Task<IActionResult> GetAllTicketsAsync()
         {
-            var result = await _ticketService.GetAllAsync();
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var tickets = await _ticketService.GetAllTicketsAsync();
+                return Ok(tickets);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{ticketId}")]
-        public async Task<IActionResult> GetTicketById(string ticketId)
+        [SwaggerOperation(Summary = "This API is used to 'Get Ticket By ID'")]
+        public async Task<IActionResult> GetTicketByIdAsync(string ticketId)
         {
-            var result = await _ticketService.GetByIdAsync(ticketId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var ticket = await _ticketService.GetTicketByIdAsync(ticketId);
+                if (ticket == null)
+                {
+                    return NotFound();
+                }
+                return Ok(ticket);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTicket([FromBody] TicketDTO ticketDTO)
+        [SwaggerOperation(Summary = "This API is used to 'Add Ticket'")]
+        public async Task<IActionResult> AddTicketAsync([FromBody] TicketDTO ticketDto)
         {
-            var result = await _ticketService.AddAsync(ticketDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _ticketService.AddTicketAsync(user, ticketDto);
+                return Ok("SUCCESS: Ticket CREATED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateTicket([FromBody] TicketDTO ticketDTO)
+        [HttpPut("{ticketId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Update Ticket'")]
+        public async Task<IActionResult> UpdateTicketAsync(string ticketId, [FromBody] TicketDTO ticketDto)
         {
-            var result = await _ticketService.UpdateAsync(ticketDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _ticketService.UpdateTicketAsync(user, ticketId, ticketDto);
+                return Ok($"SUCCESS: Ticket with ID '{ticketId}' UPDATED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{ticketId}")]
-        public async Task<IActionResult> DeleteTicket(string ticketId)
+        [SwaggerOperation(Summary = "This API is used to 'Delete Ticket'")]
+        public async Task<IActionResult> DeleteTicketAsync(string ticketId)
         {
-            var result = await _ticketService.DeleteAsync(ticketId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _ticketService.DeleteTicketAsync(user, ticketId);
+                return Ok($"SUCCESS: Ticket with ID '{ticketId}' DELETED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
     }

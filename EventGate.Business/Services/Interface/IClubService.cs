@@ -13,8 +13,8 @@ namespace EventGate.Business.Services.Interface
     {
         Task<List<ClubDTO>> GetAllClubsAsync();
         Task<ClubDTO> GetClubByIdAsync(string clubId);
-        Task<int> AddClubAsync(ClubDTO addClubDto);
-        Task<int> UpdateClubAsync(string clubId, ClubDTO updateClubDto);
-        Task<int> DeleteClubAsync(string clubId);
+        Task<int> AddClubAsync(string user, ClubDTO addClubDto);
+        Task<int> UpdateClubAsync(string user, string clubId, ClubDTO updateClubDto);
+        Task<int> DeleteClubAsync(string user, string clubId);
     }
 }

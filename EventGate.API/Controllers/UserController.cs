@@ -1,9 +1,11 @@
-﻿using EventGate.Business.Services.Interface;
+﻿using EventGate.Business.Models.DTOs.Request.User;
+using EventGate.Business.Services.Interface;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EventGate.WebAPI.Controllers
 {
@@ -18,38 +20,40 @@ namespace EventGate.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        [SwaggerOperation(Summary = "This API is to Get All User")]
+        public async Task<IActionResult> GetAll()
         {
-            var data = await _userService.GetAllAsync();
-            return Ok(data);
+            return await _userService.GetAllAsync();
+        }
+
+        [HttpGet("/api/User/Deleted")]
+        [SwaggerOperation(Summary = "This API is to Get All User be Deleted")]
+        public async Task<IActionResult> GetAllDeleted()
+        {
+            return await _userService.GetAllDeletedAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [SwaggerOperation(Summary = "This API is to Get User By Id")]
+        public async Task<IActionResult> GetById(string id)
         {
-            var data = await _userService.GetByIdAsync(id);
-            return Ok(data);
+            return await _userService.GetByIdAsync(id);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Add([FromBody] UserDTORequest user)
+
+        [HttpPut("{id}")]
+        [SwaggerOperation(Summary = "This API is to Update User Through Id")]
+        public async Task<IActionResult> Update([FromBody] UpdateUserDTORequest user, string id)
         {
-            var result = await _userService.AddAsync(user);
-            return Ok(result);
+            return await _userService.UpdateAsync(user, id);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] UserDTORequest user)
-        {
-            var result = await _userService.UpdateAsync(user);
-            return Ok(result);
-        }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [SwaggerOperation(Summary = "This API is to Delete User Through Id")]
+        public async Task<IActionResult> Delete(string id)
         {
-            var result = await _userService.DeleteAsync(id);
-            return Ok(result);
+            return await _userService.DeleteAsync(id);   
         }
     }
 }

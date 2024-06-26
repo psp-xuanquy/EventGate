@@ -1,12 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EventGate.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EventGate.Data.Entity
 {
-    public class EventHistory
+    public class EventHistory : AbstractEntity
     {
         [Key]
-        public string? EventHistoryID { get; set; }
+        public string? EventHistoryID { get; set; } = Guid.NewGuid().ToString();
         public string? EventName { get; set; }
         public string? Location { get; set; }
         public string? Content { get; set; }

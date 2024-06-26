@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EventGate.Business.Mappers
 {
-    public class Mapper : Profile
+    public class AutoMapperProfile : Profile
     {
-        public Mapper() 
+        public AutoMapperProfile()
         {
             CreateMap<Club, ClubDTO>().ReverseMap();
             CreateMap<Ticket, TicketDTO>().ReverseMap();

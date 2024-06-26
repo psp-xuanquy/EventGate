@@ -192,6 +192,16 @@ namespace EventGate.Data
                 .HasOne(od => od.Ticket)
                 .WithMany()
                 .HasForeignKey(od => od.TicketID);
+            
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Ticket)
+                .WithMany(t => t.OrderDetails)
+                .HasForeignKey(od => od.TicketID);
+
+            modelBuilder.Entity<Voucher>()
+                .HasOne(v => v.Event)
+                .WithMany(e => e.Vouchers)
+                .HasForeignKey(v => v.EventID);
 
             modelBuilder.Entity<Voucher>()
                 .HasOne(v => v.User)
@@ -220,6 +230,8 @@ namespace EventGate.Data
                 .WithMany(et => et.EventRules)
                 .HasForeignKey(er => er.EventTypeID);
 
+            modelBuilder.Entity<Seat>().HasData(GenerateSeats());
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -239,6 +251,35 @@ namespace EventGate.Data
             }
         }
 
+        private Seat[] GenerateSeats()
+        {
+            var seats = new List<Seat>();
+            var halls = new[] { "HallA", "HallB", "HallC" };
+            var rows = new[] { "A", "B", "C", "D", "E" };
+
+            foreach (var hall in halls)
+            {
+                foreach (var row in rows)
+                {
+                    for (int number = 1; number <= 6; number++)
+                    {
+                        seats.Add(new Seat
+                        {
+                            SeatID = Guid.NewGuid().ToString(),
+                            Hall = hall,
+                            Row = row,
+                            Number = number,
+                            IsAvailable = true,
+                            CreatedBy = "System",
+                            LastUpdatedBy = "System",
+                            LastUpdatedTime = DateTime.Now
+                        });
+                    }
+                }
+            }
+
+            return seats.ToArray();
+        }
 
         public EntityEntry Add(object entity)
         {

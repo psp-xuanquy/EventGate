@@ -9,10 +9,10 @@ namespace EventGate.Data.Repositories.Interface
 {
     public interface IVoucherRepository
     {
-        Task<int> AddAsync(Voucher voucher);
-        Task<int> UpdateAsync(Voucher voucher);
-        Task<int> DeleteAsync(string voucherId);
+        Task<List<Voucher>> GetAllAsync();
         Task<Voucher> GetByIdAsync(string voucherId);
-        Task<IEnumerable<Voucher>> GetAllAsync();
+        Task<int> AddAsync(string user, Voucher addVoucher);
+        Task<int> UpdateAsync(string user, string voucherId, Voucher updateVoucher);
+        Task<int> DeleteAsync(string user, string voucherId);
     }
 }

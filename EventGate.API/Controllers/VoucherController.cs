@@ -2,6 +2,8 @@
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace EventGate.API.Controllers
 {
@@ -17,77 +19,84 @@ namespace EventGate.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllVouchers()
+        [SwaggerOperation(Summary = "This API is used to 'Get all Vouchers'")]
+        public async Task<IActionResult> GetAllVouchersAsync()
         {
-            var result = await _voucherService.GetAllAsync();
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var vouchers = await _voucherService.GetAllVouchersAsync();
+                return Ok(vouchers);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{voucherId}")]
-        public async Task<IActionResult> GetVoucherById(string voucherId)
+        [SwaggerOperation(Summary = "This API is used to 'Get Voucher by ID'")]
+        public async Task<IActionResult> GetVoucherByIdAsync(string voucherId)
         {
-            var result = await _voucherService.GetByIdAsync(voucherId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var voucher = await _voucherService.GetVoucherByIdAsync(voucherId);
+                if (voucher == null)
+                {
+                    return NotFound();
+                }
+                return Ok(voucher);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddVoucher([FromBody] VoucherDTO voucherDTO)
+        [SwaggerOperation(Summary = "This API is used to 'Add Voucher'")]
+        public async Task<IActionResult> AddVoucherAsync([FromBody] VoucherDTO voucherDto)
         {
-            var result = await _voucherService.AddAsync(voucherDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _voucherService.AddVoucherAsync(user, voucherDto);
+                return Ok($"SUCCESS: Voucher with code '{voucherDto.Code}' ADDED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateVoucher([FromBody] VoucherDTO voucherDTO)
+        [HttpPut("{voucherId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Update Voucher'")]
+        public async Task<IActionResult> UpdateVoucherAsync(string voucherId, [FromBody] VoucherDTO voucherDto)
         {
-            var result = await _voucherService.UpdateAsync(voucherDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _voucherService.UpdateVoucherAsync(user, voucherId, voucherDto);
+                return Ok($"SUCCESS: Voucher with ID '{voucherId}' UPDATED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{voucherId}")]
-        public async Task<IActionResult> DeleteVoucher(string voucherId)
+        [SwaggerOperation(Summary = "This API is used to 'Delete Voucher'")]
+        public async Task<IActionResult> DeleteVoucherAsync(string voucherId)
         {
-            var result = await _voucherService.DeleteAsync(voucherId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _voucherService.DeleteVoucherAsync(user, voucherId);
+                return Ok($"SUCCESS: Voucher with ID '{voucherId}' DELETED successfully");
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
     }
