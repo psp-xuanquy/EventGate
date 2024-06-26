@@ -11,22 +11,12 @@ namespace EventGate.Data
 {
     public class AppDbContext : IdentityDbContext<User>, IAppDbContext
     {
-        //IConfiguration _configuration;
-
         public AppDbContext()
         {
-
         }
-
-        //public AppDbContext(DbContextOptions<AppDbContext> options, IConfiguration configuration)
-        //    : base(options)
-        //{
-        //    _configuration = configuration;
-        //}
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-
         }
 
         public DatabaseFacade DatabaseFacade => base.Database;
@@ -54,16 +44,6 @@ namespace EventGate.Data
         public DbSet<UserHistory> UserHistories { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (!optionsBuilder.IsConfigured)
-        //    {
-        //        var configuration = _configuration ?? throw new InvalidOperationException("Configuration is null.");
-        //        optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"), 
-        //            options => options.EnableRetryOnFailure());
-        //    }
-        //}
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -76,7 +56,6 @@ namespace EventGate.Data
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
             }
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -186,17 +165,14 @@ namespace EventGate.Data
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
-                .HasForeignKey(od => od.OrderID);
+                .HasForeignKey(od => od.OrderID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Ticket)
-                .WithMany()
-                .HasForeignKey(od => od.TicketID);
-            
-            modelBuilder.Entity<OrderDetail>()
-                .HasOne(od => od.Ticket)
                 .WithMany(t => t.OrderDetails)
-                .HasForeignKey(od => od.TicketID);
+                .HasForeignKey(od => od.TicketID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Voucher>()
                 .HasOne(v => v.Event)
@@ -206,12 +182,8 @@ namespace EventGate.Data
             modelBuilder.Entity<Voucher>()
                 .HasOne(v => v.User)
                 .WithMany()
-                .HasForeignKey(v => v.UserID);
-
-            modelBuilder.Entity<Voucher>()
-                .HasOne(v => v.Event)
-                .WithMany()
-                .HasForeignKey(v => v.EventID);
+                .HasForeignKey(v => v.UserID)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<EventHistory>()
                 .HasOne(eh => eh.EventType)
