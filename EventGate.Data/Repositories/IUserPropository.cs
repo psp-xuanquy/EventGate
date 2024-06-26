@@ -10,11 +10,12 @@ namespace EventGate.Data.Repositories
 {
     public interface IUserPropository
     {
-        Task<int> AddAsync(User user);
-        Task<int> UpdateAsync(User user);
-        Task<int> DeleteAsync(Guid id);
-        Task<User> GetByIdAsync(Guid id);
-        Task<IEnumerable<User>> GetAllAsync();
+        Task<List<User>> GetAllAsync();
+        Task<List<User>> GetAllDeletedAsync();
+        Task<User> GetByIdAsync(string id);
+        Task<int> UpdateAsync(string id, User user);
+        Task<int> DeleteAsync(string id, User user);
+        
         Task<User> VerifyLoginAsync(string username, string password);
     }
 }

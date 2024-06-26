@@ -1,5 +1,8 @@
-﻿using EventGate.Business.Mappers;
+﻿using AutoMapper;
+using EventGate.Business.Mappers;
 using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.User;
+using EventGate.Business.Models.DTOs.Response.User;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
@@ -16,100 +19,95 @@ namespace EventGate.Business.Services
     public class UserService : IUserService
     {
         private readonly IUserPropository _userRepository;
-        private readonly IMapper<User, UserDTORequest> _userMapper;
         private readonly UserManager<User> _userManager;
-
-        public UserService(IUserPropository userPropository, UserManager<User> userManager)
+        private readonly IMapper _mapper;
+        public UserService(IUserPropository userPropository, UserManager<User> userManager, IMapper mapper)
         {
             _userRepository = userPropository;
             _userManager = userManager;
+            _mapper = mapper;
         }
 
-        public async Task<ServiceResult<int>> AddAsync(UserDTORequest userDTO)
+
+        //Get All User
+        public async Task<IActionResult> GetAllAsync()
         {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var user = _userMapper.Map(userDTO);
-                var affectedRows = await _userRepository.AddAsync(user);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
+            List<User> users = await _userRepository.GetAllAsync();
+            return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
         }
 
-        public async Task<ServiceResult<int>> DeleteAsync(Guid id)
+        //Get All User Deleted
+        public async Task<IActionResult> GetAllDeletedAsync()
         {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var affectedRows = await _userRepository.DeleteAsync(id);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
+            List<User> users = await _userRepository.GetAllDeletedAsync();
+            return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
         }
 
-        public async Task<ServiceResult<IEnumerable<User>>> GetAllAsync()
+
+        //Find By Id
+        public async Task<IActionResult> GetByIdAsync(string id)
         {
-            var result = new ServiceResult<IEnumerable<User>>();
-
-            try
+            User user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
             {
-                var users = await _userRepository.GetAllAsync();
-                result.IsSuccess = true;
-                result.Data = users;
+                return new BadRequestObjectResult($"User với id: '{id}' không tìm thấy hoặc đã bị xóa!");
             }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
+            return new OkObjectResult(_mapper.Map<UserDTOResponse>(user));
         }
 
-        public async Task<ServiceResult<User>> GetByIdAsync(Guid id)
+        //Find By Gmail Or UserName
+
+        //Update User
+        public async Task<IActionResult> UpdateAsync(UpdateUserDTORequest userDTO, string id)
         {
-            var result = new ServiceResult<User>();
-
-            try
+            User user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
             {
-                var user = await _userRepository.GetByIdAsync(id);
-                if (user == null)
-                {
-                    result.IsSuccess = false;
-                    result.ErrorMessage = "User not found";
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Data = user;
-                }
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                return new BadRequestObjectResult($"User với id: '{id}' không tìm thấy hoặc đã bị xóa!");
             }
 
-            return result;
+            List<User> users = await _userRepository.GetAllAsync();
+            if(users.Any(user => user.Email == userDTO.Email && user.Id != id))
+            {
+                return new BadRequestObjectResult($"Gmail này đã được sử dụng, vui lòng chọn một gmail khác!");
+            }
+            if (users.Any(user => user.IdentityCard == userDTO.IdentityCard && user.Id != id))
+            {
+                return new BadRequestObjectResult($"Mã định danh này được sử dụng! *Lưu ý: Mã định danh phải là duy nhất");
+            }
+
+            var entity = _mapper.Map(userDTO, user);
+
+            int rs = await _userRepository.UpdateAsync(id, entity);
+            if(rs == 0)
+            {
+                return new BadRequestObjectResult("Update User thất bại!");
+            }
+
+            return new OkObjectResult("Update User thành công!");
         }
 
+
+        //Delete User
+        public async Task<IActionResult> DeleteAsync(string id)
+        {
+            User user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return new BadRequestObjectResult($"User với id: '{id}' không tìm thấy hoặc đã bị xóa!");
+            }
+
+            int rs = await _userRepository.DeleteAsync(id, user);
+            if (rs == 0)
+            {
+                return new BadRequestObjectResult("Delete User thất bại!");
+            }
+
+            return new OkObjectResult("Delete User thành công!");
+        }
+
+
+        //Login 
         public async Task<ServiceResult<string>> Login(LoginDTO loginUser)
         {
             var result = new ServiceResult<string>();
@@ -139,26 +137,8 @@ namespace EventGate.Business.Services
             return result;
         }
 
-        public async Task<ServiceResult<int>> UpdateAsync(UserDTORequest userDTO)
-        {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var user = _userMapper.Map(userDTO);
-                var affectedRows = await _userRepository.UpdateAsync(user);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
-        }
-
+       
+        //Register
         public async Task<ServiceResult<int>> RegisterByRole(RegisterUserDTO registerDTO, string role)
         {
             var result = new ServiceResult<int>();
@@ -199,7 +179,6 @@ namespace EventGate.Business.Services
             result.IsSuccess = true;
             result.ErrorMessage = "Add Successfully";
             return result;
-
 
         }
     }

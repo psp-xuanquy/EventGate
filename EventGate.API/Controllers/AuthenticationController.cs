@@ -1,8 +1,11 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Services;
 using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
 
 namespace EventGate.API.Controllers
 {
@@ -37,6 +40,11 @@ namespace EventGate.API.Controllers
 
         [HttpPost]
         [Route("register/member")]
+        [SwaggerOperation(Description = "Example: <br> " +
+        "{ <br> \"username\": \"crimson\", <br>" +
+        "\"email\": \"dung@gmail.com\", <br>" +
+        "\"password\": \"Dung@123\", <br>" +
+        "\"confirmedPassword\": \"Dung@123\" <br> }")]
         public async Task<IActionResult> RegisterMentor([FromBody] RegisterUserDTO registerMentorDTO)
         {
             try

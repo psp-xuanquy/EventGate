@@ -21,47 +21,40 @@ namespace EventGate.Data.Repositories
             _appDbContext = appDbContext;
         }
 
-        public async Task<int> AddAsync(User user)
-        {
-            var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.UserName == user.UserName || u.Email == user.Email && u.DeletedTime == null);
-            if (result != null)
-            {
-                throw new Exception("User already exists");
-            }
-
-            await _appDbContext.Users.AddAsync(user);
-            return await _appDbContext.SaveChangesAsync();
-        }
-
-        public async Task<int> DeleteAsync(Guid id)
-        {
-            var user = await _appDbContext.Users.Where(x => x.Id.Equals(id) && x.DeletedTime == null).SingleOrDefaultAsync();
-            if (user != null)
-            {
-                throw new Exception("User does not exist");
-            }
-            _appDbContext.Users.Remove(user);
-            return await _appDbContext.SaveChangesAsync();
-        }
-
-        public async Task<IEnumerable<User>> GetAllAsync()
+        //Get All User
+        public async Task<List<User>> GetAllAsync()
         {
             var list = await _appDbContext.Users.Where(x => x.DeletedTime == null).AsNoTracking().ToListAsync();
             return list;
         }
 
-        public async Task<User> GetByIdAsync(Guid id)
+        //Get All Deleted User
+        public async Task<List<User>> GetAllDeletedAsync()
         {
-            var user = await _appDbContext.Users.Where(x => x.Id.Equals(id) && x.DeletedTime == null).SingleOrDefaultAsync();
-            if(user == null)
-                throw new Exception("User does not exist");
+            var list = await _appDbContext.Users.Where(x => x.DeletedTime != null).AsNoTracking().ToListAsync();
+            return list;
+        }
+
+
+        //Get User By Id
+        public async Task<User> GetByIdAsync(string id)
+        {
+            var user = await _appDbContext.Users
+                .Where(user => user.DeletedTime == null)
+                .FirstOrDefaultAsync(user => user.Id == id);
             return user;
         }
 
-        public async Task<int> UpdateAsync(User user)
+        //Get User By Email || UserName
+
+
+        //Update User
+        public async Task<int> UpdateAsync(string id, User user)
         {
-            var newUser = await _appDbContext.Users.Where(x => x.Id.Equals(user.Id) && x.DeletedTime == null).SingleOrDefaultAsync();
-            if (newUser == null)
+            var existUser = await _appDbContext.Users
+                .Where(user => user.DeletedTime == null)
+                .FirstOrDefaultAsync(user => user.Id == id);
+            if (existUser == null)
             {
                 throw new Exception("User does not exist");
             }
@@ -69,6 +62,24 @@ namespace EventGate.Data.Repositories
             return await _appDbContext.SaveChangesAsync();
         }
 
+        //Delete User
+        public async Task<int> DeleteAsync(string id, User user)
+        {
+            var existUser = await _appDbContext.Users
+                .Where(user => user.DeletedTime == null)
+                .FirstOrDefaultAsync(user => user.Id == id);
+            if (existUser == null)
+            {
+                throw new Exception("User does not exist");
+            }
+
+            user.DeletedTime = DateTime.Now;
+            user.IsDeleted = true;
+
+            return await _appDbContext.SaveChangesAsync();
+        }
+ 
+        //Verify Login
         public async Task<User> VerifyLoginAsync(string userName, string password)
         {
             var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.UserName == userName && u.DeletedTime == null);
@@ -79,6 +90,7 @@ namespace EventGate.Data.Repositories
             return user;
         }
 
+        //Verify Password
         private bool VerifyPassword(User user, string password)
         {
             var passwordHasher = new PasswordHasher<User>();
