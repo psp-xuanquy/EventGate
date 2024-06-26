@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using EventGate.Data.Entities;
 
 namespace EventGate.Data.Entity
 {
-    public class Order
+    public class Order : AbstractEntity
     {
         [Key]
         public string OrderID { get; set; } = Guid.NewGuid().ToString();

@@ -1,4 +1,4 @@
-﻿using EventGate.Business.Services;
+﻿using EventGate.Business.Services.Interface;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;

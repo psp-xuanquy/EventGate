@@ -1,8 +1,9 @@
 ﻿using EventGate.Business.Mappers;
 using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Services.Interface;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
-using EventGate.Data.Repositories;
+using EventGate.Data.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;

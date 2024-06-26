@@ -1,9 +1,11 @@
 ﻿using EventGate.Business.Mappers;
 using EventGate.Business.Services;
+using EventGate.Business.Services.Interface;
 using EventGate.Data;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
+using EventGate.Data.Repositories.Interface;
 using EventGate.Services.JWT;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -58,10 +60,14 @@ namespace EventGate
                 .AddDefaultTokenProviders();
 
             // Add Scoped
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
             builder.Services.AddScoped<IUserPropository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IMapper<User, UserDTORequest>, UserMapper>();
 
+            builder.Services.AddScoped<IClubRepository, ClubRepository>();
+            builder.Services.AddScoped<IClubService, ClubService>();
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
