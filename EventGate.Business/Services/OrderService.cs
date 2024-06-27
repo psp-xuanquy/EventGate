@@ -1,12 +1,12 @@
-﻿using EventGate.Business.Mappers;
+﻿using AutoMapper;
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
+using EventGate.Data.Repositories;
 using EventGate.Data.Repositories.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace EventGate.Business.Services
@@ -14,133 +14,103 @@ namespace EventGate.Business.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly IMapper<Order, OrderDTO> _orderMapper;
+        private readonly ITicketRepository _ticketRepository;
+        private readonly IMapper _mapper;
 
-        public OrderService(IOrderRepository orderRepository, IMapper<Order, OrderDTO> orderMapper)
+        public OrderService(IOrderRepository orderRepository, ITicketRepository ticketRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
-            _orderMapper = orderMapper;
+            _ticketRepository = ticketRepository;
+            _mapper = mapper;
         }
 
-        public async Task<ServiceResult<int>> AddAsync(OrderDTO orderDTO)
+        // Get all Orders
+        public async Task<List<OrderDTO>> GetAllOrdersAsync()
         {
-            var result = new ServiceResult<int>();
-
-            try
-            {
-                var order = _orderMapper.Map(orderDTO);
-                var affectedRows = await _orderRepository.AddAsync(order);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Order added successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                result.Status = 500;
-            }
-
-            return result;
+            var orders = await _orderRepository.GetAllAsync();
+            return _mapper.Map<List<OrderDTO>>(orders);
         }
 
-        public async Task<ServiceResult<int>> UpdateAsync(OrderDTO orderDTO)
+        // Get Order by ID
+        public async Task<OrderDTO> GetOrderByIdAsync(string orderId)
         {
-            var result = new ServiceResult<int>();
-
-            try
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
             {
-                var order = _orderMapper.Map(orderDTO);
-                var affectedRows = await _orderRepository.UpdateAsync(order);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Order updated successfully";
+                throw new Exception($"Order with ID ( {orderId} ) NOT FOUND");
             }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
+            return _mapper.Map<OrderDTO>(order);
         }
 
-        public async Task<ServiceResult<int>> DeleteAsync(string orderId)
+        // Add Order
+        public async Task<int> AddOrderAsync(string user, OrderDTO addOrderDto)
         {
-            var result = new ServiceResult<int>();
+            var order = _mapper.Map<Order>(addOrderDto);
+            var orderDetails = new List<OrderDetail>();
 
-            try
+            foreach (var detailDto in addOrderDto.OrderDetails)
             {
-                var affectedRows = await _orderRepository.DeleteAsync(orderId);
-                result.IsSuccess = true;
-                result.Data = affectedRows;
-                result.Status = 200;
-                result.ErrorMessage = "Order deleted successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
-        }
-
-        public async Task<ServiceResult<IEnumerable<Order>>> GetAllAsync()
-        {
-            var result = new ServiceResult<IEnumerable<Order>>();
-
-            try
-            {
-                var orders = await _orderRepository.GetAllAsync();
-                result.IsSuccess = true;
-                result.Data = orders;
-                result.Status = 200;
-                result.ErrorMessage = "Retrieved all orders successfully";
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
-            }
-
-            return result;
-        }
-
-        public async Task<ServiceResult<Order>> GetByIdAsync(string orderId)
-        {
-            var result = new ServiceResult<Order>();
-
-            try
-            {
-                var order = await _orderRepository.GetByIdAsync(orderId);
-                if (order == null)
+                var ticket = await _ticketRepository.GetByIdAsync(detailDto.TicketID);
+                if (ticket == null)
                 {
-                    result.IsSuccess = false;
-                    result.Status = 404;
-                    result.ErrorMessage = "Order not found";
+                    throw new Exception($"Ticket with ID ( {detailDto.TicketID} ) NOT FOUND");
                 }
-                else
+
+                var orderDetail = new OrderDetail
                 {
-                    result.IsSuccess = true;
-                    result.Data = order;
-                    result.Status = 200;
-                    result.ErrorMessage = "Retrieved order successfully";
-                }
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.Status = 500;
-                result.ErrorMessage = ex.Message;
+                    OrderDetailID = Guid.NewGuid().ToString(),
+                    OrderID = order.OrderID,
+                    TicketID = ticket.TicketID,
+                    Quantity = detailDto.Quantity,
+                    UnitPrice = ticket.Price
+                };
+
+                orderDetails.Add(orderDetail);
             }
 
-            return result;
+            order.TotalPrice = orderDetails.Sum(od => od.UnitPrice * od.Quantity);
+            return await _orderRepository.AddAsync(user, order, orderDetails);
+        }
+
+        // Update Order
+        public async Task<int> UpdateOrderAsync(string user, string orderId, OrderDTO updateOrderDto)
+        {
+            if (!await _orderRepository.IsOrderExistAsync(orderId))
+            {
+                throw new Exception($"Order with ID ( {orderId} ) NOT FOUND");
+            }
+
+            var order = _mapper.Map<Order>(updateOrderDto);
+            var orderDetails = new List<OrderDetail>();
+
+            foreach (var detailDto in updateOrderDto.OrderDetails)
+            {
+                var ticket = await _ticketRepository.GetByIdAsync(detailDto.TicketID);
+                if (ticket == null)
+                {
+                    throw new Exception($"Ticket with ID ( {detailDto.TicketID} ) NOT FOUND");
+                }
+
+                var orderDetail = new OrderDetail
+                {
+                    OrderDetailID = Guid.NewGuid().ToString(),
+                    OrderID = orderId,
+                    TicketID = ticket.TicketID,
+                    Quantity = detailDto.Quantity,
+                    UnitPrice = ticket.Price
+                };
+
+                orderDetails.Add(orderDetail);
+            }
+
+            order.TotalPrice = orderDetails.Sum(od => od.UnitPrice * od.Quantity);
+            return await _orderRepository.UpdateAsync(user, orderId, order, orderDetails);
+        }
+
+        // Delete Order
+        public async Task<int> DeleteOrderAsync(string user, string orderId)
+        {
+            return await _orderRepository.DeleteAsync(user, orderId);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace EventGate.Business.Models.DTOs.Request
         {
             if (ExpirationDate < ValidDate)
             {
-                yield return new ValidationResult("Expiration Date must be after Valid Date", new[] { nameof(ExpirationDate) });
+                yield return new ValidationResult("EXPIRATION Date must be AFTER VALID Date", new[] { nameof(ExpirationDate) });
             }
         }
     }

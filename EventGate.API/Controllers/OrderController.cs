@@ -2,6 +2,8 @@
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.Security.Claims;
 
 namespace EventGate.API.Controllers
 {
@@ -17,79 +19,85 @@ namespace EventGate.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllOrders()
+        [SwaggerOperation(Summary = "This API is used to 'Get All Orders'")]
+        public async Task<IActionResult> GetAllOrdersAsync()
         {
-            var result = await _orderService.GetAllAsync();
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var orders = await _orderService.GetAllOrdersAsync();
+                return Ok(orders);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpGet("{orderId}")]
-        public async Task<IActionResult> GetOrderById(string orderId)
+        [SwaggerOperation(Summary = "This API is used to 'Get Order By ID'")]
+        public async Task<IActionResult> GetOrderByIdAsync(string orderId)
         {
-            var result = await _orderService.GetByIdAsync(orderId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var order = await _orderService.GetOrderByIdAsync(orderId);
+                if (order == null)
+                {
+                    return NotFound();
+                }
+                return Ok(order);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOrder([FromBody] OrderDTO orderDTO)
+        [SwaggerOperation(Summary = "This API is used to 'Add Order'")]
+        public async Task<IActionResult> AddOrderAsync([FromBody] OrderDTO orderDto)
         {
-            var result = await _orderService.AddAsync(orderDTO);
-
-            if (result.IsSuccess)
+            try
             {
+                var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var result = await _orderService.AddOrderAsync(user, orderDto);
                 return Ok(result);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateOrder([FromBody] OrderDTO orderDTO)
+        [HttpPut("{orderId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Update Order'")]
+        public async Task<IActionResult> UpdateOrderAsync(string orderId, [FromBody] OrderDTO orderDto)
         {
-            var result = await _orderService.UpdateAsync(orderDTO);
-
-            if (result.IsSuccess)
+            try
             {
+                var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var result = await _orderService.UpdateOrderAsync(user, orderId, orderDto);
                 return Ok(result);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpDelete("{orderId}")]
-        public async Task<IActionResult> DeleteOrder(string orderId)
+        [SwaggerOperation(Summary = "This API is used to 'Delete Order'")]
+        public async Task<IActionResult> DeleteOrderAsync(string orderId)
         {
-            var result = await _orderService.DeleteAsync(orderId);
-
-            if (result.IsSuccess)
+            try
             {
+                var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var result = await _orderService.DeleteOrderAsync(user, orderId);
                 return Ok(result);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
-
     }
 }

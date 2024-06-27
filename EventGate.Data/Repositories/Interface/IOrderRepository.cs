@@ -9,10 +9,11 @@ namespace EventGate.Data.Repositories.Interface
 {
     public interface IOrderRepository
     {
-        Task<int> AddAsync(Order order);
-        Task<int> UpdateAsync(Order order);
-        Task<int> DeleteAsync(string orderId);
+        Task<List<Order>> GetAllAsync();
         Task<Order> GetByIdAsync(string orderId);
-        Task<IEnumerable<Order>> GetAllAsync();
+        Task<int> AddAsync(string user, Order order, List<OrderDetail> orderDetails);
+        Task<int> UpdateAsync(string user, string orderId, Order order, List<OrderDetail> orderDetails);
+        Task<int> DeleteAsync(string user, string orderId);
+        Task<bool> IsOrderExistAsync(string orderId);
     }
 }
