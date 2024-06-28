@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using EventGate.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -29,6 +30,7 @@ namespace EventGate.Data.Entity
         public ICollection<Order>? Orders { get; set; }
         public ICollection<Blog>? Blogs { get; set; }
         public ICollection<UserEvent>? UserEvents { get; set; }
+        public ICollection<UserChatRoom>? UserChatRooms { get; set; }
         public ICollection<EventFeedback>? EventFeedbacks { get; set; }
         public ICollection<UserHistory>? UserHistories { get; set; }
         public ICollection<ChatHistory>? ChatHistories { get; set; }

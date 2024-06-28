@@ -87,8 +87,8 @@ namespace EventGate
             builder.Services.AddScoped<IVoucherService, VoucherService>();
 
             ////-- Order -- 
-            //builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-            //builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
 
             ////-- OrderDetail -- 
             //builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();

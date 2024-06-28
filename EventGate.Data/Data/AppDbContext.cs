@@ -1,10 +1,12 @@
-﻿using EventGate.Data.Entity;
+﻿using EventGate.Data.Entities;
+using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace EventGate.Data
@@ -43,6 +45,8 @@ namespace EventGate.Data
         public DbSet<UserEventHistory> UserEventHistories { get; set; }
         public DbSet<UserHistory> UserHistories { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<UserChatRoom> UserChatRooms { get; set; }
+        public DbSet<ChatReceiver> ChatReceivers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -67,9 +71,6 @@ namespace EventGate.Data
                 .HasForeignKey(c => c.PresidentID);
 
             modelBuilder.Entity<EventClub>()
-                .HasKey(ec => new { ec.EventID, ec.ClubID });
-
-            modelBuilder.Entity<EventClub>()
                 .HasOne(ec => ec.Event)
                 .WithMany(e => e.EventClubs)
                 .HasForeignKey(ec => ec.EventID);
@@ -78,9 +79,6 @@ namespace EventGate.Data
                 .HasOne(ec => ec.Club)
                 .WithMany(c => c.EventClubs)
                 .HasForeignKey(ec => ec.ClubID);
-
-            modelBuilder.Entity<UserEvent>()
-                .HasKey(ue => new { ue.UserID, ue.EventID });
 
             modelBuilder.Entity<UserEvent>()
                 .HasOne(ue => ue.User)
@@ -127,6 +125,16 @@ namespace EventGate.Data
                 .WithOne(ch => ch.Sender)
                 .HasForeignKey(ch => ch.SenderID);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.UserChatRooms)
+                .WithOne(ucr => ucr.User)
+                .HasForeignKey(ucr => ucr.UserID);
+
+            modelBuilder.Entity<ChatRoom>()
+                .HasMany(cr => cr.UserChatRooms)
+                .WithOne(ucr => ucr.ChatRoom)
+                .HasForeignKey(ucr => ucr.ChatRoomID);
+
             modelBuilder.Entity<ChatHistory>()
                 .HasOne(ch => ch.Chat)
                 .WithMany(c => c.ChatHistories)
@@ -139,12 +147,6 @@ namespace EventGate.Data
                 .HasForeignKey(ch => ch.SenderID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ChatHistory>()
-                .HasOne(ch => ch.Receiver)
-                .WithMany()
-                .HasForeignKey(ch => ch.ReceiverID)
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Sender)
                 .WithMany()
@@ -152,9 +154,29 @@ namespace EventGate.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Chat>()
-                .HasOne(c => c.Receiver)
+                .HasMany(c => c.ChatReceivers)
+                .WithOne(cr => cr.Chat)
+                .HasForeignKey(cr => cr.ChatID);
+
+            modelBuilder.Entity<UserChatRoom>()
+                .HasOne(ucr => ucr.User)
+                .WithMany(u => u.UserChatRooms)
+                .HasForeignKey(ucr => ucr.UserID);
+
+            modelBuilder.Entity<UserChatRoom>()
+                .HasOne(ucr => ucr.ChatRoom)
+                .WithMany(cr => cr.UserChatRooms)
+                .HasForeignKey(ucr => ucr.ChatRoomID);
+
+            modelBuilder.Entity<ChatReceiver>()
+                .HasOne(cr => cr.Chat)
+                .WithMany(c => c.ChatReceivers)
+                .HasForeignKey(cr => cr.ChatID);
+
+            modelBuilder.Entity<ChatReceiver>()
+                .HasOne(cr => cr.Receiver)
                 .WithMany()
-                .HasForeignKey(c => c.ReceiverID)
+                .HasForeignKey(cr => cr.ReceiverID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<User>()
@@ -165,14 +187,13 @@ namespace EventGate.Data
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
-                .HasForeignKey(od => od.OrderID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasForeignKey(od => od.OrderID);
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Ticket)
                 .WithMany(t => t.OrderDetails)
                 .HasForeignKey(od => od.TicketID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Voucher>()
                 .HasOne(v => v.Event)
@@ -226,7 +247,7 @@ namespace EventGate.Data
         private Seat[] GenerateSeats()
         {
             var seats = new List<Seat>();
-            var halls = new[] { "HallA", "HallB", "HallC" };
+            var halls = new[] { "Alpha", "Beta", "Ceasar" };
             var rows = new[] { "A", "B", "C", "D", "E" };
 
             foreach (var hall in halls)

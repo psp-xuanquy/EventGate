@@ -20,10 +20,11 @@ namespace EventGate.Data.Entity
         public string? SenderID { get; set; }
         public User? Sender { get; set; }
 
-        [ForeignKey("Receiver")]
-        public string? ReceiverID { get; set; }
-        public User? Receiver { get; set; }
+        //[ForeignKey("Receiver")]
+        //public string? ReceiverID { get; set; }
+        //public User? Receiver { get; set; }
 
         public ICollection<ChatHistory>? ChatHistories { get; set; }
+        public ICollection<ChatReceiver>? ChatReceivers { get; set; }
     }
 }

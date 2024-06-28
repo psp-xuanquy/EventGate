@@ -7,5 +7,7 @@ namespace EventGate.Data.Entity
         public string? ChatRoomID { get; set; } = Guid.NewGuid().ToString();
         public string? RoomName { get; set; }
         public string? Description { get; set; }
+
+        public ICollection<UserChatRoom>? UserChatRooms { get; set; }
     }
 }
