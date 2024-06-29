@@ -12,7 +12,7 @@ namespace EventGate.Data.Entities
     public class UserChatRoom : AbstractEntity
     {
         [Key]
-        public string UserChatRoomID { get; set; }
+        public string UserChatRoomID { get; set; } = Guid.NewGuid().ToString();
 
         [ForeignKey("User")]
         public string UserID { get; set; }
