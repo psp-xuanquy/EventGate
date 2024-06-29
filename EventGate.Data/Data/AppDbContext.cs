@@ -130,6 +130,11 @@ namespace EventGate.Data
                 .WithOne(ucr => ucr.User)
                 .HasForeignKey(ucr => ucr.UserID);
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.UserEvents)
+                .WithOne(ue => ue.User)
+                .HasForeignKey(ue => ue.UserID);
+
             modelBuilder.Entity<ChatRoom>()
                 .HasMany(cr => cr.UserChatRooms)
                 .WithOne(ucr => ucr.ChatRoom)
@@ -179,11 +184,6 @@ namespace EventGate.Data
                 .HasForeignKey(cr => cr.ReceiverID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.UserEvents)
-                .WithOne(ue => ue.User)
-                .HasForeignKey(ue => ue.UserID);
-
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
@@ -227,6 +227,7 @@ namespace EventGate.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
 
         public override int SaveChanges()
         {

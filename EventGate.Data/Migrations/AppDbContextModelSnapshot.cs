@@ -215,6 +215,9 @@ namespace EventGate.Data.Migrations
                     b.Property<string>("ChatID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ChatRoomID")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -237,22 +240,24 @@ namespace EventGate.Data.Migrations
                     b.Property<string>("Message")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ReceiverID")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("SenderID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("ChatHistoryID");
 
                     b.HasIndex("ChatID");
 
-                    b.HasIndex("ReceiverID");
+                    b.HasIndex("ChatRoomID");
 
                     b.HasIndex("SenderID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ChatHistories", "dbo");
                 });
@@ -383,8 +388,8 @@ namespace EventGate.Data.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PosterImage")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<byte[]>("PosterImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("QRCode")
                         .HasColumnType("varbinary(max)");
@@ -392,8 +397,11 @@ namespace EventGate.Data.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("TicketDueDate")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TicketQuantity")
+                        .HasColumnType("int");
 
                     b.HasKey("EventID");
 
@@ -507,13 +515,13 @@ namespace EventGate.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EventID")
@@ -534,14 +542,17 @@ namespace EventGate.Data.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("PosterImage")
-                        .HasColumnType("datetime2");
+                    b.Property<byte[]>("PosterImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<byte[]>("QRCode")
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<int>("TicketQuantity")
                         .HasColumnType("int");
@@ -849,1081 +860,1081 @@ namespace EventGate.Data.Migrations
                     b.HasData(
                         new
                         {
-                            SeatID = "0f86b350-96ee-422c-bf66-d93524e1dde6",
+                            SeatID = "eafde119-0717-4f6c-8e41-f1bb06381b1c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8263),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7204),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8287),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7233),
                             Number = 1,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "03287f27-2ad8-4f73-80b7-64d2812e0e48",
+                            SeatID = "f924ffa7-28ac-4817-9201-fb3f18ddf2a4",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8292),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7238),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8294),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7239),
                             Number = 2,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "621d57fd-fb4b-4701-857a-4bfb9669cec7",
+                            SeatID = "adebc06e-b408-4966-9748-7b15159f835f",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8295),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7242),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8297),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7253),
                             Number = 3,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "c867e90a-9ed8-41df-98c2-9cc2164bb373",
+                            SeatID = "6521f633-f1be-40bb-bf0d-3ad3a2cd2eca",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8298),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7255),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8313),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7257),
                             Number = 4,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "93b6276b-899f-4d8a-aad8-7523a2ec8da8",
+                            SeatID = "0c47a725-9ad2-4596-82f1-b6e4e1694637",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8315),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7259),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8316),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7260),
                             Number = 5,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "f0c74ee5-ac8f-4b4d-b176-f13c2beccc80",
+                            SeatID = "46b94b13-3885-44c7-a62e-eb6c3909a25f",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8319),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7263),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8320),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7265),
                             Number = 6,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "683b0b22-1ef4-4d6d-8e06-8fe309ee8bd3",
+                            SeatID = "a59d73dc-edfc-42ca-958f-5339ae1182b1",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8322),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7267),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8323),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7271),
                             Number = 1,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "eb99bb45-be3c-425e-82bb-817f59dd6225",
+                            SeatID = "0d542d66-608f-4d5c-a5d9-87b3569c8130",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8324),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7272),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8328),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7274),
                             Number = 2,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "2348dab0-5b69-4db1-8547-2e12fb79604d",
+                            SeatID = "6ba12bac-b081-40e6-a1cf-93db6bc80a96",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8329),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7275),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8331),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7277),
                             Number = 3,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "cf0d1a4e-c586-464a-be36-e1b7cf973ebf",
+                            SeatID = "dc862e62-14a2-4ef7-ab8e-c5ee0e1e1262",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8333),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7280),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8334),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7282),
                             Number = 4,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "80bd34d3-695e-4792-b901-c589ff940ebb",
+                            SeatID = "2a532458-ed20-4aea-837a-4eb7d6642f10",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8335),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7283),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8336),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7286),
                             Number = 5,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "e8c45f15-9ba6-4630-a67c-dba580c64307",
+                            SeatID = "af8f400f-ccfb-4b8b-89d4-77ceb64391e6",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8344),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7288),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8347),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7290),
                             Number = 6,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "164100eb-45c7-47f1-9953-71bb8f1f70fa",
+                            SeatID = "0b512794-4e98-4bf2-b7ac-22d5aa4c856a",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8349),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7291),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8350),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7293),
                             Number = 1,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "c576b31c-e1a8-4d86-99ad-2638045bfcaa",
+                            SeatID = "d5bc59a1-9449-4e99-9e92-a6ec0719053c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8352),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7294),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8353),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7296),
                             Number = 2,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "4f3b5593-daf4-4125-a363-f972b1d8a893",
+                            SeatID = "c9e24e58-d666-4741-89b8-b650543402e2",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8354),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7297),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8356),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7301),
                             Number = 3,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "d787bc9f-300c-47d5-866e-f8fd5415740e",
+                            SeatID = "5899c31f-10ca-4805-9b67-0b70acd34082",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8358),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7302),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8361),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7303),
                             Number = 4,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "3ec81c30-6fca-4fba-ac6b-798875d22615",
+                            SeatID = "33936567-3c28-4859-b22b-9d5abe331331",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8362),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7305),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8363),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7307),
                             Number = 5,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "b3dcda7a-415c-4534-bacb-4eb870dcc0bc",
+                            SeatID = "ed9d51fa-395e-4c55-b7ce-b2703811f28f",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8365),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7309),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8366),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7311),
                             Number = 6,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "8242b0e6-f490-40c4-806a-403589a868bc",
+                            SeatID = "1ca32687-09bf-4266-a347-d40069585180",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8368),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7312),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8369),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7315),
                             Number = 1,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "fa256b96-c123-4cda-a626-a148441ce1cd",
+                            SeatID = "4572613d-7b57-43a6-8270-71b1fba947f8",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8370),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7316),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8373),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7318),
                             Number = 2,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "1be9987f-5728-4f11-9d6c-2419505f28cc",
+                            SeatID = "c1881a4b-d90b-4339-ab01-f62d7f576b6f",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8374),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7319),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8376),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7328),
                             Number = 3,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "46d515a3-a16b-4d70-92f4-f543904e47fe",
+                            SeatID = "d2825613-15ef-461f-97ed-b3d676f17cbe",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8377),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7329),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8378),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7331),
                             Number = 4,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "87fd747a-78fb-4e09-86ca-adf264a50a08",
+                            SeatID = "259720de-cae9-430c-9dd0-99b08d32de6e",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8379),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7332),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8381),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7335),
                             Number = 5,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "7819a534-0d17-46d6-99dc-f4c443f06aa9",
+                            SeatID = "d8a9fcb3-960e-4759-ac01-9e925f7d0def",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8382),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7336),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8385),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7338),
                             Number = 6,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "e584c119-9f53-4c41-82b0-c065283fead8",
+                            SeatID = "1c51ad9b-43ba-4b62-bf33-83861ed888ad",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8386),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7339),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8387),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7340),
                             Number = 1,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "d3c0bdd7-802b-4756-81b1-3706446acc96",
+                            SeatID = "4901508d-0037-4853-9d83-2cb8721e003c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8388),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7342),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8390),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7343),
                             Number = 2,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "2973eca7-62e5-4c44-87ac-2a5b7af3ecbf",
+                            SeatID = "b1b821be-0048-454b-9b4b-2aeffad4b688",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8392),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7345),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8393),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7348),
                             Number = 3,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "e067e934-b06a-4829-9f0d-5b7f86aa1e40",
+                            SeatID = "df1698c9-13b6-4270-852c-241b82c106ba",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8394),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7349),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8397),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7350),
                             Number = 4,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "bffbc21d-1ba0-48fa-a7a8-e3f0702a9936",
+                            SeatID = "7c64dc88-5e78-4ec4-b802-8cb1b2788c71",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8398),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7352),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8399),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7353),
                             Number = 5,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "0ed693c5-9258-4360-b9ef-d14c4a4a3190",
+                            SeatID = "42765655-85a7-43d6-82ec-cbbfc2588bc1",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8401),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7355),
                             Hall = "Alpha",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8402),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7356),
                             Number = 6,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "1fd6da40-161b-46ea-8456-1b7ce523c5ae",
+                            SeatID = "0cd0ee6c-855d-4c6a-a2a1-64fa32a33f76",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8403),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7358),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8405),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7361),
                             Number = 1,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "98650eab-ad18-4ca1-a8e2-f8591f5a33fd",
+                            SeatID = "9f434373-8bbf-46e7-982e-65068b5b4e52",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8406),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7362),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8409),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7363),
                             Number = 2,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "959b7a97-5c6c-48c8-9379-e4262c7ce049",
+                            SeatID = "90b909f3-6850-4ff3-8c57-521ecb672de6",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8410),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7365),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8412),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7366),
                             Number = 3,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "77d0798c-5435-4a0b-90ba-ce0cdd180e6b",
+                            SeatID = "07c2a7c3-167d-43ce-ae4f-04084148019d",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8414),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7369),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8415),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7370),
                             Number = 4,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "d6b8fe73-b00a-4ce6-b12d-3d972d2ae012",
+                            SeatID = "ed406954-a466-4ac4-9a74-c7702e62028d",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8416),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7372),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8417),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7375),
                             Number = 5,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "2bad08c8-7f25-4cc3-956c-d65bc5785b22",
+                            SeatID = "44353e77-e9da-46e6-a41b-5a0cd2c4386c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8428),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7377),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8432),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7378),
                             Number = 6,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "82ea438f-0a3f-4356-bb75-339607c572e6",
+                            SeatID = "38c378c1-9ada-4fd4-8161-e50151d5d7bc",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8433),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7380),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8434),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7381),
                             Number = 1,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "e060ad10-3fee-4a21-b362-e739bfa5fb54",
+                            SeatID = "cf2d3a0c-ca50-4fe8-9541-b123613ba856",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8435),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7382),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8436),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7384),
                             Number = 2,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "aae0aec7-6d93-451e-8c38-1edb65df2161",
+                            SeatID = "9bc5b737-28b5-45ca-926c-52ecaec18b01",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8438),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7385),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8439),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7388),
                             Number = 3,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "6c50e080-e590-4ba4-aae5-de040c4fb860",
+                            SeatID = "3c369a13-4993-4e59-b90c-6484f37f82c6",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8440),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7389),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8443),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7391),
                             Number = 4,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "e61dea7b-0acd-43fb-a27d-fb5e7dfeb5ae",
+                            SeatID = "fc49c9ca-1877-454d-9853-234e87fd11f0",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8444),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7392),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8446),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7393),
                             Number = 5,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "c1388655-2bea-458a-8c9d-783eed406cfa",
+                            SeatID = "6c55ecf8-5f25-4069-acff-41a477fd54d4",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8447),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7394),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8448),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7396),
                             Number = 6,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "d18db6c4-2d9c-4257-b374-dcc1de9de31c",
+                            SeatID = "f9693f5e-dc4a-4b8c-801c-09d24081e0a0",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8449),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7397),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8451),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7400),
                             Number = 1,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "04b2ede0-f4e9-44e8-90c2-f43a84bc16e3",
+                            SeatID = "373806de-9cd8-43c9-82c9-37a399426af0",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8452),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7402),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8455),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7403),
                             Number = 2,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "836c27aa-96e0-47c3-8e8a-f709a5fec9a1",
+                            SeatID = "5f69ea70-f395-449c-b302-416c117ff9c6",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8456),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7404),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8457),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7406),
                             Number = 3,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "c11d467e-0bbe-47d7-8aae-c4fc01251a22",
+                            SeatID = "d70af112-5d2d-40b5-84f4-365c1a60a6a6",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8458),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7420),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8459),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7421),
                             Number = 4,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "478c7ed4-66d8-483c-bb74-5ac2da210951",
+                            SeatID = "5f6671ff-1bf3-4fa5-ac23-c46cd775eb72",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8461),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7422),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8462),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7425),
                             Number = 5,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "a6a97c87-fff7-494f-9f3d-32b7bde4b621",
+                            SeatID = "4de1b650-0181-416a-8bf2-52ef2178f8bb",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8463),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7427),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8466),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7428),
                             Number = 6,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "1c1ec68a-d785-4141-bdc6-522f76d6968a",
+                            SeatID = "76a2475d-f8e5-4db7-88ea-5bcfbdbfe28c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8467),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7430),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8469),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7431),
                             Number = 1,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "9c1ee3a5-25dc-492f-9f2c-224bcc1e2976",
+                            SeatID = "209dbd61-32ec-43ed-a229-e846592a334b",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8470),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7432),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8471),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7434),
                             Number = 2,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "5d3fa2f0-a65b-444f-acc8-bb8441d86150",
+                            SeatID = "198783df-c6f6-4036-b049-66cf9bb88cd4",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8473),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7435),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8474),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7438),
                             Number = 3,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "fdfc216b-589e-4002-9319-c234a1e2c640",
+                            SeatID = "15e9c2a9-1236-45bc-8d7a-b14274b61c01",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8475),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7440),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8478),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7441),
                             Number = 4,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "179a407e-bf23-47d3-b32b-0e23019c63d9",
+                            SeatID = "93161c0e-f633-4416-8b7c-8acb980e22b1",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8479),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7442),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8480),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7444),
                             Number = 5,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "b6337e20-e9f4-4c34-95a5-2c949bb7483f",
+                            SeatID = "9e748c79-5375-4ad5-ae44-4302e38f1979",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8481),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7445),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8482),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7446),
                             Number = 6,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "35cdbff0-54a2-480a-8c23-7308c09faab3",
+                            SeatID = "30f3cac2-360a-43bf-b995-97ef031edfbd",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8484),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7448),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8485),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7451),
                             Number = 1,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "bc0cae71-aece-4484-9098-238b60a04a17",
+                            SeatID = "96a78324-427f-4923-8975-c5560d4bffaa",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8486),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7452),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8489),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7453),
                             Number = 2,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "bff87dfa-2b3a-4ed2-b831-34493bc95f40",
+                            SeatID = "bb81ff69-cc2f-47b6-8034-0ff7f5f83266",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8490),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7454),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8491),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7456),
                             Number = 3,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "7ecf704f-3db2-44e1-abe9-cffa2f1c46bd",
+                            SeatID = "cbd1558a-48a0-4208-8efd-db2892bdf4c7",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8492),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7457),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8494),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7459),
                             Number = 4,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "19c0d2d9-011d-443e-8466-33c47778b9e5",
+                            SeatID = "fb6d8904-85fe-4914-a3c8-646de5817894",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8495),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7460),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8496),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7463),
                             Number = 5,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "4e755093-94e7-42a6-839b-8fb23705ef3a",
+                            SeatID = "b49fba07-f362-4c9f-b09a-94cccc99c7a3",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8497),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7465),
                             Hall = "Beta",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8500),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7466),
                             Number = 6,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "2acedb4d-1d47-4f30-9ac7-28a2b898af59",
+                            SeatID = "b8da574d-6a03-4b57-8c94-87af4f1f2611",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8502),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7467),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8503),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7469),
                             Number = 1,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "0628d1a4-cbf5-4977-aa07-e6deac60488b",
+                            SeatID = "bb72ebeb-99fe-4109-8bec-1285d4d52314",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8514),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7470),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8516),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7471),
                             Number = 2,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "9466d65c-fede-472d-b118-e5110f2693a3",
+                            SeatID = "5d8f5e25-e04f-4ca9-94fc-9cea6bd06b7c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8517),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7473),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8518),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7476),
                             Number = 3,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "630d5562-2111-48b7-b841-292351f5b177",
+                            SeatID = "1efe51a5-27bc-4430-bb49-d2a1d0904a2b",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8519),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7477),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8522),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7479),
                             Number = 4,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "80250c54-558f-43a9-922e-5d28bc29ae70",
+                            SeatID = "d4246a03-face-4f45-acf8-b3c5c9c0b24e",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8523),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7480),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8524),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7482),
                             Number = 5,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "be2137e8-f258-45d2-9aa7-0c4276eba605",
+                            SeatID = "18265294-4990-4645-8db4-f10ae207e8ad",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8527),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7484),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8528),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7486),
                             Number = 6,
                             Row = "A"
                         },
                         new
                         {
-                            SeatID = "27594f0f-1fb2-40fe-aa60-73171bc7c36a",
+                            SeatID = "efc0a10d-ac53-497f-a20b-2a8470fa9906",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8530),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7487),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8531),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7490),
                             Number = 1,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "b208ad10-64bd-4435-b0ce-224bf30562e5",
+                            SeatID = "ca01c6df-ad46-4500-b278-2f52d44a93ac",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8532),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7492),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8535),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7493),
                             Number = 2,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "4813c3e3-3d37-4791-a3f7-4e5b36eb7c6c",
+                            SeatID = "75615485-1c6e-42ad-b15a-e10608895c02",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8536),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7504),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8537),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7506),
                             Number = 3,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "9247a79c-a28c-4d7d-b75b-a1fd16336801",
+                            SeatID = "a48c324a-9cf2-4a5a-8801-d08656f5575c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8538),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7507),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8539),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7508),
                             Number = 4,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "3ff41964-c40c-41b7-8319-f66975d593c5",
+                            SeatID = "daa1ca9a-6cca-4268-8503-c2812ab4848a",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8541),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7510),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8542),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7513),
                             Number = 5,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "e36ee5c6-30c2-45b0-8752-5287c717a1fd",
+                            SeatID = "1dc50203-742a-46a6-add9-7c4ad5db4675",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8543),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7514),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8546),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7515),
                             Number = 6,
                             Row = "B"
                         },
                         new
                         {
-                            SeatID = "1279b1ad-9c81-489d-83ed-c4c4bd6ddfd0",
+                            SeatID = "1c5ba7b3-bc02-404b-b7e4-8f8e7f96cb94",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8547),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7517),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8548),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7518),
                             Number = 1,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "69d71b6a-faba-471b-822b-450511d9cb54",
+                            SeatID = "bd234dab-4f6e-4de1-ac59-10cf595d110e",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8549),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7519),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8551),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7521),
                             Number = 2,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "11ed7718-767c-4cdd-9c13-e9fec6c69367",
+                            SeatID = "41f999d7-73f0-424d-8d49-a7f914be47e2",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8552),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7522),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8553),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7525),
                             Number = 3,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "3e16b752-8f2c-430e-bc62-679b4c4e3f83",
+                            SeatID = "11b796b7-d7fd-4307-bff4-faccb41fa00a",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8554),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7527),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8557),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7528),
                             Number = 4,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "edc6fa6d-b43a-447d-b230-bb0b8f49e69f",
+                            SeatID = "f1d43f28-b422-4db5-86b7-e393a15a240a",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8558),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7529),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8560),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7531),
                             Number = 5,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "a980eec3-4e95-49e4-b226-80a3de7edf1c",
+                            SeatID = "e3199cdf-d34b-4e35-9ac8-f2b51902cba6",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8561),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7532),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8562),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7533),
                             Number = 6,
                             Row = "C"
                         },
                         new
                         {
-                            SeatID = "6dd2077e-6851-443b-a0cf-4a43eb8a9c14",
+                            SeatID = "548c20b8-358e-4f8a-9f3c-720b397caa2e",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8564),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7534),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8565),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7538),
                             Number = 1,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "cd219308-1370-4e3e-93c0-6cd63e70e463",
+                            SeatID = "6b343dc2-124b-4fe8-9485-4d8a1cf0312b",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8566),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7539),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8569),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7540),
                             Number = 2,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "8492fcce-8f11-4782-884b-4059c48643a9",
+                            SeatID = "8782c7b5-a980-44d5-a824-7cec6461d9d1",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8570),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7542),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8571),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7543),
                             Number = 3,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "7bd22f90-2ef9-493d-b574-8ef2ba46cd38",
+                            SeatID = "b18ed097-42a7-430a-9495-04a83da0e1d7",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8572),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7544),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8574),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7546),
                             Number = 4,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "fc841fc3-46d4-4a13-b3b3-dadd008f9ee8",
+                            SeatID = "0bab52a5-3490-4d32-952f-f71e511ef5e4",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8575),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7547),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8576),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7550),
                             Number = 5,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "c18f9b7e-8691-4743-9265-059b2475ddbc",
+                            SeatID = "a97fa834-a878-4e7f-b66a-01f46e2ceb21",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8577),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7551),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8580),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7553),
                             Number = 6,
                             Row = "D"
                         },
                         new
                         {
-                            SeatID = "1a4c57f4-1a24-40a4-a0b7-2a8f693a017f",
+                            SeatID = "4d53209e-2745-4bf8-8ad7-af0fcb5a621e",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8587),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7554),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8588),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7555),
                             Number = 1,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "8937b742-752f-4139-9832-10e2e7ebeb5b",
+                            SeatID = "6147b8cf-3b5a-4a98-8726-0e46238b667f",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8589),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7557),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8590),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7558),
                             Number = 2,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "96c6c83f-617c-4755-ba2f-ceacf057e3fa",
+                            SeatID = "62a23999-c728-4b5c-86a7-cb838d96f0af",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8591),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7559),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8593),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7562),
                             Number = 3,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "6fb54c8c-1fcd-4668-8a3a-870f03b531ff",
+                            SeatID = "1e329ea4-87e8-46fa-9f7f-d7850bc6553d",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8594),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7564),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8597),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7565),
                             Number = 4,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "8d6786a6-a0ca-44fe-94a4-048943aa4ce9",
+                            SeatID = "cde2edee-2a6f-4082-85db-4c10cd7d36cf",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8598),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7566),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8599),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7568),
                             Number = 5,
                             Row = "E"
                         },
                         new
                         {
-                            SeatID = "6eab9c69-51a0-44fd-863d-416453825f07",
+                            SeatID = "5f461ea8-f118-4407-ba05-034ade09d09c",
                             CreatedBy = "System",
-                            CreatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8600),
+                            CreatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7569),
                             Hall = "Ceasar",
                             IsAvailable = true,
                             LastUpdatedBy = "System",
-                            LastUpdatedTime = new DateTime(2024, 6, 28, 16, 16, 40, 932, DateTimeKind.Local).AddTicks(8601),
+                            LastUpdatedTime = new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7570),
                             Number = 6,
                             Row = "E"
                         });
@@ -2497,18 +2508,22 @@ namespace EventGate.Data.Migrations
                         .HasForeignKey("ChatID")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("EventGate.Data.Entity.User", "Receiver")
-                        .WithMany("ChatHistories")
-                        .HasForeignKey("ReceiverID");
+                    b.HasOne("EventGate.Data.Entity.ChatRoom", "ChatRoom")
+                        .WithMany()
+                        .HasForeignKey("ChatRoomID");
 
                     b.HasOne("EventGate.Data.Entity.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("EventGate.Data.Entity.User", null)
+                        .WithMany("ChatHistories")
+                        .HasForeignKey("UserId");
+
                     b.Navigation("Chat");
 
-                    b.Navigation("Receiver");
+                    b.Navigation("ChatRoom");
 
                     b.Navigation("Sender");
                 });

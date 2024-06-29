@@ -9,10 +9,10 @@ namespace EventGate.Data.Entity
         [Key]
         public string TicketID { get; set; } = Guid.NewGuid().ToString();
         public string? Gate { get; set; }
-        public byte[]? QRCode { get; set; }
         public decimal Price { get; set; }
         public DateTime ExpirationDate { get; set; }
         public bool IsUsed { get; set; }
+        public byte[]? QRCode { get; set; }
 
         [ForeignKey("Seat")]
         public string? SeatID { get; set; }

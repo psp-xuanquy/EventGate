@@ -16,9 +16,10 @@ namespace EventGate.Data.Entity
         public string? LinkStream { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public DateTime TicketDueDate { get; set; }
+        public bool Status { get; set; }
+        public int TicketQuantity { get; set; }
+        public byte[]? PosterImage { get; set; }
         public byte[]? QRCode { get; set; }
-        public string? PosterImage { get; set; }
         public bool IsDeleted { get; set; }
 
         [ForeignKey("EventType")]
