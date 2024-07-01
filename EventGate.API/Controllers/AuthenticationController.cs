@@ -87,11 +87,12 @@ namespace EventGate.API.Controllers
 
         [HttpPost]
         [Route("register/staff")]
-        public async Task<IActionResult> RegisterStaff([FromBody] RegisterUserDTO registerMentorDTO)
+        public async Task<IActionResult> RegisterStaff([FromBody] RegisterUserDTO registerStaffDTO)
         {
             try
             {
-                await _userService.RegisterByRole(registerMentorDTO, Roles.STAFF);
+                await _userService.RegisterByRole(registerStaffDTO, Roles.STAFF);
+                await _emailService.SendConfirmEmailAsync(registerStaffDTO.Email);
                 return Ok($"Success: Register Successfully");
             }
             catch (UnauthorizedAccessException ex)
@@ -106,11 +107,11 @@ namespace EventGate.API.Controllers
 
         [HttpPost]
         [Route("register/admin")]
-        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserDTO registerMentorDTO)
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterUserDTO registerAdminDTO)
         {
             try
             {
-                await _userService.RegisterByRole(registerMentorDTO, Roles.ADMIN);
+                await _userService.RegisterByRole(registerAdminDTO, Roles.ADMIN);
                 return Ok($"Success: Register Successfully");
             }
             catch (UnauthorizedAccessException ex)
