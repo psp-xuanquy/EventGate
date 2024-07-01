@@ -81,7 +81,7 @@ namespace EventGate.Business.Services
             var link = $"https://eventgateapi.azurewebsites.net/api/Authentication/emailConfirm?id={userExist.Id}";
             htmlContent = htmlContent.Replace("{{UserName}}", userExist.UserName).Replace("{{Link}}", link);
 
-            var message = new Message(new string[] { userExist.Email }, "Email Confirmation", htmlContent, true);
+            var message = new Message(new string[] { userExist.Email }, "[Confirm Email] Please verify your account in Event Gate", htmlContent, true);
             SendEmail(message);
 
             var result = new ServiceResult<string>();
