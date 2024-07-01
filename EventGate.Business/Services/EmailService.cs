@@ -29,7 +29,7 @@ namespace EventGate.Business.Services
         private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
+            emailMessage.From.Add(new MailboxAddress("Event Gate", _emailConfig.From));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(message.IsHtml ? MimeKit.Text.TextFormat.Html : MimeKit.Text.TextFormat.Text)
