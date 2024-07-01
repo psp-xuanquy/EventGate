@@ -1,4 +1,5 @@
 ﻿using EventGate.Business.Mappers;
+using EventGate.Business.Models.DTOs;
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services;
 using EventGate.Business.Services.Interface;
@@ -94,6 +95,9 @@ namespace EventGate
             //builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             //builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
+            //--Email--
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -146,6 +150,11 @@ namespace EventGate
                 options.ClientSecret = builder.Configuration["Google:ClientSecret"];
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
+
+
+            // Add Email Configuration
+            var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+            builder.Services.AddSingleton(emailConfig);
 
 
             // Register necessary services

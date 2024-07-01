@@ -1,4 +1,6 @@
 ﻿using EventGate.Data.Entity;
+using EventGate.Data.Repositories;
+using EventGate.Data.Repositories.Interface;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -12,10 +14,13 @@ namespace EventGate.Business.Services
 {
     public static class JwtGenerator
     {
-        public static string GenerateToken(User user, List<string> roles)
+        public static async Task<string> GenerateToken(User user, List<string> roles, IUserPropository userRepository)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes("de455d3d7f83bf393eea5aef43f474f4aac57e3e8d75f9118e60d526453002dc");
+
+            var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var localExpirationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), vietnamTimeZone);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -26,12 +31,22 @@ namespace EventGate.Business.Services
                     new Claim(ClaimTypes.NameIdentifier, user.Id)
 
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = localExpirationTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            var tokenString = tokenHandler.WriteToken(token);
+
+            var userExist = await userRepository.GetByIdAsync(user.Id);
+            if (userExist != null)
+            {
+                userExist.VerificationToken = tokenString;
+                userExist.VerificationTokenExpires = localExpirationTime;
+                await userRepository.UpdateAsync(user.Id,userExist);
+            }
+
+            return tokenString;
         }
 
         private static List<InvalidToken> InvalidTokens = new List<InvalidToken>();

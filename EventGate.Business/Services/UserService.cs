@@ -6,6 +6,7 @@ using EventGate.Business.Models.DTOs.Response.User;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
+using EventGate.Data.Repositories;
 using EventGate.Data.Repositories.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,7 @@ namespace EventGate.Business.Services
             }
 
             List<User> users = await _userRepository.GetAllAsync();
-            if(users.Any(user => user.Email == userDTO.Email && user.Id != id))
+            if (users.Any(user => user.Email == userDTO.Email && user.Id != id))
             {
                 return new BadRequestObjectResult($"Gmail này đã được sử dụng, vui lòng chọn một gmail khác!");
             }
@@ -80,7 +81,7 @@ namespace EventGate.Business.Services
             var entity = _mapper.Map(userDTO, user);
 
             int rs = await _userRepository.UpdateAsync(id, entity);
-            if(rs == 0)
+            if (rs == 0)
             {
                 return new BadRequestObjectResult("Update User thất bại!");
             }
@@ -113,43 +114,45 @@ namespace EventGate.Business.Services
         {
             var result = new ServiceResult<string>();
 
-            try
+            var user = await _userRepository.VerifyLoginAsync(loginUser.Username, loginUser.Password);
+            if (user == null)
             {
-                var user = await _userRepository.VerifyLoginAsync(loginUser.Username, loginUser.Password);
-                if (user == null)
-                {
-                    result.IsSuccess = false;
-                    result.ErrorMessage = "User does not exist";
-                    return result;
-                }
+                throw new Exception("Wrong User Name or Password");
+            }
 
-                // Generate JWT token
-                var userRoles = await _userManager.GetRolesAsync(user);
-                var token = JwtGenerator.GenerateToken(user, userRoles.ToList());
-                result.IsSuccess = true;
-                result.Data = token;
-            }
-            catch (Exception ex)
+            if (user.EmailConfirmed == false)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                throw new Exception("Email has not verified yet. Please verify by checking your mail");
             }
+
+            // Generate JWT token
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var token = await JwtGenerator.GenerateToken(user, userRoles.ToList(), _userRepository);
+
+            result.Status = 1;
+            result.ErrorMessage = "Login Successfully";
+            result.IsSuccess = true;
+            result.Data = token;
+
 
             return result;
         }
 
-       
+
         //Register
-        public async Task<ServiceResult<int>> RegisterByRole(RegisterUserDTO registerDTO, string role)
+        public async Task<ServiceResult<RegisterUserDTO>> RegisterByRole(RegisterUserDTO registerDTO, string role)
         {
-            var result = new ServiceResult<int>();
+            var result = new ServiceResult<RegisterUserDTO>();
             var userExists = await _userManager.FindByNameAsync(registerDTO.Username)
                               ?? await _userManager.FindByEmailAsync(registerDTO.Email);
             if (userExists != null)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = "User already exist";
-                return result;
+                throw new Exception("User already exists");
+            }
+
+            if (!registerDTO.Email.EndsWith("@fpt.edu.vn", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("Email must ends with @fpt.edu.vn");
             }
 
             var user = new User
@@ -164,23 +167,39 @@ namespace EventGate.Business.Services
 
             if (!newUser.Succeeded)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = "Add Failed";
-                return result;
+                throw new Exception("Register Failed");
             }
 
             var roleResult = await _userManager.AddToRoleAsync(user, role);
             if (!roleResult.Succeeded)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = "Cannot add role to User";
-                return result;
+                throw new Exception("Cannot add role to User");
             }
 
+            result.Status = 1;
+            result.Data = registerDTO;
             result.IsSuccess = true;
             result.ErrorMessage = "Add Successfully";
             return result;
 
+        }
+
+        public async Task<ServiceResult<string>> ConfirmEmailUser(string userId)
+        {
+            var userExist = await _userRepository.GetByIdAsync(userId);
+            if (userExist != null)
+            {
+                userExist.EmailConfirmed = true;
+                userExist.isConfirmed = true;
+                await _userRepository.UpdateAsync(userId, userExist);
+            }
+
+            var result = new ServiceResult<string>();
+            result.Status = 1;
+            result.IsSuccess = true;
+            result.ErrorMessage = "Confirm Email Successfully";
+
+            return result;
         }
     }
 }
