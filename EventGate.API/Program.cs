@@ -98,6 +98,14 @@ namespace EventGate
             //--Email--
             builder.Services.AddScoped<IEmailService, EmailService>();
 
+            //-- Event -- 
+            builder.Services.AddScoped<IEventRepository, EventRepository>();
+            builder.Services.AddScoped<IEventService, EventService>();
+
+            //-- EventType -- 
+            builder.Services.AddScoped<IEventTypeRepository, EventTypeRepository>();
+            builder.Services.AddScoped<IEventTypeService, EventTypeService>();
+
 
             builder.Services.Configure<IdentityOptions>(options =>
             {

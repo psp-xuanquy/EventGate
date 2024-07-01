@@ -28,6 +28,9 @@ namespace EventGate.Business.Mappers
             // Mapping for Seat
             CreateMap<Seat, SeatDTO>().ReverseMap();
 
+            // Mapping for EventType
+            CreateMap<EventType, EventTypeDTO>().ReverseMap();
+
             // Mapping for Voucher
             CreateMap<Voucher, VoucherDTO>().ReverseMap();
 
