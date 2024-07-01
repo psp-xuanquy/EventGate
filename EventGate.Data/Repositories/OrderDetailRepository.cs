@@ -11,9 +11,9 @@ namespace EventGate.Data.Repositories
 {
     public class OrderDetailRepository : IOrderDetailRepository
     {
-        private readonly DbContext _context;
+        private readonly AppDbContext _context;
 
-        public OrderDetailRepository(DbContext context)
+        public OrderDetailRepository(AppDbContext context)
         {
             _context = context;
         }
@@ -21,16 +21,43 @@ namespace EventGate.Data.Repositories
         // Get OrderDetail by ID
         public async Task<OrderDetail> GetByIdAsync(string orderDetailId)
         {
-            return await _context.Set<OrderDetail>()
+            return await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderDetailID == orderDetailId && od.DeletedTime == null);
         }
 
         // Get OrderDetails by OrderID
         public async Task<List<OrderDetail>> GetByOrderIdAsync(string orderId)
         {
-            return await _context.Set<OrderDetail>()
+            return await _context.OrderDetails
                 .Where(od => od.OrderID == orderId && od.DeletedTime == null)
                 .ToListAsync();
+        }
+
+        // Add OrderDetails by OrderID
+        public async Task AddAsync(string user, OrderDetail orderDetail)
+        {
+            orderDetail.CreatedBy = user;
+            orderDetail.LastUpdatedBy = user;
+            orderDetail.LastUpdatedTime = DateTime.Now;
+
+            _context.OrderDetails.Add(orderDetail);
+            await _context.SaveChangesAsync();
+        }
+
+        // Delete OrderDetails by OrderID
+        public async Task DeleteByOrderIdAsync(string user, string orderId)
+        {
+            var orderDetailsToDelete = await _context.OrderDetails
+                .Where(od => od.OrderID == orderId && od.DeletedTime == null)
+                .ToListAsync();
+
+            foreach (var orderDetail in orderDetailsToDelete)
+            {
+                orderDetail.DeletedBy = user;
+                orderDetail.DeletedTime = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

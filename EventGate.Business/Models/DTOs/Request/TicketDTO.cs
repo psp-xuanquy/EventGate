@@ -13,7 +13,8 @@ namespace EventGate.Business.Models.DTOs.Request
 
         public string Gate { get; set; }
 
-        public byte[] QRCode { get; set; }
+        //public byte[] QRCode { get; set; }
+        public string? QRCodeBase64 { get; set; }
 
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
         [Required(ErrorMessage = "Price is required")]

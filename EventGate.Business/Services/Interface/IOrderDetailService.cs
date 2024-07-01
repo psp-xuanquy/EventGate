@@ -1,4 +1,4 @@
-﻿using EventGate.Business.Models.DTOs.Request;
+﻿using EventGate.Business.Models.DTOs.Request.Order;
 using EventGate.Data.Entity;
 using System;
 using System.Collections.Generic;

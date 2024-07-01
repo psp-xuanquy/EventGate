@@ -33,7 +33,6 @@ namespace EventGate.Business.Models.DTOs.Request
         [Display(Name = "Expiration Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = false)]
         [DataType(DataType.Date)]
-        //[DateRange("ValidDate", ErrorMessage = "Expiration Date must be after Valid Date.")]
         public DateTime ExpirationDate { get; set; }
 
         public bool IsActive { get; set; }

@@ -42,7 +42,7 @@ namespace EventGate.Data.Repositories
 
         // Add Voucher
         public async Task<int> AddAsync(string user, Voucher addVoucher)
-        { 
+        {
             addVoucher.CreatedBy = user;
             addVoucher.LastUpdatedBy = user;
             addVoucher.LastUpdatedTime = DateTime.Now;
@@ -55,31 +55,36 @@ namespace EventGate.Data.Repositories
         public async Task<int> UpdateAsync(string user, string voucherId, Voucher updateVoucher)
         {
             var existingVoucher = await _context.Vouchers.FirstOrDefaultAsync(v => v.VoucherID == voucherId && v.DeletedTime == null);
+            if (existingVoucher != null)
+            {
+                existingVoucher.Code = updateVoucher.Code;
+                existingVoucher.Quantity = updateVoucher.Quantity;
+                existingVoucher.Discount = updateVoucher.Discount;
+                existingVoucher.ValidDate = updateVoucher.ValidDate;
+                existingVoucher.ExpirationDate = updateVoucher.ExpirationDate;
+                existingVoucher.IsActive = updateVoucher.IsActive;
+                existingVoucher.UserID = updateVoucher.UserID;
+                existingVoucher.EventID = updateVoucher.EventID;
+                existingVoucher.LastUpdatedBy = user;
+                existingVoucher.LastUpdatedTime = DateTime.Now;
 
-            existingVoucher.Code = updateVoucher.Code;
-            existingVoucher.Quantity = updateVoucher.Quantity;
-            existingVoucher.Discount = updateVoucher.Discount;
-            existingVoucher.ValidDate = updateVoucher.ValidDate;
-            existingVoucher.ExpirationDate = updateVoucher.ExpirationDate;
-            existingVoucher.IsActive = updateVoucher.IsActive;
-            existingVoucher.UserID = updateVoucher.UserID;
-            existingVoucher.EventID = updateVoucher.EventID;
-            existingVoucher.LastUpdatedBy = user;
-            existingVoucher.LastUpdatedTime = DateTime.Now;
-
-            //_context.Vouchers.Update(updateVoucher);
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
 
         // Delete Voucher
         public async Task<int> DeleteAsync(string user, string voucherId)
         {
             var voucherToDelete = await _context.Vouchers.FirstOrDefaultAsync(v => v.VoucherID == voucherId && v.DeletedTime == null);
+            if (voucherToDelete != null)
+            {
+                voucherToDelete.DeletedBy = user;
+                voucherToDelete.DeletedTime = DateTime.Now;
 
-            voucherToDelete.DeletedBy = user;
-            voucherToDelete.DeletedTime = DateTime.Now;
-
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
     }
 }

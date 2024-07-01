@@ -23,8 +23,8 @@ namespace EventGate.Data.Repositories
         {
             return await _context.Seats
                 .Where(c => c.DeletedTime == null)
-                .OrderBy(s => s.Hall)  
-                .ThenBy(s => s.Row)   
+                .OrderBy(s => s.Hall)
+                .ThenBy(s => s.Row)
                 .ThenBy(s => s.Number)
                 .ToListAsync();
         }
@@ -60,27 +60,32 @@ namespace EventGate.Data.Repositories
         public async Task<int> UpdateAsync(string user, string seatId, Seat updateSeat)
         {
             var existingSeat = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seatId && s.DeletedTime == null);
+            if (existingSeat != null)
+            {
+                existingSeat.Hall = updateSeat.Hall;
+                existingSeat.Row = updateSeat.Row;
+                existingSeat.Number = updateSeat.Number;
+                existingSeat.IsAvailable = updateSeat.IsAvailable;
+                existingSeat.LastUpdatedBy = user;
+                existingSeat.LastUpdatedTime = DateTime.Now;
 
-            existingSeat.Hall = updateSeat.Hall;
-            existingSeat.Row = updateSeat.Row;
-            existingSeat.Number = updateSeat.Number;
-            existingSeat.IsAvailable = updateSeat.IsAvailable;
-            existingSeat.LastUpdatedBy = user;
-            existingSeat.LastUpdatedTime = DateTime.Now;
-
-            //_context.Seats.Update(updateSeat);
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
 
         // Delete Seat
         public async Task<int> DeleteAsync(string user, string seatId)
         {
             var seatToDelete = await _context.Seats.FirstOrDefaultAsync(s => s.SeatID == seatId && s.DeletedTime == null);
+            if (seatToDelete != null)
+            {
+                seatToDelete.DeletedBy = user;
+                seatToDelete.DeletedTime = DateTime.Now;
 
-            seatToDelete.DeletedBy = user;
-            seatToDelete.DeletedTime = DateTime.Now;
-
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
     }
 }

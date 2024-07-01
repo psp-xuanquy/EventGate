@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using EventGate.Business.Mappers;
-using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.Order;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories.Interface;
@@ -38,6 +38,10 @@ namespace EventGate.Business.Services
         public async Task<List<OrderDetailDTO>> GetOrderDetailsByOrderIdAsync(string orderId)
         {
             var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
+            if (orderDetails == null)
+            {
+                throw new Exception($"Order with ID ( {orderId} ) NOT FOUND");
+            }
             return _mapper.Map<List<OrderDetailDTO>>(orderDetails);
         }
     }

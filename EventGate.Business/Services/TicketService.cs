@@ -8,6 +8,11 @@ using EventGate.Data.Repositories.Interface;
 using EventGate.Business.Services.Interface;
 using AutoMapper;
 using EventGate.Data.Repositories;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using ZXing;
+using ZXing.Common;
+using System.Drawing.Imaging;
 
 namespace EventGate.Business.Services
 {
@@ -64,7 +69,14 @@ namespace EventGate.Business.Services
                 throw new Exception($"Seat with ID ( {addTicketDto.SeatID} ) is already ASSOCIATED with ANOTHER TICKET.");
             }
 
+            // Generate QRCode from Ticket data
+            var qrCodeImageBytes = GenerateQRCodeImage(addTicketDto);
+
+            // Store as base64
+            addTicketDto.QRCodeBase64 = Convert.ToBase64String(qrCodeImageBytes);
+
             var ticket = _mapper.Map<Ticket>(addTicketDto);
+            ticket.QRCode = qrCodeImageBytes;
             return await _ticketRepository.AddAsync(user, ticket);
         }
 
@@ -89,12 +101,20 @@ namespace EventGate.Business.Services
                 throw new Exception($"Seat with ID ( {updateTicketDto.SeatID} ) NOT FOUND.");
             }
 
-            if (await _ticketRepository.IsSeatAssociatedWithAnotherTicketAsync(updateTicketDto.SeatID))
+            if (existingTicket.SeatID != updateTicketDto.SeatID &&
+                await _ticketRepository.IsSeatAssociatedWithAnotherTicketAsync(updateTicketDto.SeatID))
             {
                 throw new Exception($"Seat with ID ( {updateTicketDto.SeatID} ) is already ASSOCIATED with ANOTHER TICKET.");
             }
 
+            // Generate QRCode from Ticket data
+            var qrCodeImageBytes = GenerateQRCodeImage(updateTicketDto);
+
+            // Store as base64
+            updateTicketDto.QRCodeBase64 = Convert.ToBase64String(qrCodeImageBytes);
+
             var ticket = _mapper.Map<Ticket>(updateTicketDto);
+            ticket.QRCode = qrCodeImageBytes;
             return await _ticketRepository.UpdateAsync(user, ticketId, ticket);
         }
 
@@ -108,6 +128,40 @@ namespace EventGate.Business.Services
             }
 
             return await _ticketRepository.DeleteAsync(user, ticketId);
+        }
+
+        // Method to Generate QRCode from Ticket
+        private byte[] GenerateQRCodeImage(TicketDTO ticketDto)
+        {
+            var writer = new BarcodeWriterPixelData
+            {
+                Format = BarcodeFormat.QR_CODE,
+                Options = new EncodingOptions
+                {
+                    Width = 300,
+                    Height = 300
+                }
+            };
+
+            var pixelData = writer.Write(ticketDto.ToString());
+            using (var bitmap = new Bitmap(pixelData.Width, pixelData.Height, PixelFormat.Format32bppRgb))
+            {
+                using (var ms = new MemoryStream())
+                {
+                    var bitmapData = bitmap.LockBits(new Rectangle(0, 0, pixelData.Width, pixelData.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
+                    try
+                    {
+                        Marshal.Copy(pixelData.Pixels, 0, bitmapData.Scan0, pixelData.Pixels.Length);
+                    }
+                    finally
+                    {
+                        bitmap.UnlockBits(bitmapData);
+                    }
+
+                    bitmap.Save(ms, ImageFormat.Png);
+                    return ms.ToArray();
+                }
+            }
         }
     }
 }

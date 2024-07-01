@@ -87,13 +87,13 @@ namespace EventGate
             builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
             builder.Services.AddScoped<IVoucherService, VoucherService>();
 
-            ////-- Order -- 
+            //-- Order -- 
             builder.Services.AddScoped<IOrderRepository, OrderRepository>();
             builder.Services.AddScoped<IOrderService, OrderService>();
 
-            ////-- OrderDetail -- 
-            //builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
-            //builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
+            //-- OrderDetail -- 
+            builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+            builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
             //--Email--
             builder.Services.AddScoped<IEmailService, EmailService>();
