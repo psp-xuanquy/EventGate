@@ -1,4 +1,5 @@
 ﻿using EventGate.Business.Models.DTOs.Request.Order;
+using EventGate.Business.Models.DTOs.Response;
 using EventGate.Data.Entity;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace EventGate.Business.Services.Interface
 {
     public interface IOrderDetailService
     {
-        Task<List<OrderDetailDTO>> GetOrderDetailsByOrderIdAsync(string orderId);
-        Task<OrderDetailDTO> GetOrderDetailByIdAsync(string orderDetailId);
+        Task<List<OrderDetailDTOResponse>> GetOrderDetailsByOrderIdAsync(string orderId);
+        Task<OrderDetailDTOResponse> GetOrderDetailByIdAsync(string orderDetailId);
     }
 }

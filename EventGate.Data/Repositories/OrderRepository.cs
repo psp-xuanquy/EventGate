@@ -85,19 +85,29 @@ namespace EventGate.Data.Repositories
             var orderToDelete = await _context.Orders.FirstOrDefaultAsync(o => o.OrderID == orderId && o.DeletedTime == null);
             if (orderToDelete != null)
             {
-
                 orderToDelete.DeletedBy = user;
                 orderToDelete.DeletedTime = DateTime.Now;
 
-                return await _context.SaveChangesAsync();
-            }
-            return 0;
-        }
+                //return await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync();
 
-        // Check if Order is exist
-        public async Task<bool> IsOrderExistAsync(string orderId)
-        {
-            return await _context.Orders.AnyAsync(o => o.OrderID == orderId && o.DeletedTime == null);
+                if (result > 0)
+                {
+                    Console.WriteLine($"SUCCESS: Order with ID ( {orderId} ) DELETED successfully");
+                    return result;
+                }
+                else
+                {
+                    Console.WriteLine($"ERROR: Failed to delete order with ID ( {orderId} ). No changes were made.");
+                    return 0;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"ERROR: Order with ID ( {orderId} ) not found or already deleted.");
+                return 0;
+            }
+            //return 0;
         }
     }
 }

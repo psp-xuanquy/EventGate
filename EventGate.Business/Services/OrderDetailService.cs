@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EventGate.Business.Mappers;
 using EventGate.Business.Models.DTOs.Request.Order;
+using EventGate.Business.Models.DTOs.Response;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories.Interface;
@@ -24,25 +25,25 @@ namespace EventGate.Business.Services
         }
 
         // Get OrderDetail by ID
-        public async Task<OrderDetailDTO> GetOrderDetailByIdAsync(string orderDetailId)
+        public async Task<OrderDetailDTOResponse> GetOrderDetailByIdAsync(string orderDetailId)
         {
             var orderDetail = await _orderDetailRepository.GetByIdAsync(orderDetailId);
             if (orderDetail == null)
             {
                 throw new Exception($"OrderDetail with ID ( {orderDetailId} ) NOT FOUND");
             }
-            return _mapper.Map<OrderDetailDTO>(orderDetail);
+            return _mapper.Map<OrderDetailDTOResponse>(orderDetail);
         }
 
         // Get OrderDetails by OrderID
-        public async Task<List<OrderDetailDTO>> GetOrderDetailsByOrderIdAsync(string orderId)
+        public async Task<List<OrderDetailDTOResponse>> GetOrderDetailsByOrderIdAsync(string orderId)
         {
             var orderDetails = await _orderDetailRepository.GetByOrderIdAsync(orderId);
             if (orderDetails == null)
             {
                 throw new Exception($"Order with ID ( {orderId} ) NOT FOUND");
             }
-            return _mapper.Map<List<OrderDetailDTO>>(orderDetails);
+            return _mapper.Map<List<OrderDetailDTOResponse>>(orderDetails);
         }
     }
 }

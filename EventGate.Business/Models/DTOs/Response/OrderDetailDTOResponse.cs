@@ -5,11 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventGate.Business.Models.DTOs.Request.Order
+namespace EventGate.Business.Models.DTOs.Response
 {
-    public class OrderDetailDTO
+    public class OrderDetailDTOResponse
     {
         //public string OrderDetailID { get; set; }
+
+        [Required(ErrorMessage = "OrderID is required")]
+        public string OrderID { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than zero")]
         public int Quantity { get; set; }

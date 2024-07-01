@@ -96,7 +96,8 @@ namespace EventGate.Business.Services
         // Update Order
         public async Task<int> UpdateOrderAsync(string user, string orderId, UpdateOrderDTO updateOrderDto)
         {
-            if (!await _orderRepository.IsOrderExistAsync(orderId))
+            var existingOrder = await _userRepository.GetByIdAsync(orderId);
+            if (existingOrder == null)
             {
                 throw new Exception($"Order with ID ({orderId}) NOT FOUND");
             }
@@ -124,6 +125,7 @@ namespace EventGate.Business.Services
 
                 var orderDetail = new OrderDetail
                 {
+                    OrderID = orderId,
                     Quantity = orderDetailDto.Quantity,
                     UnitPrice = existingTicket.Price,
                     TicketID = orderDetailDto.TicketID
@@ -142,6 +144,12 @@ namespace EventGate.Business.Services
         // Delete Order
         public async Task<int> DeleteOrderAsync(string user, string orderId)
         {
+            var existingOrder = await _orderRepository.GetByIdAsync(orderId);
+            if (existingOrder == null)
+            {
+                throw new Exception($"Order with ID ({orderId}) NOT FOUND");
+            }
+
             await _orderDetailRepository.DeleteByOrderIdAsync(user, orderId);
             return await _orderRepository.DeleteAsync(user, orderId);
         }
