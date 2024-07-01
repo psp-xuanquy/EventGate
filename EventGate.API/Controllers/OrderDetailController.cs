@@ -2,6 +2,7 @@
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace EventGate.API.Controllers
 {
@@ -16,78 +17,37 @@ namespace EventGate.API.Controllers
             _orderDetailService = orderDetailService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllOrderDetails()
-        {
-            var result = await _orderDetailService.GetAllAsync();
-
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
-
         [HttpGet("{orderDetailId}")]
-        public async Task<IActionResult> GetOrderDetailById(string orderDetailId)
+        [SwaggerOperation(Summary = "This API is used to 'Get OrderDetail By ID'")]
+        public async Task<IActionResult> GetOrderDetailByIdAsync(string orderDetailId)
         {
-            var result = await _orderDetailService.GetByIdAsync(orderDetailId);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var orderDetail = await _orderDetailService.GetOrderDetailByIdAsync(orderDetailId);
+                if (orderDetail == null)
+                {
+                    return NotFound();
+                }
+                return Ok(orderDetail);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound(result);
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddOrderDetail([FromBody] OrderDetailDTO orderDetailDTO)
+        [HttpGet("byOrder/{orderId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Get OrderDetails By OrderID'")]
+        public async Task<IActionResult> GetOrderDetailsByOrderIdAsync(string orderId)
         {
-            var result = await _orderDetailService.AddAsync(orderDetailDTO);
-
-            if (result.IsSuccess)
+            try
             {
-                return Ok(result);
+                var orderDetails = await _orderDetailService.GetOrderDetailsByOrderIdAsync(orderId);
+                return Ok(orderDetails);
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(result);
-            }
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateOrderDetail([FromBody] OrderDetailDTO orderDetailDTO)
-        {
-            var result = await _orderDetailService.UpdateAsync(orderDetailDTO);
-
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
-            }
-        }
-
-        [HttpDelete("{orderDetailId}")]
-        public async Task<IActionResult> DeleteOrderDetail(string orderDetailId)
-        {
-            var result = await _orderDetailService.DeleteAsync(orderDetailId);
-
-            if (result.IsSuccess)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest(result);
+                return BadRequest(ex.Message);
             }
         }
     }

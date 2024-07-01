@@ -32,7 +32,7 @@ namespace EventGate.Business.Models.Validation
 
                     if (thamSoTruyenVaoInfo == null)
                     {
-                        return new ValidationResult($"{_thamSoTruyenVao} không được là null!");
+                        return new ValidationResult($"{_thamSoTruyenVao} cannot be null!");
                     }
 
                     var NgayDuocSoSanh = thamSoTruyenVaoInfo.GetValue(validationContext.ObjectInstance);
@@ -46,7 +46,7 @@ namespace EventGate.Business.Models.Validation
                         if (parsedNgayTruyenVao.HasValue && parsedNgayTruyenVao.Value > parsedNgayDuocValid.Value)
                         {
 
-                            return new ValidationResult($"{validationContext.DisplayName} không được xảy ra trước {_thamSoTruyenVao}.");
+                            return new ValidationResult($"{validationContext.DisplayName} cannot be before {_thamSoTruyenVao}.");
                         }
                     }
 

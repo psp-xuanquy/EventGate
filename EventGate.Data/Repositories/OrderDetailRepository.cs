@@ -11,62 +11,26 @@ namespace EventGate.Data.Repositories
 {
     public class OrderDetailRepository : IOrderDetailRepository
     {
-        private readonly AppDbContext _context;
+        private readonly DbContext _context;
 
-        public OrderDetailRepository(AppDbContext context)
+        public OrderDetailRepository(DbContext context)
         {
             _context = context;
         }
 
-        public async Task<int> AddAsync(OrderDetail orderDetail)
-        {
-            var existingOrderDetail = await _context.OrderDetails.FirstOrDefaultAsync(od => od.OrderDetailID == orderDetail.OrderDetailID);
-            if (existingOrderDetail != null)
-            {
-                throw new Exception("Order detail already exists");
-            }
-
-            await _context.OrderDetails.AddAsync(orderDetail);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> UpdateAsync(OrderDetail orderDetail)
-        {
-            var existingOrderDetail = await _context.OrderDetails.FirstOrDefaultAsync(od => od.OrderDetailID == orderDetail.OrderDetailID);
-            if (existingOrderDetail == null)
-            {
-                throw new Exception("Order detail does not exist");
-            }
-
-            _context.OrderDetails.Update(orderDetail);
-            return await _context.SaveChangesAsync();
-        }
-
-        public async Task<int> DeleteAsync(string orderDetailId)
-        {
-            var orderDetail = await _context.OrderDetails.FirstOrDefaultAsync(od => od.OrderDetailID == orderDetailId);
-            if (orderDetail == null)
-            {
-                throw new Exception("Order detail does not exist");
-            }
-
-            _context.OrderDetails.Remove(orderDetail);
-            return await _context.SaveChangesAsync();
-        }
-
+        // Get OrderDetail by ID
         public async Task<OrderDetail> GetByIdAsync(string orderDetailId)
         {
-            var orderDetail = await _context.OrderDetails.FirstOrDefaultAsync(od => od.OrderDetailID == orderDetailId);
-            if (orderDetail == null)
-            {
-                throw new Exception("Order detail does not exist");
-            }
-            return orderDetail;
+            return await _context.Set<OrderDetail>()
+                .FirstOrDefaultAsync(od => od.OrderDetailID == orderDetailId && od.DeletedTime == null);
         }
 
-        public async Task<IEnumerable<OrderDetail>> GetAllAsync()
+        // Get OrderDetails by OrderID
+        public async Task<List<OrderDetail>> GetByOrderIdAsync(string orderId)
         {
-            return await _context.OrderDetails.ToListAsync();
+            return await _context.Set<OrderDetail>()
+                .Where(od => od.OrderID == orderId && od.DeletedTime == null)
+                .ToListAsync();
         }
     }
 }

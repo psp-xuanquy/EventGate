@@ -9,10 +9,7 @@ namespace EventGate.Data.Repositories.Interface
 {
     public interface IOrderDetailRepository
     {
-        Task<int> AddAsync(OrderDetail orderDetail);
-        Task<int> UpdateAsync(OrderDetail orderDetail);
-        Task<int> DeleteAsync(string orderDetailId);
+        Task<List<OrderDetail>> GetByOrderIdAsync(string orderId);
         Task<OrderDetail> GetByIdAsync(string orderDetailId);
-        Task<IEnumerable<OrderDetail>> GetAllAsync();
     }
 }

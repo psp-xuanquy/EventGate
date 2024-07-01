@@ -10,10 +10,7 @@ namespace EventGate.Business.Services.Interface
 {
     public interface IOrderDetailService
     {
-        Task<ServiceResult<int>> AddAsync(OrderDetailDTO orderDetailDTO);
-        Task<ServiceResult<int>> UpdateAsync(OrderDetailDTO orderDetailDTO);
-        Task<ServiceResult<int>> DeleteAsync(string orderDetailId);
-        Task<ServiceResult<OrderDetail>> GetByIdAsync(string orderDetailId);
-        Task<ServiceResult<IEnumerable<OrderDetail>>> GetAllAsync();
+        Task<List<OrderDetailDTO>> GetOrderDetailsByOrderIdAsync(string orderId);
+        Task<OrderDetailDTO> GetOrderDetailByIdAsync(string orderDetailId);
     }
 }
