@@ -180,11 +180,11 @@ namespace EventGate
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
-            {
+            //if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
