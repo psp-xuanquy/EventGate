@@ -60,7 +60,7 @@ namespace EventGate.API.Controllers
             {
                 string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 var result = await _seatService.AddSeatAsync(user, seatDto);
-                return Ok($"SUCCESS: Seat at Hall '{seatDto.Hall}' and Row '{seatDto.Row}' CREATED successfully");
+                return Ok($"SUCCESS: Seat '{seatDto.Row}{seatDto.Number}' at Hall '{seatDto.Hall}' CREATED successfully");
             }
             catch (Exception ex)
             {

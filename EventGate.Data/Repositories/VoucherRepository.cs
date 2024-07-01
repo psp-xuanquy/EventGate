@@ -34,6 +34,12 @@ namespace EventGate.Data.Repositories
                 .FirstOrDefaultAsync(v => v.VoucherID == voucherId);
         }
 
+        // Get Voucher By Code
+        public async Task<Voucher> GetByCodeAsync(string code)
+        {
+            return await _context.Vouchers.FirstOrDefaultAsync(c => c.Code == code && c.DeletedTime == null)!;
+        }
+
         // Add Voucher
         public async Task<int> AddAsync(string user, Voucher addVoucher)
         { 

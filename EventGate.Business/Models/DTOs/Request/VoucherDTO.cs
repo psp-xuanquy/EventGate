@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EventGate.Business.Models.DTOs.Request
 {
-    public class VoucherDTO
+    public class VoucherDTO : IValidatableObject
     {
         //public string VoucherID { get; set; }
 
@@ -33,7 +33,7 @@ namespace EventGate.Business.Models.DTOs.Request
         [Display(Name = "Expiration Date")]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = false)]
         [DataType(DataType.Date)]
-        [DateRange("ValidDate", ErrorMessage = "Expiration Date must be after Valid Date.")]
+        //[DateRange("ValidDate", ErrorMessage = "Expiration Date must be after Valid Date.")]
         public DateTime ExpirationDate { get; set; }
 
         public bool IsActive { get; set; }
@@ -48,7 +48,7 @@ namespace EventGate.Business.Models.DTOs.Request
         {
             if (ExpirationDate < ValidDate)
             {
-                yield return new ValidationResult("EXPIRATION Date must be AFTER VALID Date", new[] { nameof(ExpirationDate) });
+                yield return new ValidationResult("Expiration Date must be AFTER Valid Date", new[] { nameof(ExpirationDate) });
             }
         }
     }

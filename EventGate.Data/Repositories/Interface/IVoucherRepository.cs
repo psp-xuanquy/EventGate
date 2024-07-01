@@ -11,6 +11,7 @@ namespace EventGate.Data.Repositories.Interface
     {
         Task<List<Voucher>> GetAllAsync();
         Task<Voucher> GetByIdAsync(string voucherId);
+        Task<Voucher> GetByCodeAsync(string code);
         Task<int> AddAsync(string user, Voucher addVoucher);
         Task<int> UpdateAsync(string user, string voucherId, Voucher updateVoucher);
         Task<int> DeleteAsync(string user, string voucherId);
