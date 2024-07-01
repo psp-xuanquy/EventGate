@@ -1,46 +1,52 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Repositories\**" />
-    <Content Remove="Repositories\**" />
-    <EmbeddedResource Remove="Repositories\**" />
-    <None Remove="Repositories\**" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Repositories\**" />
+		<Content Remove="Repositories\**" />
+		<EmbeddedResource Remove="Repositories\**" />
+		<None Remove="Repositories\**" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <_WebToolingArtifacts Remove="Properties\serviceDependencies.json" />
-    <_WebToolingArtifacts Remove="Properties\serviceDependencies.local.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<_WebToolingArtifacts Remove="Properties\serviceDependencies.json" />
+		<_WebToolingArtifacts Remove="Properties\serviceDependencies.local.json" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Content Include="Properties\serviceDependencies.json" />
-    <Content Include="Properties\serviceDependencies.local.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="Properties\serviceDependencies.json" />
+		<Content Include="Properties\serviceDependencies.local.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Update="EmailTemplate\EmailConfirm.html">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
+		<PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+		<PackageReference Include="MimeKit" Version="4.7.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\EventGate.Business\EventGate.Business.csproj" />
-    <ProjectReference Include="..\EventGate.Data\EventGate.Data.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\EventGate.Business\EventGate.Business.csproj" />
+		<ProjectReference Include="..\EventGate.Data\EventGate.Data.csproj" />
+	</ItemGroup>
 
 </Project>

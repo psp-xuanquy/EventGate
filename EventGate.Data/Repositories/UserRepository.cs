@@ -98,5 +98,14 @@ namespace EventGate.Data.Repositories
             var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
             return result == PasswordVerificationResult.Success;
         }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var user = await _appDbContext.Users
+                .Where(user => user.DeletedTime == null)
+                .FirstOrDefaultAsync(user => user.Email == email);
+
+            return user;
+        }
     }
 }

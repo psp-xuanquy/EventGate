@@ -23,6 +23,7 @@ namespace EventGate.Business.Services.Interface
         
         Task<IActionResult> DeleteAsync(string id);
         Task<ServiceResult<string>> Login(LoginDTO loginUser);
-        Task<ServiceResult<int>> RegisterByRole(RegisterUserDTO registerMentorDTO, string member);
+        Task<ServiceResult<RegisterUserDTO>> RegisterByRole(RegisterUserDTO registerMentorDTO, string member);
+        Task<ServiceResult<string>> ConfirmEmailUser(string userId);
     }
 }
