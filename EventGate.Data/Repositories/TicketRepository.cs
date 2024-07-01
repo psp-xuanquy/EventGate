@@ -48,30 +48,36 @@ namespace EventGate.Data.Repositories
         // Update Ticket
         public async Task<int> UpdateAsync(string user, string ticketId, Ticket updateTicket)
         {
-            var existingTicket= await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId && t.DeletedTime == null);
+            var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId && t.DeletedTime == null);
+            if (existingTicket != null)
+            {
+                existingTicket.Gate = updateTicket.Gate;
+                existingTicket.QRCode = updateTicket.QRCode;
+                existingTicket.Price = updateTicket.Price;
+                existingTicket.ExpirationDate = updateTicket.ExpirationDate;
+                existingTicket.IsUsed = updateTicket.IsUsed;
+                existingTicket.SeatID = updateTicket.SeatID;
+                existingTicket.EventID = updateTicket.EventID;
+                existingTicket.LastUpdatedBy = user;
+                existingTicket.LastUpdatedTime = DateTime.Now;
 
-            existingTicket.Gate = updateTicket.Gate;
-            existingTicket.QRCode = updateTicket.QRCode;
-            existingTicket.Price = updateTicket.Price;
-            existingTicket.ExpirationDate= updateTicket.ExpirationDate;
-            existingTicket.IsUsed = updateTicket.IsUsed;
-            existingTicket.SeatID = updateTicket.SeatID;
-            existingTicket.EventID = updateTicket.EventID;
-            existingTicket.LastUpdatedBy = user;
-            existingTicket.LastUpdatedTime = DateTime.Now;
-
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
 
         // Delete Ticket
         public async Task<int> DeleteAsync(string user, string ticketId)
         {
             var ticketToDelete = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId);
+            if (ticketToDelete != null)
+            {
+                ticketToDelete.DeletedBy = user;
+                ticketToDelete.DeletedTime = DateTime.Now;
 
-            ticketToDelete.DeletedBy = user;
-            ticketToDelete.DeletedTime = DateTime.Now;
-
-            return await _context.SaveChangesAsync();
+                return await _context.SaveChangesAsync();
+            }
+            return 0;
         }
 
         // Check if Seat is associated with another Ticket

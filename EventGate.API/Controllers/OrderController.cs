@@ -1,4 +1,5 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.Order;
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,13 +55,14 @@ namespace EventGate.API.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "This API is used to 'Add Order'")]
-        public async Task<IActionResult> AddOrderAsync([FromBody] OrderDTO orderDto)
+        public async Task<IActionResult> AddOrderAsync([FromBody] AddOrderDTO orderDto)
         {
             try
             {
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var result = await _orderService.AddOrderAsync(user, orderDto);
-                return Ok(result);
+                return Ok($"SUCCESS: Order CREATED successfully");
+
             }
             catch (Exception ex)
             {
@@ -70,13 +72,14 @@ namespace EventGate.API.Controllers
 
         [HttpPut("{orderId}")]
         [SwaggerOperation(Summary = "This API is used to 'Update Order'")]
-        public async Task<IActionResult> UpdateOrderAsync(string orderId, [FromBody] OrderDTO orderDto)
+        public async Task<IActionResult> UpdateOrderAsync(string orderId, [FromBody] UpdateOrderDTO orderDto)
         {
             try
             {
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var result = await _orderService.UpdateOrderAsync(user, orderId, orderDto);
-                return Ok(result);
+                return Ok($"SUCCESS: Order with ID ( {orderId} ) UPDATED successfully");
+
             }
             catch (Exception ex)
             {
@@ -92,7 +95,7 @@ namespace EventGate.API.Controllers
             {
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var result = await _orderService.DeleteOrderAsync(user, orderId);
-                return Ok(result);
+                return Ok($"SUCCESS: Order with ID ( {orderId} ) DELETED successfully");
             }
             catch (Exception ex)
             {

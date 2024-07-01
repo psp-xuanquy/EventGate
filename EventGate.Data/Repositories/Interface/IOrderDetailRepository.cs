@@ -11,5 +11,7 @@ namespace EventGate.Data.Repositories.Interface
     {
         Task<List<OrderDetail>> GetByOrderIdAsync(string orderId);
         Task<OrderDetail> GetByIdAsync(string orderDetailId);
+        Task AddAsync(string user, OrderDetail orderDetail);
+        Task DeleteByOrderIdAsync(string user, string orderId);
     }
 }

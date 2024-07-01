@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventGate.Business.Models.DTOs.Request
+namespace EventGate.Business.Models.DTOs.Request.Order
 {
     public class OrderDTO
     {

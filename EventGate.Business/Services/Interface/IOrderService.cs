@@ -1,4 +1,4 @@
-﻿using EventGate.Business.Models.DTOs.Request;
+﻿using EventGate.Business.Models.DTOs.Request.Order;
 using EventGate.Data.Entity;
 using System;
 using System.Collections.Generic;
@@ -12,8 +12,8 @@ namespace EventGate.Business.Services.Interface
     {
         Task<List<OrderDTO>> GetAllOrdersAsync();
         Task<OrderDTO> GetOrderByIdAsync(string orderId);
-        Task<int> AddOrderAsync(string user, OrderDTO addOrderDto);
-        Task<int> UpdateOrderAsync(string user, string orderId, OrderDTO updateOrderDto);
+        Task<int> AddOrderAsync(string user, AddOrderDTO addOrderDto);
+        Task<int> UpdateOrderAsync(string user, string orderId, UpdateOrderDTO updateOrderDto);
         Task<int> DeleteOrderAsync(string user, string orderId);
     }
 }
