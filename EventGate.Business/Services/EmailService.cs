@@ -78,7 +78,7 @@ namespace EventGate.Business.Services
 
             var token = userExist.VerificationToken;
 
-            var link = $"https://localhost:7050/api/Authentication/emailConfirm?id={userExist.Id}";
+            var link = $"https://eventgateapi.azurewebsites.net/api/Authentication/emailConfirm?id={userExist.Id}";
             htmlContent = htmlContent.Replace("{{UserName}}", userExist.UserName).Replace("{{Link}}", link);
 
             var message = new Message(new string[] { userExist.Email }, "Email Confirmation", htmlContent, true);
