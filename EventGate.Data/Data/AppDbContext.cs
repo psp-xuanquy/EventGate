@@ -120,10 +120,10 @@ namespace EventGate.Data
                 .WithOne(b => b.Author)
                 .HasForeignKey(b => b.AuthorID);
 
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.ChatHistories)
-                .WithOne(ch => ch.Sender)
-                .HasForeignKey(ch => ch.SenderID);
+            //modelBuilder.Entity<User>()
+            //    .HasMany(u => u.ChatHistories)
+            //    .WithOne(ch => ch.Sender)
+            //    .HasForeignKey(ch => ch.SenderID);
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.UserChatRooms)
@@ -140,17 +140,16 @@ namespace EventGate.Data
                 .WithOne(ucr => ucr.ChatRoom)
                 .HasForeignKey(ucr => ucr.ChatRoomID);
 
-            modelBuilder.Entity<ChatHistory>()
-                .HasOne(ch => ch.Chat)
-                .WithMany(c => c.ChatHistories)
-                .HasForeignKey(ch => ch.ChatID)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<ChatHistory>()
+            //    .HasOne(ch => ch.Sender)
+            //    .WithMany()
+            //    .HasForeignKey(ch => ch.SenderID)
+            //    .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ChatHistory>()
-                .HasOne(ch => ch.Sender)
+                .HasOne(ch => ch.ChatRoom)
                 .WithMany()
-                .HasForeignKey(ch => ch.SenderID)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasForeignKey(ch => ch.ChatRoomID);
 
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.Sender)
@@ -208,15 +207,14 @@ namespace EventGate.Data
 
             modelBuilder.Entity<EventHistory>()
                 .HasOne(eh => eh.EventType)
-                .WithMany(et => et.EventHistories)
+                .WithMany()
                 .HasForeignKey(eh => eh.EventTypeID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<EventHistory>()
-                .HasOne(eh => eh.Event)
-                .WithMany(e => e.EventHistories)
-                .HasForeignKey(eh => eh.EventID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasMany(eh => eh.UserEventHistories)
+                .WithOne()
+                .HasForeignKey(ueh => ueh.EventHistoryID);
 
             modelBuilder.Entity<EventRule>()
                 .HasOne(er => er.EventType)
@@ -227,7 +225,6 @@ namespace EventGate.Data
 
             base.OnModelCreating(modelBuilder);
         }
-
 
         public override int SaveChanges()
         {

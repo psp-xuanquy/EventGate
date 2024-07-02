@@ -19,9 +19,7 @@ namespace EventGate.Data.Entity
         public byte[]? QRCode { get; set; }
         public DateTime ArchiveDate { get; set; }
 
-        [ForeignKey("Event")]
         public string? EventID { get; set; }
-        public Event? Event { get; set; }
 
         [ForeignKey("EventType")]
         public string? EventTypeID { get; set; }

@@ -12,20 +12,12 @@ namespace EventGate.Data.Entity
         public DateTime SentDate { get; set; }
         public DateTime? ArchivedDate { get; set; }
 
-        [ForeignKey("Chat")]
         public string? ChatID { get; set; }
-        public Chat? Chat { get; set; }
+
+        public string? SenderID { get; set; }
 
         [ForeignKey("ChatRoom")]
         public string? ChatRoomID { get; set; }
         public ChatRoom? ChatRoom { get; set; }
-
-        [ForeignKey("Sender")]
-        public string? SenderID { get; set; }
-        public User? Sender { get; set; }
-
-        //[ForeignKey("Receiver")]
-        //public string? ReceiverID { get; set; }
-        //public User? Receiver { get; set; }
     }
 }
