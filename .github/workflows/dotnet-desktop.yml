@@ -16,7 +16,9 @@ jobs:
 
     env:
       Solution_Name: EventGate.sln  # Replace with your solution name.
-
+      AZURE_WEBAPP_NAME: eventgateapi
+      AZURE_WEBAPP_PAKAGE_PATH: "./publish"
+      
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -49,6 +51,6 @@ jobs:
     - name: Deploy to Azure Web Apps
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'eventgateapi'  # Replace with your Azure App Service name
+        app-name: ${{ AZURE_WEBAPP_NAME }}  # Replace with your Azure App Service name
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: '${{ github.workspace }}/path/to/publish'  # Adjust the path to your publish directory
+        package: ${{ AZURE_WEBAPP_PAKAGE_PATH }}  # Adjust the path to your publish directory
