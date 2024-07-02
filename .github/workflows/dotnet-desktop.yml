@@ -44,5 +44,12 @@ jobs:
       run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }} -verbosity:diag
       env:
         Configuration: ${{ matrix.configuration }}
-
+        
+    # Deploy to Azure Web Apps
+    - name: Deploy to Azure Web Apps
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'eventgateapi'  # Replace with your Azure App Service name
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: '.'
    
