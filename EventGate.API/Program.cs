@@ -106,6 +106,10 @@ namespace EventGate
             builder.Services.AddScoped<IEventTypeRepository, EventTypeRepository>();
             builder.Services.AddScoped<IEventTypeService, EventTypeService>();
 
+            //-- EventRule -- 
+            builder.Services.AddScoped<IEventRuleRepository, EventRuleRepository>();
+            builder.Services.AddScoped<IEventRuleService, EventRuleService>();
+
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
