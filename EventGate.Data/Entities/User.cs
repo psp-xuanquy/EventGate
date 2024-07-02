@@ -32,7 +32,7 @@ namespace EventGate.Data.Entity
         public ICollection<UserEvent>? UserEvents { get; set; }
         public ICollection<UserChatRoom>? UserChatRooms { get; set; }
         public ICollection<EventFeedback>? EventFeedbacks { get; set; }
-        public ICollection<UserHistory>? UserHistories { get; set; }
-        public ICollection<ChatHistory>? ChatHistories { get; set; }
+        //public ICollection<UserHistory>? UserHistories { get; set; }
+        //public ICollection<ChatHistory>? ChatHistories { get; set; }
     }
 }

@@ -24,7 +24,7 @@ namespace EventGate.Data.Entity
         //public string? ReceiverID { get; set; }
         //public User? Receiver { get; set; }
 
-        public ICollection<ChatHistory>? ChatHistories { get; set; }
+        //public ICollection<ChatHistory>? ChatHistories { get; set; }
         public ICollection<ChatReceiver>? ChatReceivers { get; set; }
     }
 }

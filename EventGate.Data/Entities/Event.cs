@@ -34,6 +34,6 @@ namespace EventGate.Data.Entity
         public ICollection<EventFeedback>? EventFeedbacks { get; set; }
         public ICollection<EventClub>? EventClubs { get; set; }
         public ICollection<UserEvent>? UserEvents { get; set; }
-        public ICollection<EventHistory>? EventHistories { get; set; }
+        //public ICollection<EventHistory>? EventHistories { get; set; }
     }
 }
