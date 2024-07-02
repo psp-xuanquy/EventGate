@@ -191,12 +191,13 @@ namespace EventGate
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            //if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
-            //{
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            //}
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventGate API V1");
+                c.RoutePrefix = "swagger"; // Sets the Swagger UI to be available at /swagger
+            });
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
