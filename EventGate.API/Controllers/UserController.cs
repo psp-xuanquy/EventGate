@@ -1,6 +1,6 @@
 ﻿using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Services.Interface;
-using EventGate.Data.DTOs.Request;
+
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
 using Microsoft.AspNetCore.Http;

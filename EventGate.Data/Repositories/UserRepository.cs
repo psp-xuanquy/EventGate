@@ -46,8 +46,6 @@ namespace EventGate.Data.Repositories
             return user;
         }
 
-        //Get User By Email || UserName
-
 
         //Update User
         public async Task<int> UpdateAsync(string id, User user)
@@ -63,23 +61,12 @@ namespace EventGate.Data.Repositories
             return await _appDbContext.SaveChangesAsync();
         }
 
-        //Delete User
-        public async Task<int> DeleteAsync(string id, User user)
+        public async Task<int> DeleteAsync(User user)
         {
-            var existUser = await _appDbContext.Users
-                .Where(user => user.DeletedTime == null)
-                .FirstOrDefaultAsync(user => user.Id == id);
-            if (existUser == null)
-            {
-                throw new Exception("User does not exist");
-            }
-
-            user.DeletedTime = DateTime.Now;
-            user.IsDeleted = true;
-
+            _appDbContext.Users.Remove(user);
             return await _appDbContext.SaveChangesAsync();
         }
- 
+
         //Verify Login
         public async Task<User> VerifyLoginAsync(string userName, string password)
         {

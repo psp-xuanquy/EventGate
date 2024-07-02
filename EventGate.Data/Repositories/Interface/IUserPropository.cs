@@ -13,7 +13,7 @@ namespace EventGate.Data.Repositories.Interface
         Task<List<User>> GetAllDeletedAsync();
         Task<User> GetByIdAsync(string id);
         Task<int> UpdateAsync(string id, User user);
-        Task<int> DeleteAsync(string id, User user);
+        Task<int> DeleteAsync(User user);
         Task<User> GetUserByEmail(string email);
         Task<User> VerifyLoginAsync(string username, string password);
     }

@@ -64,7 +64,7 @@ namespace EventGate.API.Controllers
         [Route("register/member")]
         [SwaggerOperation(Description = "Example: <br> " +
         "{ <br> \"username\": \"crimson\", <br>" +
-        "\"email\": \"dung@gmail.com\", <br>" +
+        "\"email\": \"dungnxse161720@fpt.edu.vn\", <br>" +
         "\"password\": \"Dung@123\", <br>" +
         "\"confirmedPassword\": \"Dung@123\" <br> }")]
         public async Task<IActionResult> RegisterMember([FromBody] RegisterUserDTO registerMemberDTO)

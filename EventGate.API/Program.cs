@@ -4,7 +4,6 @@ using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services;
 using EventGate.Business.Services.Interface;
 using EventGate.Data;
-using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
 using EventGate.Data.Repositories.Interface;
@@ -105,6 +104,19 @@ namespace EventGate
             //-- EventType -- 
             builder.Services.AddScoped<IEventTypeRepository, EventTypeRepository>();
             builder.Services.AddScoped<IEventTypeService, EventTypeService>();
+
+            //-- EventClub --
+            builder.Services.AddScoped<IEventClubsRepository, EventClubsRepository>();
+            builder.Services.AddScoped<IEventClubService, EventClubService>();
+
+            //-- UserEvent --
+            builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
+            builder.Services.AddScoped<IUserEventService, UserEventService>();
+
+            //-- UserHistory--
+            builder.Services.AddScoped<IUserHistoryRepository, UserHistoryRepository>();
+            builder.Services.AddScoped<IUserHistoryService, UserHistoryService>();
+
 
             //-- EventRule -- 
             builder.Services.AddScoped<IEventRuleRepository, EventRuleRepository>();

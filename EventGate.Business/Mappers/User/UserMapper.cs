@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Models.DTOs.Response.User;
-using EventGate.Data.DTOs.Request;
 using EventGate.Data.Entity;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Models.DTOs.Response.User;
 using EventGate.Business.Services.Interface;
-using EventGate.Data.DTOs.Request;
+using EventGate.Data;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
 using EventGate.Data.Repositories.Interface;
@@ -21,13 +21,21 @@ namespace EventGate.Business.Services
     public class UserService : IUserService
     {
         private readonly IUserPropository _userRepository;
+        private readonly IUserHistoryRepository _userHistoryRepository;
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
-        public UserService(IUserPropository userPropository, UserManager<User> userManager, IMapper mapper)
+        private readonly AppDbContext _appDbContext;
+        public UserService(IUserPropository userPropository,
+            UserManager<User> userManager,
+            IMapper mapper,
+            AppDbContext appDbContext,
+            IUserHistoryRepository userHistoryRepository)
         {
             _userRepository = userPropository;
             _userManager = userManager;
             _mapper = mapper;
+            _userHistoryRepository = userHistoryRepository;
+            _appDbContext = appDbContext;
         }
 
 
@@ -52,12 +60,12 @@ namespace EventGate.Business.Services
             User user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                return new BadRequestObjectResult($"User với id: '{id}' không tìm thấy hoặc đã bị xóa!");
+                return new BadRequestObjectResult($"UserId: '{id}' not found or has been deleted!");
             }
             return new OkObjectResult(_mapper.Map<UserDTOResponse>(user));
         }
 
-        //Find By Gmail Or UserName
+
 
         //Update User
         public async Task<IActionResult> UpdateAsync(UpdateUserDTORequest userDTO, string id)
@@ -65,17 +73,17 @@ namespace EventGate.Business.Services
             User user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                return new BadRequestObjectResult($"User với id: '{id}' không tìm thấy hoặc đã bị xóa!");
+                return new BadRequestObjectResult($"UserId: '{id}' not found or has been deleted!");
             }
 
             List<User> users = await _userRepository.GetAllAsync();
             if (users.Any(user => user.Email == userDTO.Email && user.Id != id))
             {
-                return new BadRequestObjectResult($"Gmail này đã được sử dụng, vui lòng chọn một gmail khác!");
+                return new BadRequestObjectResult($"Gmail has already been used, please choose another one!");
             }
             if (users.Any(user => user.IdentityCard == userDTO.IdentityCard && user.Id != id))
             {
-                return new BadRequestObjectResult($"Mã định danh này được sử dụng! *Lưu ý: Mã định danh phải là duy nhất");
+                return new BadRequestObjectResult($"IdentityCard has already been used ! *Note: IdentityCard must be unique!");
             }
 
             var entity = _mapper.Map(userDTO, user);
@@ -83,10 +91,10 @@ namespace EventGate.Business.Services
             int rs = await _userRepository.UpdateAsync(id, entity);
             if (rs == 0)
             {
-                return new BadRequestObjectResult("Update User thất bại!");
+                return new BadRequestObjectResult("Update User Fail!");
             }
 
-            return new OkObjectResult("Update User thành công!");
+            return new OkObjectResult("Update User Success!");
         }
 
 
@@ -96,16 +104,28 @@ namespace EventGate.Business.Services
             User user = await _userRepository.GetByIdAsync(id);
             if (user == null)
             {
-                return new BadRequestObjectResult($"User với id: '{id}' không tìm thấy hoặc đã bị xóa!");
+                return new BadRequestObjectResult($"Userid: '{id}' Not found or been deleted!");
             }
+            // Map User to UserHistoryDTORequest
+            var userHistoryDTO = _mapper.Map<UserHistoryDTORequest>(user);
 
-            int rs = await _userRepository.DeleteAsync(id, user);
+            // Map UserHistoryDTORequest to UserHistory entity
+            var userHistory = _mapper.Map<UserHistory>(userHistoryDTO);
+
+            // Add UserHistory entry
+            await _userHistoryRepository.AddUserHistoryAsync(userHistory);
+
+            Console.WriteLine($"UserID in DTO: {user.Id}");
+            int rs = await _userRepository.DeleteAsync(user);
             if (rs == 0)
             {
-                return new BadRequestObjectResult("Delete User thất bại!");
+                return new BadRequestObjectResult("Delete User fail!");
             }
 
-            return new OkObjectResult("Delete User thành công!");
+
+           
+            return new OkObjectResult("Delete User success!");
+
         }
 
 
