@@ -17,7 +17,6 @@ jobs:
     env:
       Solution_Name: EventGate.sln  # Replace with your solution name.
       AZURE_WEBAPP_NAME: eventgateapi
-      AZURE_WEBAPP_PAKAGE_PATH: "./publish"
 
     steps:
     - name: Checkout
@@ -53,4 +52,4 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}  # Replace with your Azure App Service name
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: "${{ env.AZURE_WEBAPP_PAKAGE_PATH }}"  # Adjust the path to your publish directory
+        package: './publish'  # Adjust the path to your publish directory relative to the GitHub workspace
