@@ -162,6 +162,16 @@ namespace EventGate.Data
                 .WithOne(cr => cr.Chat)
                 .HasForeignKey(cr => cr.ChatID);
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserID);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne(c => c.ChatRoom)
+                .WithMany(cr => cr.Chats)
+                .HasForeignKey(c => c.ChatRoomID);
+
             modelBuilder.Entity<UserChatRoom>()
                 .HasOne(ucr => ucr.User)
                 .WithMany(u => u.UserChatRooms)

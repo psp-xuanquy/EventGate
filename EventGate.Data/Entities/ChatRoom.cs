@@ -8,6 +8,7 @@ namespace EventGate.Data.Entity
         public string? RoomName { get; set; }
         public string? Description { get; set; }
 
+        public ICollection<Chat>? Chats { get; set; }
         public ICollection<UserChatRoom>? UserChatRooms { get; set; }
     }
 }
