@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventGate.Business.Models.DTOs.Request;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,10 @@ namespace EventGate.Business.Services.Interface
 {
     public interface IEventService
     {
+        Task<List<EventDTO>> GetAllEventsAsync();
+        Task<EventDTO> GetEventByIdAsync(string eventId);
+        Task<int> AddEventAsync(string user, EventDTO addEventDto);
+        Task<int> UpdateEventAsync(string user, string eventId, EventDTO updateEventDto);
+        Task<int> DeleteEventAsync(string user, string eventId);
     }
 }
