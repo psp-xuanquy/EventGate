@@ -46,19 +46,15 @@ jobs:
       run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }} -verbosity:diag
       env:
         Configuration: ${{ matrix.configuration }}
-	
     # Verify build output directory
     - name: Verify build output
       run: dir /s ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
     # Publish
     - name: Publish
       run: dotnet publish ${{ env.Solution_Name }} --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-    
     # Verify publish output directory
     - name: Verify publish output
       run: dir /s ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-	
     # Deploy to Azure Web Apps
     - name: Deploy to Azure Web Apps
       uses: azure/webapps-deploy@v2
