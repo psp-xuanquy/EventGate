@@ -37,6 +37,9 @@ namespace EventGate.Business.Mappers
             // Mapping for Voucher
             CreateMap<Voucher, VoucherDTO>().ReverseMap();
 
+            // Mapping for Event
+            CreateMap<Event, EventDTO>().ReverseMap();
+
             // Mapping for Order
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<AddOrderDTO, Order>();
