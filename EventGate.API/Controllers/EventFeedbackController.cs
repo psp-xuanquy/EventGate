@@ -1,4 +1,5 @@
-﻿using EventGate.Business.Models.DTOs.Request.User;
+﻿using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -38,14 +39,14 @@ namespace EventGate.API.Controllers
 
         [HttpPost]
         [SwaggerOperation(Summary = "This API is to Add UserFeedBack")]
-        public async Task<IActionResult> Add([FromBody] UserEventDTORequest userEvent)
+        public async Task<IActionResult> Add([FromBody] EventFeedBackDTO userEvent)
         {
             return await _eventFeedBackService.AddAsync(userEvent);
         }
 
         [HttpPut("{id}")]
         [SwaggerOperation(Summary = "This API is to Update UserFeedBack Through Id")]
-        public async Task<IActionResult> Update([FromBody] UserEventDTORequest userEvent, string id)
+        public async Task<IActionResult> Update([FromBody] EventFeedBackDTO userEvent, string id)
         {
             return await _eventFeedBackService.UpdateAsync(userEvent, id);
         }

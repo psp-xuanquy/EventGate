@@ -10,7 +10,7 @@ namespace EventGate.Data.Entity
         public string FeedbackID { get; set; } = Guid.NewGuid().ToString();
         public string? Content { get; set; }
         public int Rating { get; set; }
-        public DateTime SubmittedDate { get; set; }
+        public DateTime SubmittedDate { get; set; } = DateTime.Now;
 
         [ForeignKey("User")]
         public string? UserID { get; set; }

@@ -1,4 +1,5 @@
-﻿using EventGate.Business.Models.DTOs.Request.User;
+﻿using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.User;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace EventGate.Business.Services.Interface
         Task<IActionResult> GetAllAsync();
         Task<IActionResult> GetAllDeletedAsync();
         Task<IActionResult> GetByIdAsync(string id);
-        Task<IActionResult> AddAsync(UserEventDTORequest userEvent);
-        Task<IActionResult> UpdateAsync(UserEventDTORequest userEvent, string id);
+        Task<IActionResult> AddAsync(EventFeedBackDTO userEvent);
+        Task<IActionResult> UpdateAsync(EventFeedBackDTO userEvent, string id);
         Task<IActionResult> DeleteAsync(string id);
     }
 }

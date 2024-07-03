@@ -125,6 +125,9 @@ namespace EventGate
             //-- PaymentsInfo -- 
             builder.Services.AddScoped<IPaymentsInfoRepository, PaymentsInfoRepository>();
             builder.Services.AddScoped<IPaymentsInfoService, PaymentsInfoService>();
+            //-- PaymentsInfo -- 
+            builder.Services.AddScoped<IEventFeedBackRepository, EventFeedBackRepository>();
+            builder.Services.AddScoped<IEventFeedBackService, EventFeedBackService>();
 
 
             builder.Services.Configure<IdentityOptions>(options =>

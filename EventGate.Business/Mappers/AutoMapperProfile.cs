@@ -54,6 +54,8 @@ namespace EventGate.Business.Mappers
 
             // Mapping for OrderDetail response
             CreateMap<OrderDetail, OrderDetailDTOResponse>().ReverseMap();
+            CreateMap<EventFeedback,EventFeedBackDTO>().ReverseMap();
+            CreateMap<EventFeedback, EventFeedBackDTOResponse>().ReverseMap();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Models.DTOs.Request.User;
+using EventGate.Business.Models.DTOs.Response;
 using EventGate.Business.Models.DTOs.Response.User;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
@@ -35,14 +37,14 @@ namespace EventGate.Business.Services
         public async Task<IActionResult> GetAllAsync()
         {
             List<EventFeedback> users = await _userFeedbackRepository.GetAllAsync();
-            return new OkObjectResult(_mapper.Map<List<UserEventDTOResponse>>(users));
+            return new OkObjectResult(_mapper.Map<List<EventFeedBackDTOResponse>>(users));
         }
 
         //Get All UserEvent Deleted
         public async Task<IActionResult> GetAllDeletedAsync()
         {
             List<EventFeedback> users = await _userFeedbackRepository.GetAllDeletedAsync();
-            return new OkObjectResult(_mapper.Map<List<UserEventDTOResponse>>(users));
+            return new OkObjectResult(_mapper.Map<List<EventFeedBackDTOResponse>>(users));
         }
 
 
@@ -54,16 +56,16 @@ namespace EventGate.Business.Services
             {
                 return new BadRequestObjectResult($"UserFeedbackId: '{id}' not found or has been deleted!");
             }
-            return new OkObjectResult(_mapper.Map<UserEventDTOResponse>(user));
+            return new OkObjectResult(_mapper.Map<EventFeedBackDTOResponse>(user));
         }
 
         //Add UserEvent
-        public async Task<IActionResult> AddAsync(UserEventDTORequest userEvent)
+        public async Task<IActionResult> AddAsync(EventFeedBackDTO userEvent)
         {
-            User user = await _userRepository.GetByIdAsync(userEvent.UserId);
+            User user = await _userRepository.GetByIdAsync(userEvent.UserID);
             if (user == null)
             {
-                return new BadRequestObjectResult($"UserId: '{userEvent.UserId}' not found or has been deleted");
+                return new BadRequestObjectResult($"UserId: '{userEvent.UserID}' not found or has been deleted");
             }
 
             //Event events = await _eventRepository.GetEventById(userEvent.EventId);
@@ -85,7 +87,7 @@ namespace EventGate.Business.Services
 
 
         //Update UserEvent
-        public async Task<IActionResult> UpdateAsync(UserEventDTORequest userEventDTO, string id)
+        public async Task<IActionResult> UpdateAsync(EventFeedBackDTO userEventDTO, string id)
         {
             EventFeedback userEvent = await _userFeedbackRepository.GetByIdAsync(id);
             if (userEvent == null)
@@ -93,10 +95,10 @@ namespace EventGate.Business.Services
                 return new BadRequestObjectResult($"UserFeedBackId: '{id}' not found or has been deleted!");
             }
 
-            User user = await _userRepository.GetByIdAsync(userEventDTO.UserId);
+            User user = await _userRepository.GetByIdAsync(userEventDTO.UserID);
             if (user == null)
             {
-                return new BadRequestObjectResult($"UserId: '{userEventDTO.UserId}' not found or has been deleted");
+                return new BadRequestObjectResult($"UserId: '{userEventDTO.UserID}' not found or has been deleted");
             }
 
             //Event events = await _eventRepository.GetEventById(userEventDTO.EventId);
