@@ -1,3 +1,23 @@
+Skip to content
+Navigation Menu
+psp-xuanquy
+/
+EventGate
+
+Type / to search
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+.NET Core Desktop
+Merge pull request #13 from psp-xuanquy/hojudu #12
+Jobs
+Run details
+Workflow file for this run
+.github/workflows/dotnet-desktop.yml at 46f6da7
 name: .NET Core Desktop
 
 on:
@@ -35,45 +55,17 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
 
-    # Restore the application with verbose logging
-    - name: Restore the application
-      run: msbuild ${{ env.Solution_Name }} /t:Restore /p:Configuration=${{ matrix.configuration }} -verbosity:diag
-      env:
-        Configuration: ${{ matrix.configuration }}
+    # Restore
+    - name: Restore
+        run: dotnet restore ./EventGate.sln
 
-    # Verify solution file exists
-    - name: Verify solution file exists
-      run: |
-        if [ ! -f ${{ env.Solution_Name }} ]; then
-          echo "Solution file not found: ${{ env.Solution_Name }}"
-          exit 1
-        fi
-
-    # Build the application with verbose logging
+    # Build
     - name: Build
-      run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }} -verbosity:diag
-      env:
-        Configuration: ${{ matrix.configuration }}
-
-    # Verify build output directory
-    - name: Verify build output
-      run: |
-        if [ ! -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} ]; then
-          echo "Build output directory not found: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-          exit 1
-        fi
+        run: dotnet build ./EventGate.sln --configuration Release --no-restore
 
     # Publish
     - name: Publish
-      run: dotnet publish ${{ env.Solution_Name }} --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
-
-    # Verify publish output directory
-    - name: Verify publish output
-      run: |
-        if [ ! -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} ]; then
-          echo "Publish output directory not found: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
-          exit 1
-        fi
+        run: dotnet publish ./EventGate.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
 
     # Deploy to Azure Web Apps
     - name: Deploy to Azure Web Apps
