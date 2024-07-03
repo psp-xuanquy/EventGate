@@ -105,11 +105,6 @@ namespace EventGate.Data
                 .WithOne(t => t.Event)
                 .HasForeignKey(t => t.EventID);
 
-            modelBuilder.Entity<Event>()
-                .HasMany(e => e.EventFeedbacks)
-                .WithOne(ef => ef.Event)
-                .HasForeignKey(ef => ef.EventID);
-
             modelBuilder.Entity<EventFeedback>()
                 .HasOne(ef => ef.User)
                 .WithMany(u => u.EventFeedbacks)
