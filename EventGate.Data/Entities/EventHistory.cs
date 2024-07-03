@@ -21,9 +21,9 @@ namespace EventGate.Data.Entity
 
         public string? EventID { get; set; }
 
-        //[ForeignKey("EventType")]
+        [ForeignKey("EventType")]
         public string? EventTypeID { get; set; }
-        //public EventType? EventType { get; set; }
+        public EventType? EventType { get; set; }
 
         //public virtual ICollection<UserEventHistory>? UserEventHistories { get; set; }
     }
