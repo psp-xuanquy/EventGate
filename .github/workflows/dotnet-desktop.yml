@@ -1,39 +1,60 @@
 name: .NET Core Desktop
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-    - main
-
-env:
-  AZURE_WEBAPP_NAME: eventgateapi
-  AZURE_WEBAPP_PACKAGE_PATH: "./publish"
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    
+  build:
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on: windows-latest
+
+    env:
+      Solution_Name: EventGate.sln  # Replace with your solution name.
+      AZURE_WEBAPP_NAME: eventgateapi
+      AZURE_WEBAPP_PACKAGE_PATH: "./publish"
+
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
-          
-      - name: Restore
-        run: dotnet restore ./EventGate.sln
-        
-      - name: Build
-        run: dotnet build ./EventGate.sln --configuration Release --no-restore
-        
-      - name: Publish
-        run: dotnet publish ./EventGate.sln --configuration Release --no-build --output '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}'
-        
-      - name: Deployment
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: "${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # Add MSBuild to the PATH
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+
+    # Restore the application with verbose logging
+    - name: Restore the application
+      run: msbuild ${{ env.Solution_Name }} /t:Restore /p:Configuration=${{ matrix.configuration }} -verbosity:diag
+      env:
+        Configuration: ${{ matrix.configuration }}
+
+    # Build the application with verbose logging
+    - name: Build
+      run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }} -verbosity:diag
+      env:
+        Configuration: ${{ matrix.configuration }}
+	
+    # Publish
+    - name: Publish
+      run: dotnet publish ./EventGate.sln --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+	
+    # Deploy to Azure Web Apps
+    - name: Deploy to Azure Web Apps
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
