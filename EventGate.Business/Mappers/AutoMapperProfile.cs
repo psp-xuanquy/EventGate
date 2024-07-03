@@ -40,6 +40,9 @@ namespace EventGate.Business.Mappers
             // Mapping for Event
             CreateMap<Event, EventDTO>().ReverseMap();
 
+            // Mapping for PaymentsInfo
+            CreateMap<PaymentsInfo, PaymentsInfoDTO>().ReverseMap();
+
             // Mapping for Order
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<AddOrderDTO, Order>();
