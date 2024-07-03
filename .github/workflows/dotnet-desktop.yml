@@ -41,20 +41,40 @@ jobs:
       env:
         Configuration: ${{ matrix.configuration }}
 
+    # Verify solution file exists
+    - name: Verify solution file exists
+      run: |
+        if [ ! -f ${{ env.Solution_Name }} ]; then
+          echo "Solution file not found: ${{ env.Solution_Name }}"
+          exit 1
+        fi
+
     # Build the application with verbose logging
     - name: Build
       run: msbuild ${{ env.Solution_Name }} /p:Configuration=${{ matrix.configuration }} -verbosity:diag
       env:
         Configuration: ${{ matrix.configuration }}
+
     # Verify build output directory
     - name: Verify build output
-      run: dir /s ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      run: |
+        if [ ! -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} ]; then
+          echo "Build output directory not found: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+          exit 1
+        fi
+
     # Publish
     - name: Publish
       run: dotnet publish ${{ env.Solution_Name }} --configuration Release --no-build --output ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
     # Verify publish output directory
     - name: Verify publish output
-      run: dir /s ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      run: |
+        if [ ! -d ${{ env.AZURE_WEBAPP_PACKAGE_PATH }} ]; then
+          echo "Publish output directory not found: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}"
+          exit 1
+        fi
+
     # Deploy to Azure Web Apps
     - name: Deploy to Azure Web Apps
       uses: azure/webapps-deploy@v2
