@@ -16,8 +16,8 @@ namespace EventGate.Data.Entity
 
         public string? SenderID { get; set; }
 
-        [ForeignKey("ChatRoom")]
+        //[ForeignKey("ChatRoom")]
         public string? ChatRoomID { get; set; }
-        public ChatRoom? ChatRoom { get; set; }
+        //public ChatRoom? ChatRoom { get; set; }
     }
 }

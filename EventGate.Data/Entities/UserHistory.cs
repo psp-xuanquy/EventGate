@@ -20,6 +20,6 @@ namespace EventGate.Data.Entity
 
         public string? UserID { get; set; }
 
-        public virtual ICollection<UserEventHistory>? UserEventHistories { get; set; }
+        //public virtual ICollection<UserEventHistory>? UserEventHistories { get; set; }
     }
 }

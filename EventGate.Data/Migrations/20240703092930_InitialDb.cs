@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EventGate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialUpdate : Migration
+    public partial class InitialDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -71,6 +71,30 @@ namespace EventGate.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatHistories",
+                schema: "dbo",
+                columns: table => new
+                {
+                    ChatHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ArchivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ChatID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SenderID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChatRoomID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatHistories", x => x.ChatHistoryID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ChatRooms",
                 schema: "dbo",
                 columns: table => new
@@ -129,6 +153,56 @@ namespace EventGate.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Seats", x => x.SeatID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserEventHistories",
+                schema: "dbo",
+                columns: table => new
+                {
+                    UserEventHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserEventID = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ArchiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EventID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserEventHistories", x => x.UserEventHistoryID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserHistories",
+                schema: "dbo",
+                columns: table => new
+                {
+                    UserHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdentityCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ArchivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserHistories", x => x.UserHistoryID);
                 });
 
             migrationBuilder.CreateTable(
@@ -333,40 +407,6 @@ namespace EventGate.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserHistories",
-                schema: "dbo",
-                columns: table => new
-                {
-                    UserHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Avatar = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IdentityCard = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ArchivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserHistories", x => x.UserHistoryID);
-                    table.ForeignKey(
-                        name: "FK_UserHistories_AspNetUsers_UserID",
-                        column: x => x.UserID,
-                        principalSchema: "dbo",
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Chats",
                 schema: "dbo",
                 columns: table => new
@@ -437,6 +477,42 @@ namespace EventGate.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "EventHistories",
+                schema: "dbo",
+                columns: table => new
+                {
+                    EventHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EventName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    PosterImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    TicketQuantity = table.Column<int>(type: "int", nullable: false),
+                    QRCode = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ArchiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EventID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EventTypeID = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EventHistories", x => x.EventHistoryID);
+                    table.ForeignKey(
+                        name: "FK_EventHistories_EventTypes_EventTypeID",
+                        column: x => x.EventTypeID,
+                        principalSchema: "dbo",
+                        principalTable: "EventTypes",
+                        principalColumn: "EventTypeID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EventRules",
                 schema: "dbo",
                 columns: table => new
@@ -496,56 +572,6 @@ namespace EventGate.Data.Migrations
                         principalSchema: "dbo",
                         principalTable: "EventTypes",
                         principalColumn: "EventTypeID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ChatHistories",
-                schema: "dbo",
-                columns: table => new
-                {
-                    ChatHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ArchivedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ChatID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ChatRoomID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SenderID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChatHistories", x => x.ChatHistoryID);
-                    table.ForeignKey(
-                        name: "FK_ChatHistories_AspNetUsers_SenderID",
-                        column: x => x.SenderID,
-                        principalSchema: "dbo",
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ChatHistories_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "dbo",
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ChatHistories_ChatRooms_ChatRoomID",
-                        column: x => x.ChatRoomID,
-                        principalSchema: "dbo",
-                        principalTable: "ChatRooms",
-                        principalColumn: "ChatRoomID");
-                    table.ForeignKey(
-                        name: "FK_ChatHistories_Chats_ChatID",
-                        column: x => x.ChatID,
-                        principalSchema: "dbo",
-                        principalTable: "Chats",
-                        principalColumn: "ChatID");
                 });
 
             migrationBuilder.CreateTable(
@@ -679,48 +705,6 @@ namespace EventGate.Data.Migrations
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EventFeedbacks_Events_EventID",
-                        column: x => x.EventID,
-                        principalSchema: "dbo",
-                        principalTable: "Events",
-                        principalColumn: "EventID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EventHistories",
-                schema: "dbo",
-                columns: table => new
-                {
-                    EventHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EventName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
-                    PosterImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    TicketQuantity = table.Column<int>(type: "int", nullable: false),
-                    QRCode = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    ArchiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EventID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    EventTypeID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventHistories", x => x.EventHistoryID);
-                    table.ForeignKey(
-                        name: "FK_EventHistories_EventTypes_EventTypeID",
-                        column: x => x.EventTypeID,
-                        principalSchema: "dbo",
-                        principalTable: "EventTypes",
-                        principalColumn: "EventTypeID");
-                    table.ForeignKey(
-                        name: "FK_EventHistories_Events_EventID",
                         column: x => x.EventID,
                         principalSchema: "dbo",
                         principalTable: "Events",
@@ -866,39 +850,6 @@ namespace EventGate.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserEventHistories",
-                schema: "dbo",
-                columns: table => new
-                {
-                    UserEventHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ArchiveDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EventHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserHistoryID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastUpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DeletedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    LastUpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletedTime = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserEventHistories", x => x.UserEventHistoryID);
-                    table.ForeignKey(
-                        name: "FK_UserEventHistories_EventHistories_EventHistoryID",
-                        column: x => x.EventHistoryID,
-                        principalSchema: "dbo",
-                        principalTable: "EventHistories",
-                        principalColumn: "EventHistoryID");
-                    table.ForeignKey(
-                        name: "FK_UserEventHistories_UserHistories_UserHistoryID",
-                        column: x => x.UserHistoryID,
-                        principalSchema: "dbo",
-                        principalTable: "UserHistories",
-                        principalColumn: "UserHistoryID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "OrderDetails",
                 schema: "dbo",
                 columns: table => new
@@ -938,96 +889,96 @@ namespace EventGate.Data.Migrations
                 columns: new[] { "SeatID", "CreatedBy", "CreatedTime", "DeletedBy", "DeletedTime", "Hall", "IsAvailable", "LastUpdatedBy", "LastUpdatedTime", "Number", "Row" },
                 values: new object[,]
                 {
-                    { "07c2a7c3-167d-43ce-ae4f-04084148019d", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7369), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7370), 4, "A" },
-                    { "0b512794-4e98-4bf2-b7ac-22d5aa4c856a", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7291), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7293), 1, "C" },
-                    { "0bab52a5-3490-4d32-952f-f71e511ef5e4", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7547), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7550), 5, "D" },
-                    { "0c47a725-9ad2-4596-82f1-b6e4e1694637", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7259), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7260), 5, "A" },
-                    { "0cd0ee6c-855d-4c6a-a2a1-64fa32a33f76", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7358), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7361), 1, "A" },
-                    { "0d542d66-608f-4d5c-a5d9-87b3569c8130", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7272), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7274), 2, "B" },
-                    { "11b796b7-d7fd-4307-bff4-faccb41fa00a", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7527), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7528), 4, "C" },
-                    { "15e9c2a9-1236-45bc-8d7a-b14274b61c01", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7440), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7441), 4, "D" },
-                    { "18265294-4990-4645-8db4-f10ae207e8ad", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7484), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7486), 6, "A" },
-                    { "198783df-c6f6-4036-b049-66cf9bb88cd4", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7435), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7438), 3, "D" },
-                    { "1c51ad9b-43ba-4b62-bf33-83861ed888ad", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7339), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7340), 1, "E" },
-                    { "1c5ba7b3-bc02-404b-b7e4-8f8e7f96cb94", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7517), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7518), 1, "C" },
-                    { "1ca32687-09bf-4266-a347-d40069585180", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7312), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7315), 1, "D" },
-                    { "1dc50203-742a-46a6-add9-7c4ad5db4675", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7514), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7515), 6, "B" },
-                    { "1e329ea4-87e8-46fa-9f7f-d7850bc6553d", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7564), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7565), 4, "E" },
-                    { "1efe51a5-27bc-4430-bb49-d2a1d0904a2b", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7477), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7479), 4, "A" },
-                    { "209dbd61-32ec-43ed-a229-e846592a334b", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7432), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7434), 2, "D" },
-                    { "259720de-cae9-430c-9dd0-99b08d32de6e", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7332), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7335), 5, "D" },
-                    { "2a532458-ed20-4aea-837a-4eb7d6642f10", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7283), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7286), 5, "B" },
-                    { "30f3cac2-360a-43bf-b995-97ef031edfbd", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7448), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7451), 1, "E" },
-                    { "33936567-3c28-4859-b22b-9d5abe331331", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7305), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7307), 5, "C" },
-                    { "373806de-9cd8-43c9-82c9-37a399426af0", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7402), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7403), 2, "C" },
-                    { "38c378c1-9ada-4fd4-8161-e50151d5d7bc", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7380), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7381), 1, "B" },
-                    { "3c369a13-4993-4e59-b90c-6484f37f82c6", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7389), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7391), 4, "B" },
-                    { "41f999d7-73f0-424d-8d49-a7f914be47e2", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7522), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7525), 3, "C" },
-                    { "42765655-85a7-43d6-82ec-cbbfc2588bc1", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7355), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7356), 6, "E" },
-                    { "44353e77-e9da-46e6-a41b-5a0cd2c4386c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7377), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7378), 6, "A" },
-                    { "4572613d-7b57-43a6-8270-71b1fba947f8", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7316), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7318), 2, "D" },
-                    { "46b94b13-3885-44c7-a62e-eb6c3909a25f", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7263), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7265), 6, "A" },
-                    { "4901508d-0037-4853-9d83-2cb8721e003c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7342), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7343), 2, "E" },
-                    { "4d53209e-2745-4bf8-8ad7-af0fcb5a621e", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7554), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7555), 1, "E" },
-                    { "4de1b650-0181-416a-8bf2-52ef2178f8bb", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7427), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7428), 6, "C" },
-                    { "548c20b8-358e-4f8a-9f3c-720b397caa2e", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7534), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7538), 1, "D" },
-                    { "5899c31f-10ca-4805-9b67-0b70acd34082", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7302), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7303), 4, "C" },
-                    { "5d8f5e25-e04f-4ca9-94fc-9cea6bd06b7c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7473), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7476), 3, "A" },
-                    { "5f461ea8-f118-4407-ba05-034ade09d09c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7569), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7570), 6, "E" },
-                    { "5f6671ff-1bf3-4fa5-ac23-c46cd775eb72", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7422), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7425), 5, "C" },
-                    { "5f69ea70-f395-449c-b302-416c117ff9c6", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7404), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7406), 3, "C" },
-                    { "6147b8cf-3b5a-4a98-8726-0e46238b667f", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7557), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7558), 2, "E" },
-                    { "62a23999-c728-4b5c-86a7-cb838d96f0af", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7559), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7562), 3, "E" },
-                    { "6521f633-f1be-40bb-bf0d-3ad3a2cd2eca", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7255), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7257), 4, "A" },
-                    { "6b343dc2-124b-4fe8-9485-4d8a1cf0312b", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7539), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7540), 2, "D" },
-                    { "6ba12bac-b081-40e6-a1cf-93db6bc80a96", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7275), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7277), 3, "B" },
-                    { "6c55ecf8-5f25-4069-acff-41a477fd54d4", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7394), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7396), 6, "B" },
-                    { "75615485-1c6e-42ad-b15a-e10608895c02", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7504), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7506), 3, "B" },
-                    { "76a2475d-f8e5-4db7-88ea-5bcfbdbfe28c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7430), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7431), 1, "D" },
-                    { "7c64dc88-5e78-4ec4-b802-8cb1b2788c71", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7352), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7353), 5, "E" },
-                    { "8782c7b5-a980-44d5-a824-7cec6461d9d1", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7542), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7543), 3, "D" },
-                    { "90b909f3-6850-4ff3-8c57-521ecb672de6", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7365), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7366), 3, "A" },
-                    { "93161c0e-f633-4416-8b7c-8acb980e22b1", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7442), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7444), 5, "D" },
-                    { "96a78324-427f-4923-8975-c5560d4bffaa", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7452), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7453), 2, "E" },
-                    { "9bc5b737-28b5-45ca-926c-52ecaec18b01", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7385), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7388), 3, "B" },
-                    { "9e748c79-5375-4ad5-ae44-4302e38f1979", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7445), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7446), 6, "D" },
-                    { "9f434373-8bbf-46e7-982e-65068b5b4e52", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7362), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7363), 2, "A" },
-                    { "a48c324a-9cf2-4a5a-8801-d08656f5575c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7507), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7508), 4, "B" },
-                    { "a59d73dc-edfc-42ca-958f-5339ae1182b1", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7267), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7271), 1, "B" },
-                    { "a97fa834-a878-4e7f-b66a-01f46e2ceb21", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7551), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7553), 6, "D" },
-                    { "adebc06e-b408-4966-9748-7b15159f835f", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7242), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7253), 3, "A" },
-                    { "af8f400f-ccfb-4b8b-89d4-77ceb64391e6", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7288), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7290), 6, "B" },
-                    { "b18ed097-42a7-430a-9495-04a83da0e1d7", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7544), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7546), 4, "D" },
-                    { "b1b821be-0048-454b-9b4b-2aeffad4b688", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7345), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7348), 3, "E" },
-                    { "b49fba07-f362-4c9f-b09a-94cccc99c7a3", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7465), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7466), 6, "E" },
-                    { "b8da574d-6a03-4b57-8c94-87af4f1f2611", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7467), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7469), 1, "A" },
-                    { "bb72ebeb-99fe-4109-8bec-1285d4d52314", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7470), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7471), 2, "A" },
-                    { "bb81ff69-cc2f-47b6-8034-0ff7f5f83266", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7454), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7456), 3, "E" },
-                    { "bd234dab-4f6e-4de1-ac59-10cf595d110e", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7519), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7521), 2, "C" },
-                    { "c1881a4b-d90b-4339-ab01-f62d7f576b6f", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7319), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7328), 3, "D" },
-                    { "c9e24e58-d666-4741-89b8-b650543402e2", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7297), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7301), 3, "C" },
-                    { "ca01c6df-ad46-4500-b278-2f52d44a93ac", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7492), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7493), 2, "B" },
-                    { "cbd1558a-48a0-4208-8efd-db2892bdf4c7", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7457), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7459), 4, "E" },
-                    { "cde2edee-2a6f-4082-85db-4c10cd7d36cf", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7566), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7568), 5, "E" },
-                    { "cf2d3a0c-ca50-4fe8-9541-b123613ba856", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7382), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7384), 2, "B" },
-                    { "d2825613-15ef-461f-97ed-b3d676f17cbe", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7329), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7331), 4, "D" },
-                    { "d4246a03-face-4f45-acf8-b3c5c9c0b24e", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7480), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7482), 5, "A" },
-                    { "d5bc59a1-9449-4e99-9e92-a6ec0719053c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7294), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7296), 2, "C" },
-                    { "d70af112-5d2d-40b5-84f4-365c1a60a6a6", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7420), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7421), 4, "C" },
-                    { "d8a9fcb3-960e-4759-ac01-9e925f7d0def", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7336), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7338), 6, "D" },
-                    { "daa1ca9a-6cca-4268-8503-c2812ab4848a", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7510), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7513), 5, "B" },
-                    { "dc862e62-14a2-4ef7-ab8e-c5ee0e1e1262", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7280), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7282), 4, "B" },
-                    { "df1698c9-13b6-4270-852c-241b82c106ba", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7349), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7350), 4, "E" },
-                    { "e3199cdf-d34b-4e35-9ac8-f2b51902cba6", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7532), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7533), 6, "C" },
-                    { "eafde119-0717-4f6c-8e41-f1bb06381b1c", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7204), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7233), 1, "A" },
-                    { "ed406954-a466-4ac4-9a74-c7702e62028d", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7372), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7375), 5, "A" },
-                    { "ed9d51fa-395e-4c55-b7ce-b2703811f28f", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7309), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7311), 6, "C" },
-                    { "efc0a10d-ac53-497f-a20b-2a8470fa9906", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7487), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7490), 1, "B" },
-                    { "f1d43f28-b422-4db5-86b7-e393a15a240a", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7529), null, null, "Ceasar", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7531), 5, "C" },
-                    { "f924ffa7-28ac-4817-9201-fb3f18ddf2a4", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7238), null, null, "Alpha", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7239), 2, "A" },
-                    { "f9693f5e-dc4a-4b8c-801c-09d24081e0a0", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7397), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7400), 1, "C" },
-                    { "fb6d8904-85fe-4914-a3c8-646de5817894", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7460), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7463), 5, "E" },
-                    { "fc49c9ca-1877-454d-9853-234e87fd11f0", "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7392), null, null, "Beta", true, "System", new DateTime(2024, 6, 29, 18, 58, 30, 776, DateTimeKind.Local).AddTicks(7393), 5, "B" }
+                    { "01a139a8-dbb3-4eed-b57d-1b6c7833a370", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2847), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2848), 2, "B" },
+                    { "01ccace4-5c2e-45d1-86b2-6dce77323de9", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2835), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2837), 5, "A" },
+                    { "034c701d-75a1-46ce-850c-6c69b8c77be2", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2822), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2826), 2, "A" },
+                    { "0814e3c4-41fe-4908-a65b-e338211536aa", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2844), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2845), 1, "B" },
+                    { "08728612-24d9-4e8d-8c6d-d398221f7385", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2944), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2945), 3, "A" },
+                    { "0c77e5e5-8c0e-4f27-b485-dcc7ad64f53a", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2808), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2811), 4, "E" },
+                    { "12e7eef4-6820-4ba6-b568-05b69b24dd2a", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2898), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2899), 2, "D" },
+                    { "1597b3e4-32c2-4608-9c46-80490aea53ed", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3017), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3020), 2, "D" },
+                    { "16827578-3161-4f20-ab84-70eff39121d0", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2777), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2779), 1, "D" },
+                    { "1c2f56ca-ad1d-457a-b4cc-dbf3f736e2cc", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2989), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2992), 6, "B" },
+                    { "1c84565a-bbcb-48e6-8452-40edafd23f17", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2923), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2925), 3, "E" },
+                    { "227e19c1-87f8-4b9d-9458-2b0c752ebe23", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2672), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2675), 2, "A" },
+                    { "2547ee2d-2389-4f48-92d8-3c729e8cf249", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2869), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2871), 6, "B" },
+                    { "25557cea-b631-4424-9c64-d23a7cb5393d", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2912), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2914), 6, "D" },
+                    { "27d8d9e6-e37e-4e7d-ad01-ab35db7f8aa6", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2716), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2718), 6, "A" },
+                    { "28149626-01e7-4b23-b42e-67ab2c52925c", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2677), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2679), 3, "A" },
+                    { "2992647a-42e3-4218-898a-b9689c4a59f3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2915), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2917), 1, "E" },
+                    { "30df72f7-2bac-4ff5-bff5-88e499eb303c", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2895), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2896), 1, "D" },
+                    { "31aa69dc-6ebf-4d1c-b155-668a59e9bcbb", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2828), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2829), 3, "A" },
+                    { "32d412cf-feda-4422-ae4c-cfd4aaa67f57", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3042), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3043), 3, "E" },
+                    { "358edcba-2897-46ba-bc4c-267631d816e9", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2929), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2931), 5, "E" },
+                    { "37b3832b-1962-4476-831d-d6ab24f0b650", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2734), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2736), 4, "B" },
+                    { "3b95456b-a10d-4d68-a55f-179edb08e76b", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2963), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2965), 5, "A" },
+                    { "4163bb12-8287-4eec-af87-18e476896841", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2986), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2987), 5, "B" },
+                    { "44914335-682b-49f8-9239-c684dc8809a3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2866), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2868), 5, "B" },
+                    { "4870a59d-f5bf-4345-a78a-db6a8bab4bfb", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2816), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2817), 6, "E" },
+                    { "4b0f070d-c34c-4122-844d-27fa40029f39", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2974), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2978), 2, "B" },
+                    { "4de15274-f556-460e-b77e-45fab3c7fdbd", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2890), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2893), 6, "C" },
+                    { "4e46cbd7-1bb0-4dde-a51b-55b6acabeb69", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2932), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2936), 6, "E" },
+                    { "5286e8be-b735-4458-a9bf-15f07db04cdb", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2723), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2728), 2, "B" },
+                    { "54f030eb-4a3e-4b2f-b5fb-80deeda7b63d", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2720), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2721), 1, "B" },
+                    { "578760e9-8d5a-4187-92e9-7b38086f6128", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2918), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2922), 2, "E" },
+                    { "578dbfb9-7807-4099-8ae7-30c776e895b8", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3008), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3009), 5, "C" },
+                    { "57ae6545-03af-440a-b293-3ca917ec6abf", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2785), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2787), 3, "D" },
+                    { "5fbce7b5-9fc7-4fa3-94c7-c2335d29c6e5", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2880), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2882), 3, "C" },
+                    { "5ffcdfd0-723b-450e-ba19-9743eabf4e46", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2765), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2768), 4, "C" },
+                    { "61aed567-23c7-4358-a2b8-1182c2ad6606", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2729), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2731), 3, "B" },
+                    { "61b105a8-f66f-4c6b-9294-984a6d2111e0", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2983), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2984), 4, "B" },
+                    { "675ae974-4d96-4d62-80ef-951558665323", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2746), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2747), 1, "C" },
+                    { "6ce4edc6-fdea-425e-bd57-ac5242fbe554", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3039), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3040), 2, "E" },
+                    { "6d044b2e-6d51-4043-bf6e-1d2d3ed7bc04", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2904), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2907), 4, "D" },
+                    { "6dc13f0d-3f10-4c84-9f74-c61e077488cc", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2749), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2751), 2, "C" },
+                    { "6f11bd84-6b25-47ad-9c1f-0e8ebb44794f", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2788), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2790), 4, "D" },
+                    { "75e7220c-ec9e-4f01-b69c-1292490f3cb3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2887), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2888), 5, "C" },
+                    { "78846fb5-25fa-4b26-8b40-40fb38117464", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2770), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2771), 5, "C" },
+                    { "7c427c25-172d-4d5b-99dc-c4dd83fec920", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2968), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2969), 6, "A" },
+                    { "7fe5f986-8a3a-4fe6-961d-2444d4de0317", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2805), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2807), 3, "E" },
+                    { "802320d2-355b-4521-8421-9a632d34ce61", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2780), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2784), 2, "D" },
+                    { "83aca24d-58c3-4c6e-ba73-01b93f3dcd6b", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2979), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2981), 3, "B" },
+                    { "84312b5a-282f-40e8-8f5e-e96e225b414c", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2971), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2972), 1, "B" },
+                    { "8458a961-86cc-4229-89b4-dfa5db48b51a", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3000), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3001), 3, "C" },
+                    { "86fbff31-7713-490f-b248-dee1f7f9ab3c", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3058), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3060), 5, "E" },
+                    { "893ee0ef-1cfa-4fb7-bbbc-2239454c716f", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3025), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3026), 4, "D" },
+                    { "89aab939-c8db-4627-a8d0-98abae31c1e8", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2774), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2776), 6, "C" },
+                    { "8b027fb7-466c-45c1-8f94-d5932962af28", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2737), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2739), 5, "B" },
+                    { "8fb1779c-b90a-474e-92cf-1adfce4fccb1", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3003), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3006), 4, "C" },
+                    { "9041c777-adb7-4e26-9060-4d44e9bac0e3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2820), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2821), 1, "A" },
+                    { "951dcd74-2ee0-41f5-92b3-3e4dc681f7c1", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2624), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2667), 1, "A" },
+                    { "95a97aba-e2bb-4dd8-9bc0-a90d2523a98a", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2997), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2998), 2, "C" },
+                    { "9d31c16a-7a97-4fab-9e87-b0136b8103e3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2947), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2950), 4, "A" },
+                    { "9d9f0a50-5d09-4c39-a43a-9b7bb0dfad9f", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2926), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2928), 4, "E" },
+                    { "a49198d2-838a-4c83-bece-43452c8f0bb2", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3014), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3015), 1, "D" },
+                    { "a4bddb63-186a-4a73-951a-0251cbd4f682", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2680), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2709), 4, "A" },
+                    { "a75950cb-d2ef-47b4-8593-eacd6b6ff413", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3061), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3063), 6, "E" },
+                    { "a88aa4c4-3bb3-4232-9a41-f4b4b0af23b6", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2861), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2865), 4, "B" },
+                    { "a8cc8510-e15c-4ccb-bce3-d0d8c7d7f4f1", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2909), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2911), 5, "D" },
+                    { "acb25c11-3758-4391-88b3-85a9284094c8", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2872), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2874), 1, "C" },
+                    { "ad7b779d-54f1-4e77-9273-acf28cbf1f90", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2740), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2744), 6, "B" },
+                    { "b1364073-8c4a-4e51-b91e-ae605cd68bc4", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2838), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2842), 6, "A" },
+                    { "b3830564-bc2b-4105-b6da-ec55ddb9d258", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2799), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2801), 1, "E" },
+                    { "b829614f-489e-4f58-9915-cc4389d771b3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2791), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2793), 5, "D" },
+                    { "ba89ac30-a588-4eb5-a0f2-3cbf11b88d84", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2875), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2879), 2, "C" },
+                    { "c34ceca2-cd97-461f-9ecb-2ae37de4e27d", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3027), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3029), 5, "D" },
+                    { "cc51dcf1-1b84-4617-9372-abc85add6013", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2813), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2814), 5, "E" },
+                    { "cd649123-8e18-462b-b406-e603ee99453c", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3030), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3034), 6, "D" },
+                    { "ce936687-9e89-49e3-8a8c-56457948d869", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3036), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3037), 1, "E" },
+                    { "cf18398e-cbce-4cf9-aa89-3ebd3322707a", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2858), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2860), 3, "B" },
+                    { "cf7e2580-484b-442f-a095-8c9b81941eb9", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2711), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2712), 5, "A" },
+                    { "d0181013-d4d8-4c38-8585-10658e2794d0", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2794), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2798), 6, "D" },
+                    { "d1c2bfeb-8a54-4e19-9bbb-6df06b22d87b", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3053), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3057), 4, "E" },
+                    { "d7279cba-3c60-4d8a-bca7-5e67ec288cc0", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3022), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3023), 3, "D" },
+                    { "d86722d0-4bfe-4b9f-96e1-4e2ceccaebb8", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2802), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2804), 2, "E" },
+                    { "dc8f7078-44bd-460a-a045-1ea7115948b8", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2901), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2902), 3, "D" },
+                    { "ddbf3111-8774-44f0-8aaa-309e1233e312", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2752), null, null, "Alpha", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2763), 3, "C" },
+                    { "de4596c3-6bcf-461e-bf10-16c6e6a16e94", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2941), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2942), 2, "A" },
+                    { "e00f18a3-4a71-45c2-b1c8-9bbb8b068974", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3011), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(3012), 6, "C" },
+                    { "e4a13d6a-1893-458b-a496-6ae2a7052422", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2832), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2834), 4, "A" },
+                    { "e50fb015-7682-4a0c-8a21-9fb5b93c99c8", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2938), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2939), 1, "A" },
+                    { "fdb78e0b-5b9a-45f9-9c4a-fc6e972be3f3", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2884), null, null, "Beta", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2885), 4, "C" },
+                    { "fe2dbd42-d139-4571-b608-e5ce515cbfaa", "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2994), null, null, "Ceasar", true, "System", new DateTime(2024, 7, 3, 16, 29, 30, 68, DateTimeKind.Local).AddTicks(2995), 1, "C" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -1089,30 +1040,6 @@ namespace EventGate.Data.Migrations
                 column: "EventID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatHistories_ChatID",
-                schema: "dbo",
-                table: "ChatHistories",
-                column: "ChatID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ChatHistories_ChatRoomID",
-                schema: "dbo",
-                table: "ChatHistories",
-                column: "ChatRoomID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ChatHistories_SenderID",
-                schema: "dbo",
-                table: "ChatHistories",
-                column: "SenderID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ChatHistories_UserId",
-                schema: "dbo",
-                table: "ChatHistories",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ChatReceivers_ChatID",
                 schema: "dbo",
                 table: "ChatReceivers",
@@ -1165,12 +1092,6 @@ namespace EventGate.Data.Migrations
                 schema: "dbo",
                 table: "EventFeedbacks",
                 column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EventHistories_EventID",
-                schema: "dbo",
-                table: "EventHistories",
-                column: "EventID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EventHistories_EventTypeID",
@@ -1247,18 +1168,6 @@ namespace EventGate.Data.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserEventHistories_EventHistoryID",
-                schema: "dbo",
-                table: "UserEventHistories",
-                column: "EventHistoryID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserEventHistories_UserHistoryID",
-                schema: "dbo",
-                table: "UserEventHistories",
-                column: "UserHistoryID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserEvents_EventID",
                 schema: "dbo",
                 table: "UserEvents",
@@ -1268,12 +1177,6 @@ namespace EventGate.Data.Migrations
                 name: "IX_UserEvents_UserID",
                 schema: "dbo",
                 table: "UserEvents",
-                column: "UserID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserHistories_UserID",
-                schema: "dbo",
-                table: "UserHistories",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
@@ -1333,6 +1236,10 @@ namespace EventGate.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
+                name: "EventHistories",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
                 name: "EventRules",
                 schema: "dbo");
 
@@ -1361,6 +1268,10 @@ namespace EventGate.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
+                name: "UserHistories",
+                schema: "dbo");
+
+            migrationBuilder.DropTable(
                 name: "Vouchers",
                 schema: "dbo");
 
@@ -1385,19 +1296,11 @@ namespace EventGate.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "EventHistories",
-                schema: "dbo");
-
-            migrationBuilder.DropTable(
-                name: "UserHistories",
-                schema: "dbo");
-
-            migrationBuilder.DropTable(
                 name: "ChatRooms",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "Seats",
+                name: "AspNetUsers",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
@@ -1405,7 +1308,7 @@ namespace EventGate.Data.Migrations
                 schema: "dbo");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers",
+                name: "Seats",
                 schema: "dbo");
 
             migrationBuilder.DropTable(
