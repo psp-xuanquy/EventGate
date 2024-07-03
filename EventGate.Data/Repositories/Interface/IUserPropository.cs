@@ -10,7 +10,6 @@ namespace EventGate.Data.Repositories.Interface
     public interface IUserPropository
     {
         Task<List<User>> GetAllAsync();
-        Task<List<User>> GetAllDeletedAsync();
         Task<User> GetByIdAsync(string id);
         Task<int> UpdateAsync(string id, User user);
         Task<int> DeleteAsync(User user);

@@ -16,7 +16,7 @@ namespace EventGate.Business.Services.Interface
 
 
         Task<IActionResult> GetAllAsync();
-        Task<IActionResult> GetAllDeletedAsync();
+        
         Task<IActionResult> GetByIdAsync(string id);
         Task<IActionResult> UpdateAsync(UpdateUserDTORequest user, string id);
         // Task<ServiceResult<User>> GetByNameAndEmail(string UserName, string UserEmail);

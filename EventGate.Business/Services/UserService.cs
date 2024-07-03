@@ -46,14 +46,6 @@ namespace EventGate.Business.Services
             return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
         }
 
-        //Get All User Deleted
-        public async Task<IActionResult> GetAllDeletedAsync()
-        {
-            List<User> users = await _userRepository.GetAllDeletedAsync();
-            return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
-        }
-
-
         //Find By Id
         public async Task<IActionResult> GetByIdAsync(string id)
         {
@@ -115,15 +107,12 @@ namespace EventGate.Business.Services
             // Add UserHistory entry
             await _userHistoryRepository.AddUserHistoryAsync(userHistory);
 
-            Console.WriteLine($"UserID in DTO: {user.Id}");
             int rs = await _userRepository.DeleteAsync(user);
             if (rs == 0)
             {
                 return new BadRequestObjectResult("Delete User fail!");
             }
 
-
-           
             return new OkObjectResult("Delete User success!");
 
         }

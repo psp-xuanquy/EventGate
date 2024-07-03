@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.EventHistory;
+using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
@@ -17,14 +19,16 @@ namespace EventGate.Business.Services
         private readonly IEventRepository _eventRepository;
         private readonly IEventTypeRepository _eventTypeRepository;
         private readonly IUserPropository _userRepository;
+        private readonly IEventHistoryRepository _eventHistoryRepository;
         private readonly IMapper _mapper;
 
-        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository)
+        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository)
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _eventTypeRepository = eventTypeRepository;
+            _eventHistoryRepository = eventHistoryRepository;
         }
 
         // Get all Event
@@ -80,6 +84,15 @@ namespace EventGate.Business.Services
             {
                 throw new Exception($"Event with ID ( {eventId} ) NOT FOUND.");
             }
+
+            // Map Event to EventHistoryDTORequest
+            var eventHistoryDTO = _mapper.Map<EventHistoryDTORequest>(existingEvent);
+
+            // Map EventHistoryDTORequest to EventHistory entity
+            var eventHistory = _mapper.Map<EventHistory>(eventHistoryDTO);
+
+         
+            await _eventHistoryRepository.AddEventHistoryAsync(eventHistory);
 
             return await _eventRepository.DeleteAsync(user, eventId);
         }

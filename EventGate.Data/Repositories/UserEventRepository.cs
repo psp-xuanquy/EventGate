@@ -67,8 +67,9 @@ namespace EventGate.Data.Repositories
         //Delete UserEvent
         public async Task<int> DeleteAsync(UserEvent userEvent)
         {
-            userEvent.DeletedTime = DateTime.Now;
+            _appDbContext.UserEvents.Remove(userEvent);
             return await _appDbContext.SaveChangesAsync();
+           
         }
 
        

@@ -26,13 +26,6 @@ namespace EventGate.WebAPI.Controllers
             return await _userService.GetAllAsync();
         }
 
-        [HttpGet("/api/User/Deleted")]
-        [SwaggerOperation(Summary = "This API is to Get All User be Deleted")]
-        public async Task<IActionResult> GetAllDeleted()
-        {
-            return await _userService.GetAllDeletedAsync();
-        }
-
         [HttpGet("{id}")]
         [SwaggerOperation(Summary = "This API is to Get User By Id")]
         public async Task<IActionResult> GetById(string id)

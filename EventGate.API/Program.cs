@@ -129,6 +129,14 @@ namespace EventGate
             builder.Services.AddScoped<IEventFeedBackRepository, EventFeedBackRepository>();
             builder.Services.AddScoped<IEventFeedBackService, EventFeedBackService>();
 
+            // --EventHistory --
+            builder.Services.AddScoped<IEventHistoryRepository, EventHistoryRepository>();
+            builder.Services.AddScoped<IEventHistoryService, EventHistoryService>();
+
+            //-- UserEventHistory
+            builder.Services.AddScoped<IUserEventHistoryRepository, UserEventHistoryRepository>();
+            builder.Services.AddScoped<IUserEventHistoryService, UserEventHistoryService>();
+
 
             builder.Services.Configure<IdentityOptions>(options =>
             {

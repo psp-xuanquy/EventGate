@@ -76,14 +76,8 @@ namespace EventGate.Data.Repositories
         public async Task<int> DeleteAsync(string user, string eventId)
         {
             var eventToDelete = await _context.Events.FirstOrDefaultAsync(c => c.EventID == eventId && c.DeletedTime == null);
-            if (eventToDelete != null)
-            {
-                eventToDelete.DeletedBy = user;
-                eventToDelete.DeletedTime = DateTime.Now;
-
-                return await _context.SaveChangesAsync();
-            }
-            return 0;
+            _context.Events.Remove(eventToDelete);
+            return await _context.SaveChangesAsync();
         }
     }
 }
