@@ -122,6 +122,10 @@ namespace EventGate
             builder.Services.AddScoped<IEventRuleRepository, EventRuleRepository>();
             builder.Services.AddScoped<IEventRuleService, EventRuleService>();
 
+            //-- PaymentsInfo -- 
+            builder.Services.AddScoped<IPaymentsInfoRepository, PaymentsInfoRepository>();
+            builder.Services.AddScoped<IPaymentsInfoService, PaymentsInfoService>();
+
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
