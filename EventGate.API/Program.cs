@@ -45,8 +45,6 @@ namespace EventGate
                     });
             });
 
-            
-            
             builder.Services.AddControllers();
             builder.Services.AddHttpContextAccessor();
 
@@ -60,7 +58,6 @@ namespace EventGate
                 .AddSignInManager<SignInManager<User>>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-
 
             // Add Scoped
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
@@ -94,7 +91,7 @@ namespace EventGate
             builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 
-            //--Email--
+            //-- Email --
             builder.Services.AddScoped<IEmailService, EmailService>();
 
             //-- Event -- 
@@ -113,10 +110,9 @@ namespace EventGate
             builder.Services.AddScoped<IUserEventRepository, UserEventRepository>();
             builder.Services.AddScoped<IUserEventService, UserEventService>();
 
-            //-- UserHistory--
+            //-- UserHistory --
             builder.Services.AddScoped<IUserHistoryRepository, UserHistoryRepository>();
             builder.Services.AddScoped<IUserHistoryService, UserHistoryService>();
-
 
             //-- EventRule -- 
             builder.Services.AddScoped<IEventRuleRepository, EventRuleRepository>();
@@ -125,7 +121,8 @@ namespace EventGate
             //-- PaymentsInfo -- 
             builder.Services.AddScoped<IPaymentsInfoRepository, PaymentsInfoRepository>();
             builder.Services.AddScoped<IPaymentsInfoService, PaymentsInfoService>();
-            //-- PaymentsInfo -- 
+
+            //-- EventFeedback -- 
             builder.Services.AddScoped<IEventFeedBackRepository, EventFeedBackRepository>();
             builder.Services.AddScoped<IEventFeedBackService, EventFeedBackService>();
 
@@ -133,10 +130,9 @@ namespace EventGate
             builder.Services.AddScoped<IEventHistoryRepository, EventHistoryRepository>();
             builder.Services.AddScoped<IEventHistoryService, EventHistoryService>();
 
-            //-- UserEventHistory
+            //-- UserEventHistory --
             builder.Services.AddScoped<IUserEventHistoryRepository, UserEventHistoryRepository>();
             builder.Services.AddScoped<IUserEventHistoryService, UserEventHistoryService>();
-
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -151,26 +147,33 @@ namespace EventGate
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultProvider;
             }).Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromMinutes(15));
 
+            // Load JWT configuration from appsettings.json
+            var jwtSection = builder.Configuration.GetSection("Jwt");
+            var jwtKey = jwtSection["Key"];
+            var jwtIssuer = jwtSection["Issuer"];
+            var jwtAudience = jwtSection["Audience"];
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(option =>
+            .AddJwtBearer(options =>
             {
-                option.TokenValidationParameters = new TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "JWT:Issuer",    
-                    ValidAudience = "JWT:Audience", 
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("JWT:Key"))
+                    ValidIssuer = jwtIssuer,
+                    ValidAudience = jwtAudience,
+                    IssuerSigningKey = signingKey
                 };
 
-                option.Events = new JwtBearerEvents
+                options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
                     {
@@ -192,11 +195,9 @@ namespace EventGate
                 options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
 
-
             // Add Email Configuration
             var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
             builder.Services.AddSingleton(emailConfig);
-
 
             // Register necessary services
             builder.Services.AddDataProtection();
@@ -214,18 +215,17 @@ namespace EventGate
                     Scheme = "Bearer"
                 });
 
-                c.EnableAnnotations();  //hien thi example nhap nhu the nao cho register
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });          
+                c.EnableAnnotations();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "EventGate API", Version = "v1" });
             });
 
             var app = builder.Build();
-
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "EventGate API V1");
-                c.RoutePrefix = "swagger"; // Sets the Swagger UI to be available at /swagger
+                c.RoutePrefix = "swagger";
             });
 
             app.UseHttpsRedirection();
