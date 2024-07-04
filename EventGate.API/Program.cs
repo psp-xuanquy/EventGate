@@ -145,14 +145,7 @@ namespace EventGate
                 options.User.RequireUniqueEmail = false;
                 options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
                 options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultProvider;
-            }).Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromMinutes(15));
-
-            // Load JWT configuration from appsettings.json
-            var jwtSection = builder.Configuration.GetSection("Jwt");
-            var jwtKey = jwtSection["Key"];
-            var jwtIssuer = jwtSection["Issuer"];
-            var jwtAudience = jwtSection["Audience"];
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            }).Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromMinutes(15));    
 
             builder.Services.AddAuthentication(options =>
             {
@@ -164,13 +157,11 @@ namespace EventGate
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtIssuer,
-                    ValidAudience = jwtAudience,
-                    IssuerSigningKey = signingKey
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("de455d3d7f83bf393eea5aef43f474f4aac57e3e8d75f9118e60d526453002dc"))
                 };
 
                 options.Events = new JwtBearerEvents
