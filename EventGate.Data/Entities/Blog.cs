@@ -11,7 +11,7 @@ namespace EventGate.Data.Entity
         public string? Image { get; set; }
         public string? Title { get; set; }
         public string? Content { get; set; }
-        public DateTime UploadedDate { get; set; }
+        public DateTime UploadedDate { get; set; } = DateTime.Now;
 
         [ForeignKey("Event")]
         public string? EventID { get; set; }

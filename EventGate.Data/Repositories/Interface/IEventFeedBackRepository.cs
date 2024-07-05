@@ -12,9 +12,9 @@ namespace EventGate.Data.Repositories.Interface
         Task<List<EventFeedback>> GetAllAsync();
         Task<List<EventFeedback>> GetAllDeletedAsync();
 
-        Task<int> AddEventFeedBackAsync(EventFeedback userEvent);
+        Task<int> AddEventFeedBackAsync(EventFeedback eventFeedBack);
         Task<EventFeedback> GetByIdAsync(string id);
-        Task<int> UpdateAsync(EventFeedback userEvent);
-        Task<int> DeleteAsync(EventFeedback userEvent);
+        Task<int> UpdateAsync(EventFeedback eventFeedBack);
+        Task<int> DeleteAsync(EventFeedback eventFeedBack);
     }
 }
