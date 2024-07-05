@@ -2,10 +2,12 @@
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Models.DTOs.Request.EventHistory;
 using EventGate.Business.Models.DTOs.Request.User;
+using EventGate.Business.Models.DTOs.Response.Event;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
 using EventGate.Data.Repositories.Interface;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,22 +34,21 @@ namespace EventGate.Business.Services
         }
 
         // Get all Event
-        public async Task<List<EventDTO>> GetAllEventsAsync()
+        public async Task<List<EventDTOResponse>> GetAllEventsAsync()
         {
             List<Event> events = await _eventRepository.GetAllAsync();
-            return _mapper.Map<List<EventDTO>>(events);
+            return _mapper.Map<List<EventDTOResponse>>(events);
         }
 
         // Get Event by ID
-        public async Task<EventDTO> GetEventByIdAsync(string eventId)
+        public async Task<EventDTOResponse> GetEventByIdAsync(string eventId)
         {
             var existingEvent = await _eventRepository.GetByIdAsync(eventId);
             if (existingEvent == null)
             {
                 throw new Exception($"Event with ID ( {eventId} ) NOT FOUND");
             }
-
-            return _mapper.Map<EventDTO>(existingEvent);
+            return _mapper.Map<EventDTOResponse>(existingEvent);
         }
 
         // Add Event

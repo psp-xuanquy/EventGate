@@ -2,6 +2,7 @@
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Models.DTOs.Request.Order;
 using EventGate.Business.Models.DTOs.Response;
+using EventGate.Business.Models.DTOs.Response.Event;
 using EventGate.Data.Entity;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace EventGate.Business.Mappers
             CreateMap<Seat, SeatDTO>().ReverseMap();
 
             // Mapping for EventType
-            CreateMap<EventType, EventTypeDTO>().ReverseMap();
+            CreateMap<EventType, Models.DTOs.Request.EventTypeDTO>().ReverseMap();
 
             // Mapping for EventRule
             CreateMap<EventRule, EventRuleDTO>().ReverseMap();
@@ -39,6 +40,13 @@ namespace EventGate.Business.Mappers
 
             // Mapping for Event
             CreateMap<Event, EventDTO>().ReverseMap();
+
+            // Mapping for EventResponse
+            CreateMap<Event, EventDTOResponse>()
+                .ForMember(dest => dest.EventId, opt => opt.MapFrom(src => src.EventID.ToString()))
+                .ForMember(dest => dest.EventTypeName, opt => opt.MapFrom(src => src.EventType.EventTypeName))
+                .ForMember(dest => dest.ClubName, opt => opt.MapFrom(src => src.EventClubs.FirstOrDefault().Club.Name))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Tickets.FirstOrDefault().Price));
 
             // Mapping for PaymentsInfo
             CreateMap<PaymentsInfo, PaymentsInfoDTO>().ReverseMap();
