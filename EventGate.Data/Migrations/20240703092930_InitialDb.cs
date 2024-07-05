@@ -552,7 +552,7 @@ namespace EventGate.Data.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     TicketQuantity = table.Column<int>(type: "int", nullable: false),
-                    PosterImage = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    PosterImage = table.Column<byte[]>(type: "nvarchar(max)", nullable: true),
                     QRCode = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     EventTypeID = table.Column<string>(type: "nvarchar(450)", nullable: true),
