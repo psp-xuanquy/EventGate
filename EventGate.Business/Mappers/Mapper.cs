@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using EventGate.Business.Models.DTOs.Request.EventHistory;
 using EventGate.Business.Models.DTOs.Request.User;
+using EventGate.Business.Models.DTOs.Response.Event;
 using EventGate.Business.Models.DTOs.Response.User;
 using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -64,6 +66,56 @@ namespace EventGate.Business.Mappers
             CreateMap<UserHistory, UserHistoryDTOResponse>()
             .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth.HasValue ? src.DateOfBirth.Value.ToString("dd/MM/yyyy") : null))
             .ForMember(dest => dest.ArchivedDate, opt => opt.MapFrom(src => src.ArchivedDate.HasValue ? src.ArchivedDate.Value.ToString("dd/MM/yyyy") : null));
+
+
+            //EventHistory Mapping
+
+            CreateMap<EventHistory, EventHistoryDTOResponse>()
+                .ForMember(dest => dest.EventType, opt => opt.MapFrom(src => src.EventType))
+                .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => src.ArchiveDate.HasValue ? src.ArchiveDate.Value.ToString("dd/MM/yyyy") : null))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate.HasValue ? src.StartDate.Value.ToString("dd/MM/yyyy") : null))
+            .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate.HasValue ? src.EndDate.Value.ToString("dd/MM/yyyy") : null)); ;
+            
+
+            CreateMap<EventType, EventTypeDTO>()
+                .ForMember(dest => dest.EventTypeName, opt => opt.MapFrom(src => src.EventTypeName));
+
+            CreateMap<EventHistory, EventHistoryDTORequest>()
+                .ForMember(dest => dest.EventID, opt => opt.MapFrom(src => src.EventID))
+                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.EventName))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.TicketQuantity, opt => opt.MapFrom(src => src.TicketQuantity))
+                .ForMember(dest => dest.PosterImage, opt => opt.MapFrom(src => src.PosterImage))
+                .ForMember(dest => dest.QRCode, opt => opt.MapFrom(src => src.QRCode))
+                .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.EventTypeID, opt => opt.MapFrom(src => src.EventTypeID))
+                .ReverseMap();
+
+            CreateMap<Event, EventHistoryDTORequest>()
+                .ForMember(dest => dest.EventID, opt => opt.MapFrom(src => src.EventID))
+                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.EventName))
+                .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.TicketQuantity, opt => opt.MapFrom(src => src.TicketQuantity))
+                .ForMember(dest => dest.PosterImage, opt => opt.MapFrom(src => src.PosterImage))
+                .ForMember(dest => dest.QRCode, opt => opt.MapFrom(src => src.QRCode))
+                .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.EventTypeID, opt => opt.MapFrom(src => src.EventTypeID));
+
+            //UserEventHistory
+            CreateMap<UserEvent, UserEventHistoryDTORequest>()
+                 .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => DateTime.Now));
+            CreateMap<UserEventHistory, UserEventHistoryDTORequest>().ReverseMap();
+            CreateMap<UserEventHistory, UserEventHistoryDTOResponse>()
+                 .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => src.ArchiveDate.HasValue ? src.ArchiveDate.Value.ToString("dd/MM/yyyy") : null));
+
         }
     }
 }

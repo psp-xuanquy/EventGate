@@ -12,6 +12,7 @@ namespace EventGate.Business.Services
         public bool IsSuccess { get; set; }
         public int Status { get; set; }
         public string ErrorMessage { get; set; }
+        public string Token { get; set; }
 
         public ServiceResult()
         {
@@ -33,6 +34,15 @@ namespace EventGate.Business.Services
             Status = status;
             ErrorMessage = message;
             Data = data;
+        }
+
+        public ServiceResult(int status, string message, string token, T data)
+        {
+            IsSuccess = true;
+            Status = status;
+            ErrorMessage = message;
+            Data = data;
+            Token = token;
         }
     }
 }

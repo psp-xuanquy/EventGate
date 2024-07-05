@@ -15,5 +15,6 @@ namespace EventGate.Data.Repositories.Interface
         Task<int> UpdateAsync(string user, string ticketId, Ticket updateTicket);
         Task<int> DeleteAsync(string user, string ticketId);
         Task<bool> IsSeatAssociatedWithAnotherTicketAsync(string seatId);
+        Task<Ticket> GetTicketByEventID(string eventId);
     }
 }

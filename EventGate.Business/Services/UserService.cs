@@ -46,14 +46,6 @@ namespace EventGate.Business.Services
             return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
         }
 
-        //Get All User Deleted
-        public async Task<IActionResult> GetAllDeletedAsync()
-        {
-            List<User> users = await _userRepository.GetAllDeletedAsync();
-            return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
-        }
-
-
         //Find By Id
         public async Task<IActionResult> GetByIdAsync(string id)
         {
@@ -115,24 +107,21 @@ namespace EventGate.Business.Services
             // Add UserHistory entry
             await _userHistoryRepository.AddUserHistoryAsync(userHistory);
 
-            Console.WriteLine($"UserID in DTO: {user.Id}");
             int rs = await _userRepository.DeleteAsync(user);
             if (rs == 0)
             {
                 return new BadRequestObjectResult("Delete User fail!");
             }
 
-
-           
             return new OkObjectResult("Delete User success!");
 
         }
 
 
         //Login 
-        public async Task<ServiceResult<string>> Login(LoginDTO loginUser)
+        public async Task<ServiceResult<UserDTOResponse>> Login(LoginDTO loginUser)
         {
-            var result = new ServiceResult<string>();
+            var result = new ServiceResult<UserDTOResponse>();
 
             var user = await _userRepository.VerifyLoginAsync(loginUser.Username, loginUser.Password);
             if (user == null)
@@ -148,16 +137,17 @@ namespace EventGate.Business.Services
             // Generate JWT token
             var userRoles = await _userManager.GetRolesAsync(user);
             var token = await JwtGenerator.GenerateToken(user, userRoles.ToList(), _userRepository);
+            var userDto = _mapper.Map<UserDTOResponse>(user);
+            userDto.Role = userRoles.FirstOrDefault();
 
             result.Status = 1;
-            result.ErrorMessage = "Login Successfully";
+            //result.ErrorMessage = "Login Successfully";
             result.IsSuccess = true;
-            result.Data = token;
-
+            result.Data = userDto;
+            result.Token = token;
 
             return result;
         }
-
 
         //Register
         public async Task<ServiceResult<RegisterUserDTO>> RegisterByRole(RegisterUserDTO registerDTO, string role)

@@ -20,17 +20,20 @@ namespace EventGate.Business.Services
         private readonly IUserEventRepository _userEventRepository;
         private readonly IEventRepository _eventRepository;
         private readonly IUserPropository _userRepository;
+        private readonly IUserEventHistoryRepository _userEventHistoryRepository;
         private readonly IMapper _mapper;
 
         public UserEventService(IUserEventRepository userEventRepository,
             IEventRepository eventRepository,
             IUserPropository userRepository,
+            IUserEventHistoryRepository userEventHistoryRepository,
             IMapper mapper)
         {
             _mapper = mapper;
             _userEventRepository = userEventRepository;
             _eventRepository = eventRepository;
             _userRepository = userRepository;
+            _userEventHistoryRepository = userEventHistoryRepository;
         }
 
         //Get All UserEvent
@@ -68,11 +71,11 @@ namespace EventGate.Business.Services
                 return new BadRequestObjectResult($"UserId: '{userEvent.UserId}' not found or has been deleted");
             }
 
-            //Event events = await _eventRepository.GetEventById(userEvent.EventId);
-            //if (events == null)
-            //{
-            //    return new BadRequestObjectResult($"EventId: '{userEvent.EventId}' not found or has been deleted");
-            //}
+            Event events = await _eventRepository.GetByIdAsync(userEvent.EventId);
+            if (events == null)
+            {
+                return new BadRequestObjectResult($"EventId: '{userEvent.EventId}' not found or has been deleted");
+            }
 
             var userEventEntity = _mapper.Map<UserEvent>(userEvent);
 
@@ -101,11 +104,11 @@ namespace EventGate.Business.Services
                 return new BadRequestObjectResult($"UserId: '{userEventDTO.UserId}' not found or has been deleted");
             }
 
-            //Event events = await _eventRepository.GetEventById(userEventDTO.EventId);
-            //if (events == null)
-            //{
-            //    return new BadRequestObjectResult($"EventId: '{userEventDTO.EventId}' not found or has been deleted");
-            //}
+            Event events = await _eventRepository.GetByIdAsync(userEventDTO.EventId);
+            if (events == null)
+            {
+                return new BadRequestObjectResult($"EventId: '{userEventDTO.EventId}' not found or has been deleted");
+            }
 
             _mapper.Map(userEventDTO, userEvent);
 
@@ -127,6 +130,16 @@ namespace EventGate.Business.Services
             {
                 return new BadRequestObjectResult($"UserEventId: '{id}' not found or has been deleted!");
             }
+
+            // Map User to UserHistoryDTORequest
+            var userEventHistoryDTO = _mapper.Map<UserEventHistoryDTORequest>(userEvent);
+
+            // Map UserHistoryDTORequest to UserHistory entity
+            var userEventHistory = _mapper.Map<UserEventHistory>(userEventHistoryDTO);
+
+            // Add UserHistory entry
+            await _userEventHistoryRepository.AddUserEventHistoryAsync(userEventHistory);
+
 
             int rs = await _userEventRepository.DeleteAsync(userEvent);
             if (rs == 0)

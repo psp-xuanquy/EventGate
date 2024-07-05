@@ -49,11 +49,11 @@ namespace EventGate.Business.Services
                 return new BadRequestObjectResult($"Club với id: '{eventclub.ClubId}' không tìm thấy hoặc đã bị xóa");
             }
 
-            //Event events = await _eventRepository.GetEventById(eventclub.EventId);
-            //if(events == null)
-            //{
-            //    return new BadRequestObjectResult($"Event với id: '{eventclub.EventId}' không tìm thấy hoặc đã bị xóa");
-            //}
+            Event events = await _eventRepository.GetByIdAsync(eventclub.EventId);
+            if (events == null)
+            {
+                return new BadRequestObjectResult($"Event với id: '{eventclub.EventId}' không tìm thấy hoặc đã bị xóa");
+            }
 
             var eventClubEntity = _mapper.Map<EventClub>(eventclub);
 
@@ -64,12 +64,12 @@ namespace EventGate.Business.Services
                 return new BadRequestObjectResult($"Sự kiện này đã được tổ chức bởi một câu lạc bộ khác.");
             }
 
-            //Check xem cái event đó có đang tồn tại trong danh sách thời gian đang diễn ra sự kiện của Club đó không? 
-            //var existingEventClub = await _eventClubsRepository.CheckDuplicateEventClub(eventclub.EventId, eventclub.ClubId);
-            //if (existingEventClub != null)
-            //{
-            //    return new BadRequestObjectResult($"Event {events.EventName} đã tồn tại trong danh sách những sự kiện đang diễn ra của câu lạc bộ, vui lòng thêm vào một sự kiện mới khác.");
-            //}
+            //Check xem cái event đó có đang tồn tại trong danh sách thời gian đang diễn ra sự kiện của Club đó không?
+            var existingEventClub = await _eventClubsRepository.CheckDuplicateEventClub(eventclub.EventId, eventclub.ClubId);
+            if (existingEventClub != null)
+            {
+                return new BadRequestObjectResult($"Event {events.EventName} đã tồn tại trong danh sách những sự kiện đang diễn ra của câu lạc bộ, vui lòng thêm vào một sự kiện mới khác.");
+            }
 
             int rs = await _eventClubsRepository.AddEventClub(eventClubEntity);
             if(rs == 0)
@@ -107,11 +107,11 @@ namespace EventGate.Business.Services
                 return new BadRequestObjectResult($"Club với id: '{eventclub.ClubId}' không tìm thấy hoặc đã bị xóa");
             }
 
-            //Event events = await _eventRepository.GetEventById(eventclub.EventId);
-            //if (events == null)
-            //{
-            //    return new BadRequestObjectResult($"Event với id: '{eventclub.EventId}' không tìm thấy hoặc đã bị xóa");
-            //}
+            Event events = await _eventRepository.GetByIdAsync(eventclub.EventId);
+            if (events == null)
+            {
+                return new BadRequestObjectResult($"Event với id: '{eventclub.EventId}' không tìm thấy hoặc đã bị xóa");
+            }
 
             _mapper.Map(eventclub, existEventClub);
 

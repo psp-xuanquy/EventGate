@@ -22,7 +22,12 @@ namespace EventGate.Data.Repositories
         public async Task<List<Event>> GetAllAsync()
         {
             return await _context.Events
-                .Where(c => c.DeletedTime == null)
+                .Include(e => e.EventType)
+                .Include(e => e.EventClubs)
+                    .ThenInclude(ec => ec.Club)
+                        .ThenInclude(c => c.President)
+                .Include(e => e.Tickets)
+                .Where(e => e.DeletedTime == null)
                 .ToListAsync();
         }
 
@@ -30,8 +35,13 @@ namespace EventGate.Data.Repositories
         public async Task<Event> GetByIdAsync(string eventId)
         {
             return await _context.Events
-                .Where(c => c.DeletedTime == null)
-                .FirstOrDefaultAsync(c => c.EventID == eventId);
+                .Include(e => e.EventType)
+                .Include(e => e.EventClubs)
+                    .ThenInclude(ec => ec.Club)
+                        .ThenInclude(c => c.President)
+                .Include(e => e.Tickets)
+                .Where(e => e.DeletedTime == null && e.EventID == eventId)
+                .FirstOrDefaultAsync();
         }
 
         // Add Event 
@@ -62,7 +72,6 @@ namespace EventGate.Data.Repositories
                 existingEvent.PosterImage = updateEvent.PosterImage;
                 existingEvent.QRCode = updateEvent.QRCode;
                 existingEvent.IsDeleted = updateEvent.IsDeleted;
-                existingEvent.EventID = updateEvent.EventID;
 
                 existingEvent.LastUpdatedBy = user;
                 existingEvent.LastUpdatedTime = DateTime.Now;
@@ -76,14 +85,8 @@ namespace EventGate.Data.Repositories
         public async Task<int> DeleteAsync(string user, string eventId)
         {
             var eventToDelete = await _context.Events.FirstOrDefaultAsync(c => c.EventID == eventId && c.DeletedTime == null);
-            if (eventToDelete != null)
-            {
-                eventToDelete.DeletedBy = user;
-                eventToDelete.DeletedTime = DateTime.Now;
-
-                return await _context.SaveChangesAsync();
-            }
-            return 0;
+            _context.Events.Remove(eventToDelete);
+            return await _context.SaveChangesAsync();
         }
     }
 }

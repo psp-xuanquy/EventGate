@@ -8,9 +8,8 @@ namespace EventGate.Data.Entity
     {
         [Key]
         public string? UserEventHistoryID { get; set; } = Guid.NewGuid().ToString();
-        public string UserEventID { get; set; }
-        public DateTime ArchiveDate { get; set; }
-
+        public DateTime? ArchiveDate { get; set; }
+        public string? UserEventID { get; set; }
         public string? EventID { get; set; }
         public string? UserID { get; set; }
 

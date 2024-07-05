@@ -29,13 +29,6 @@ namespace EventGate.Data.Repositories
             return list;
         }
 
-        //Get All Deleted User
-        public async Task<List<User>> GetAllDeletedAsync()
-        {
-            var list = await _appDbContext.Users.Where(x => x.DeletedTime != null).AsNoTracking().ToListAsync();
-            return list;
-        }
-
 
         //Get User By Id
         public async Task<User> GetByIdAsync(string id)
@@ -70,7 +63,7 @@ namespace EventGate.Data.Repositories
         //Verify Login
         public async Task<User> VerifyLoginAsync(string userName, string password)
         {
-            var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.UserName == userName && u.DeletedTime == null);
+            var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.UserName == userName || u.Email == userName && u.DeletedTime == null);
             if (user == null || !VerifyPassword(user, password))
             {
                 return null;

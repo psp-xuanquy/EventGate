@@ -81,5 +81,15 @@ namespace EventGate.Data.Repositories
             return await _appDbContext.SaveChangesAsync();
         }
 
+        public async Task<EventClub> FindEventClubByEvent(string idEvent)
+        {
+            var eventclub = await _appDbContext.EventClubs
+                .Where(eventclub => eventclub.DeletedTime == null)
+                .Include(eventclub => eventclub.Club)
+                .Include(eventclub => eventclub.Event)
+                .FirstOrDefaultAsync(eventclub => eventclub.EventID == idEvent);
+
+            return eventclub;
+        }
     }
 }
