@@ -70,7 +70,6 @@ namespace EventGate.Data.Repositories
                 existingEvent.PosterImage = updateEvent.PosterImage;
                 existingEvent.QRCode = updateEvent.QRCode;
                 existingEvent.IsDeleted = updateEvent.IsDeleted;
-                existingEvent.EventID = updateEvent.EventID;
 
                 existingEvent.LastUpdatedBy = user;
                 existingEvent.LastUpdatedTime = DateTime.Now;
