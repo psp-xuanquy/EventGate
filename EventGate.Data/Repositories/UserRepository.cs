@@ -63,7 +63,7 @@ namespace EventGate.Data.Repositories
         //Verify Login
         public async Task<User> VerifyLoginAsync(string userName, string password)
         {
-            var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.UserName == userName && u.DeletedTime == null);
+            var user = await _appDbContext.Users.SingleOrDefaultAsync(u => u.UserName == userName || u.Email == userName && u.DeletedTime == null);
             if (user == null || !VerifyPassword(user, password))
             {
                 return null;

@@ -1,6 +1,6 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Models.DTOs.Request.User;
-
+using EventGate.Business.Models.DTOs.Response.User;
 using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,7 +22,7 @@ namespace EventGate.Business.Services.Interface
         // Task<ServiceResult<User>> GetByNameAndEmail(string UserName, string UserEmail);
         
         Task<IActionResult> DeleteAsync(string id);
-        Task<ServiceResult<string>> Login(LoginDTO loginUser);
+        Task<ServiceResult<UserDTOResponse>> Login(LoginDTO loginUser);
         Task<ServiceResult<RegisterUserDTO>> RegisterByRole(RegisterUserDTO registerMentorDTO, string member);
         Task<ServiceResult<string>> ConfirmEmailUser(string userId);
     }

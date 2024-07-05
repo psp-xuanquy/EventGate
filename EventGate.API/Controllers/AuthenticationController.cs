@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EventGate.Business.Models.DTOs;
 using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Services;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Http;
@@ -28,8 +29,19 @@ namespace EventGate.API.Controllers
         {
             try
             {
-                var token = await _userService.Login(loginDTO);
-                return Ok(new { token.Data });
+                var serviceResult = await _userService.Login(loginDTO);
+
+                if (!serviceResult.IsSuccess)
+                {
+                    return BadRequest(serviceResult.ErrorMessage);
+                }
+
+                return Ok(new
+                {
+                    userName = serviceResult.Data.UserName,
+                    role = serviceResult.Data.Role,
+                    token = serviceResult.Token
+                });
             }
             catch (UnauthorizedAccessException ex)
             {
