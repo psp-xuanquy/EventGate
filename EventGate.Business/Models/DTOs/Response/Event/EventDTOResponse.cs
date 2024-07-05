@@ -21,6 +21,9 @@ namespace EventGate.Business.Models.DTOs.Response.Event
         public byte[]? QRCode { get; set; }
         public string? EventTypeName { get; set; }
         public string? ClubName { get; set; }
+        public string? LogoClub { get; set; }
+        public string? PhonePresident { get; set; }
+        public string? GmailContact {  get; set; }
         public decimal Price { get; set; }
     }
 }

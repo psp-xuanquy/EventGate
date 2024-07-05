@@ -25,6 +25,7 @@ namespace EventGate.Data.Repositories
                 .Include(e => e.EventType)
                 .Include(e => e.EventClubs)
                     .ThenInclude(ec => ec.Club)
+                        .ThenInclude(c => c.President)
                 .Include(e => e.Tickets)
                 .Where(e => e.DeletedTime == null)
                 .ToListAsync();
@@ -37,6 +38,7 @@ namespace EventGate.Data.Repositories
                 .Include(e => e.EventType)
                 .Include(e => e.EventClubs)
                     .ThenInclude(ec => ec.Club)
+                        .ThenInclude(c => c.President)
                 .Include(e => e.Tickets)
                 .Where(e => e.DeletedTime == null && e.EventID == eventId)
                 .FirstOrDefaultAsync();
