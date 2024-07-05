@@ -15,7 +15,7 @@ namespace EventGate.Data.Repositories.Interface
         Task<EventClub> FindEventClubById(string id);
         Task<int> UpdateAsync(EventClub eventClub);
         Task<int> DeleteAsync(EventClub eventClub);
-
+        Task<EventClub> FindEventClubByEvent(string idEvent);
         Task<EventClub> CheckDuplicateEventClub(string eventId, string clubId);
         Task<EventClub> GetEventClubByEventIdAsync(string eventId, string clubId);
     }

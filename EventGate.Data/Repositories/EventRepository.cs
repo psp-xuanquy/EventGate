@@ -22,7 +22,11 @@ namespace EventGate.Data.Repositories
         public async Task<List<Event>> GetAllAsync()
         {
             return await _context.Events
-                .Where(c => c.DeletedTime == null)
+                .Include(e => e.EventType)
+                .Include(e => e.EventClubs)
+                    .ThenInclude(ec => ec.Club)
+                .Include(e => e.Tickets)
+                .Where(e => e.DeletedTime == null)
                 .ToListAsync();
         }
 
@@ -30,8 +34,12 @@ namespace EventGate.Data.Repositories
         public async Task<Event> GetByIdAsync(string eventId)
         {
             return await _context.Events
-                .Where(c => c.DeletedTime == null)
-                .FirstOrDefaultAsync(c => c.EventID == eventId);
+                .Include(e => e.EventType)
+                .Include(e => e.EventClubs)
+                    .ThenInclude(ec => ec.Club)
+                .Include(e => e.Tickets)
+                .Where(e => e.DeletedTime == null && e.EventID == eventId)
+                .FirstOrDefaultAsync();
         }
 
         // Add Event 
