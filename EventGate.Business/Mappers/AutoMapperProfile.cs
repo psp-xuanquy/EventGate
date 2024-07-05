@@ -46,6 +46,9 @@ namespace EventGate.Business.Mappers
                 .ForMember(dest => dest.EventId, opt => opt.MapFrom(src => src.EventID.ToString()))
                 .ForMember(dest => dest.EventTypeName, opt => opt.MapFrom(src => src.EventType.EventTypeName))
                 .ForMember(dest => dest.ClubName, opt => opt.MapFrom(src => src.EventClubs.FirstOrDefault().Club.Name))
+                .ForMember(dest => dest.LogoClub, opt => opt.MapFrom(src => src.EventClubs.FirstOrDefault().Club.LogoClub))
+                .ForMember(dest => dest.PhonePresident, opt => opt.MapFrom(src => src.EventClubs.FirstOrDefault().Club.President.PhoneNumber))
+                .ForMember(dest => dest.GmailContact, opt => opt.MapFrom(src => src.EventClubs.FirstOrDefault().Club.President.Email))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Tickets.FirstOrDefault().Price));
 
             // Mapping for PaymentsInfo
