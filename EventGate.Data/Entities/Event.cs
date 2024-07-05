@@ -18,7 +18,7 @@ namespace EventGate.Data.Entity
         public DateTime EndDate { get; set; }
         public bool Status { get; set; }
         public int TicketQuantity { get; set; }
-        public byte[]? PosterImage { get; set; }
+        public string? PosterImage { get; set; }
         public byte[]? QRCode { get; set; }
         public bool IsDeleted { get; set; }
 
