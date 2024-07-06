@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Chat Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.7/signalr.min.js"></script>
+</head>
+<body>
+    <h1>SignalR Chat Test</h1>
+    <div>
+        <label for="userName">User Name:</label>
+        <input type="text" id="userName">
+    </div>
+    <div>
+        <label for="chatRoomId">Chat Room ID:</label>
+        <input type="text" id="chatRoomId">
+    </div>
+    <div>
+        <label for="message">Message:</label>
+        <input type="text" id="message">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+    <div>
+        <button onclick="joinRoom()">Join Room</button>
+    </div>
+    <div id="messages"></div>
+
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        connection.on("ReceiveMessage", (user, message) => {
+            const msgDiv = document.getElementById("messages");
+            const msg = document.createElement("div");
+            msg.textContent = `${user}: ${message}`;
+            msgDiv.appendChild(msg);
+        });
+
+        connection.on("ReceivingMessage", (user, message) => {
+            const msgDiv = document.getElementById("messages");
+            const msg = document.createElement("div");
+            msg.textContent = `${user}: ${message}`;
+            msgDiv.appendChild(msg);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+
+        async function joinRoom() {
+            const userName = document.getElementById("userName").value;
+            const chatRoomId = document.getElementById("chatRoomId").value;
+            try {
+                await connection.invoke("AddUsertoRoom", { UserID: userName, ChatRoomID: chatRoomId });
+                console.log("Joined room");
+            } catch (err) {
+                console.error(err.toString());
+            }
+        }
+
+        async function sendMessage() {
+            const userName = document.getElementById("userName").value;
+            const chatRoomId = document.getElementById("chatRoomId").value;
+            const message = document.getElementById("message").value;
+            try {
+                await connection.invoke("Chat", message, userName, chatRoomId);
+                console.log("Message sent");
+            } catch (err) {
+                console.error(err.toString());
+            }
+        }
+    </script>
+</body>
+</html>

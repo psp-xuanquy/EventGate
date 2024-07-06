@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using EventGate.Business.Models.DTOs.Request.ChatRoom;
 using EventGate.Business.Models.DTOs.Request.EventHistory;
 using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Models.DTOs.Response.Event;
 using EventGate.Business.Models.DTOs.Response.User;
+using EventGate.Data.Entities;
 using EventGate.Data.Entity;
 using Microsoft.AspNetCore.Http.HttpResults;
 using System;
@@ -22,7 +24,10 @@ namespace EventGate.Business.Mappers
             CreateMap<User, UserDTORequest>().ReverseMap();
             CreateMap<User, UserDTOResponse>().ReverseMap();
             CreateMap<User, UpdateUserDTORequest>().ReverseMap();
-
+            CreateMap<UserChatRoomAdd, UserChatRoom>();
+            CreateMap<ChatRoomAddDTO, ChatRoom>();
+            CreateMap<ChatRoomDTORequest, ChatRoom>();
+            CreateMap<ChatUppdateDTO, ChatRoom>();
 
             CreateMap<User, UserDTO>();
 

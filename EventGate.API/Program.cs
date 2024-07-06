@@ -30,6 +30,7 @@ namespace EventGate
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -66,7 +67,13 @@ namespace EventGate
             builder.Services.AddAutoMapper(typeof(UserMapper));
             builder.Services.AddScoped<IUserPropository, UserRepository>();
             builder.Services.AddScoped<IUserService, UserService>();
-
+            //--chat Room--
+            builder.Services.AddScoped<IChatRoomRepository, ChatRoomRepository>();
+            builder.Services.AddScoped<IChatRoomServices, ChatRoomServices>();
+            
+            //--Chat--
+            builder.Services.AddScoped<IChatRepository, ChatRepository>();
+            
             //-- Club -- 
             builder.Services.AddScoped<IClubRepository, ClubRepository>();
             builder.Services.AddScoped<IClubService, ClubService>();
@@ -121,13 +128,10 @@ namespace EventGate
             //-- PaymentsInfo -- 
             builder.Services.AddScoped<IPaymentsInfoRepository, PaymentsInfoRepository>();
             builder.Services.AddScoped<IPaymentsInfoService, PaymentsInfoService>();
-            //-- PaymentsInfo -- 
+
+            //-- EventFeedback -- 
             builder.Services.AddScoped<IEventFeedBackRepository, EventFeedBackRepository>();
             builder.Services.AddScoped<IEventFeedBackService, EventFeedBackService>();
-            //~~ Blog ~~
-            builder.Services.AddScoped<IBlogRepository, BlogRepository>();
-            builder.Services.AddScoped<IBlogService, BlogService>();
-
 
             // --EventHistory --
             builder.Services.AddScoped<IEventHistoryRepository, EventHistoryRepository>();
@@ -196,6 +200,8 @@ namespace EventGate
             // Register necessary services
             builder.Services.AddDataProtection();
 
+            builder.Services.AddSignalR();
+
             // Add Swagger services
             builder.Services.AddSwaggerGen(c =>
             {
@@ -226,14 +232,16 @@ namespace EventGate
             app.UseStaticFiles();
 
             app.UseRouting();
+           
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseCors("AllowOrigin");
-
+           
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatRepository>("/Chathub");
                 endpoints.MapControllers();
             });
 
