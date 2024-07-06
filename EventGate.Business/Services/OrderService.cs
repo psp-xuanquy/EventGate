@@ -52,7 +52,7 @@ namespace EventGate.Business.Services
         }
 
         // Add Order
-        public async Task<int> AddOrderAsync(string user, AddOrderDTO addOrderDto)
+        public async Task<Order> AddOrderAsync(string user, AddOrderDTO addOrderDto)
         {
             var existingUser = await _userRepository.GetByIdAsync(addOrderDto.UserID);
             if (existingUser == null)
@@ -70,18 +70,15 @@ namespace EventGate.Business.Services
                     throw new Exception($"Ticket with ID ({orderDetailDto.TicketID}) NOT FOUND.");
                 }
 
-                if (orderDetailDto.Quantity <= 0 || existingTicket.Price <= 0)
-                {
-                    throw new ArgumentException("Quantity and UnitPrice must be GREATER THAN 0.");
-                }
-
                 var orderDetail = new OrderDetail
                 {
                     OrderID = null,
-                    Quantity = orderDetailDto.Quantity,
+                    Quantity = 1,
                     UnitPrice = existingTicket.Price,
                     TicketID = orderDetailDto.TicketID
                 };
+
+                existingTicket.IsUsed = true;
 
                 orderDetails.Add(orderDetail);
             }
@@ -118,15 +115,10 @@ namespace EventGate.Business.Services
                     throw new Exception($"Ticket with ID ({orderDetailDto.TicketID}) NOT FOUND.");
                 }
 
-                if (orderDetailDto.Quantity <= 0 || existingTicket.Price <= 0)
-                {
-                    throw new ArgumentException("Quantity and UnitPrice must be GREATER THAN 0.");
-                }
-
                 var orderDetail = new OrderDetail
                 {
                     OrderID = orderId,
-                    Quantity = orderDetailDto.Quantity,
+                    Quantity = 1,
                     UnitPrice = existingTicket.Price,
                     TicketID = orderDetailDto.TicketID
                 };

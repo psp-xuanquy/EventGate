@@ -11,7 +11,7 @@ namespace EventGate.Data.Entity
         public int Quantity { get; set; }
         public decimal UnitPrice { get; set; }
 
-        [ForeignKey("Order")]   
+        [ForeignKey("Order")]       
         public string? OrderID { get; set; }
         public Order? Order { get; set; }
 

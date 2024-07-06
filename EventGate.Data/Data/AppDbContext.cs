@@ -174,11 +174,6 @@ namespace EventGate.Data
                 .WithOne(cr => cr.Chat)
                 .HasForeignKey(cr => cr.ChatID);
 
-            modelBuilder.Entity<Order>()
-                .HasOne(o => o.User)
-                .WithMany(u => u.Orders)
-                .HasForeignKey(o => o.UserID);
-
             modelBuilder.Entity<Chat>()
                 .HasOne(c => c.ChatRoom)
                 .WithMany(cr => cr.Chats)
@@ -205,6 +200,16 @@ namespace EventGate.Data
                 .HasForeignKey(cr => cr.ReceiverID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserID);
+
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne(od => od.Order)
+                .HasForeignKey(od => od.OrderID);
+
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
@@ -212,8 +217,8 @@ namespace EventGate.Data
 
             modelBuilder.Entity<OrderDetail>()
                 .HasOne(od => od.Ticket)
-                .WithMany(t => t.OrderDetails)
-                .HasForeignKey(od => od.TicketID)
+                .WithOne(t => t.OrderDetail)
+                .HasForeignKey<OrderDetail>(od => od.TicketID)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Voucher>()

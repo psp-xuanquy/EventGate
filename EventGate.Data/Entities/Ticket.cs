@@ -22,6 +22,6 @@ namespace EventGate.Data.Entity
         public string? EventID { get; set; }
         public Event? Event { get; set; }
 
-        public ICollection<OrderDetail>? OrderDetails { get; set; }
+        public OrderDetail OrderDetail { get; set; }
     }
 }

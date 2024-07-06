@@ -38,7 +38,7 @@ namespace EventGate.Data.Repositories
         }
 
         // Add Order
-        public async Task<int> AddAsync(string user, Order order, List<OrderDetail> orderDetails)
+        public async Task<Order> AddAsync(string user, Order order, List<OrderDetail> orderDetails)
         {
             order.OrderDate = DateTime.Now;
             order.CreatedBy = user;
@@ -51,7 +51,8 @@ namespace EventGate.Data.Repositories
             _context.Orders.Add(order);
             _context.OrderDetails.AddRange(orderDetails);
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return order;
         }
 
         // Update Order
