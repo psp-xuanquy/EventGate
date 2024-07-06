@@ -4,6 +4,7 @@ using EventGate.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventGate.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240706040055_AddPriceToEvent")]
+    partial class AddPriceToEvent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -716,9 +719,7 @@ namespace EventGate.Data.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.HasIndex("TicketID")
-                        .IsUnique()
-                        .HasFilter("[TicketID] IS NOT NULL");
+                    b.HasIndex("TicketID");
 
                     b.ToTable("OrderDetails", "dbo");
                 });
@@ -2583,8 +2584,8 @@ namespace EventGate.Data.Migrations
                         .HasForeignKey("OrderID");
 
                     b.HasOne("EventGate.Data.Entity.Ticket", "Ticket")
-                        .WithOne("OrderDetail")
-                        .HasForeignKey("EventGate.Data.Entity.OrderDetail", "TicketID")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("TicketID")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Order");
@@ -2757,8 +2758,7 @@ namespace EventGate.Data.Migrations
 
             modelBuilder.Entity("EventGate.Data.Entity.Ticket", b =>
                 {
-                    b.Navigation("OrderDetail")
-                        .IsRequired();
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("EventGate.Data.Entity.User", b =>

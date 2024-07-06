@@ -20,17 +20,19 @@ namespace EventGate.Business.Services
     {
         private readonly IEventRepository _eventRepository;
         private readonly IEventTypeRepository _eventTypeRepository;
+        private readonly ITicketRepository _ticketRepository;
         private readonly IUserPropository _userRepository;
         private readonly IEventHistoryRepository _eventHistoryRepository;
         private readonly IMapper _mapper;
 
-        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository)
+        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository, ITicketRepository ticketRepository)
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
             _mapper = mapper;
             _eventTypeRepository = eventTypeRepository;
             _eventHistoryRepository = eventHistoryRepository;
+            _ticketRepository = ticketRepository;
         }
 
         // Get all Event
@@ -60,8 +62,26 @@ namespace EventGate.Business.Services
                 throw new Exception($"EventType with the ID '{addEventDto.EventTypeID}' DOES NOT EXIST");
             }
 
+            if(addEventDto.TicketQuantity > 30)
+            {
+                throw new Exception("Ticket quantity must be less than or equal to 30");
+            }
+
             var eventExist = _mapper.Map<Event>(addEventDto);
-            return await _eventRepository.AddAsync(user, eventExist);
+            var result = await _eventRepository.AddAsync(user, eventExist);
+
+            if(result != 0)
+            {
+                for(var i = 0; i < addEventDto.TicketQuantity; i++)
+                {
+                    Ticket newTicket = new Ticket();
+                    newTicket.EventID = eventExist.EventID;
+                    newTicket.Price = addEventDto.Price??0;
+                    await _ticketRepository.AddAsync(user, newTicket);
+                }
+            }
+
+            return result;
         }
 
         // Update Event
