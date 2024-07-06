@@ -61,7 +61,7 @@ namespace EventGate.Business.Services
         }
 
         // Add Event
-        public async Task<int> AddEventAsync(string user, EventDTO addEventDto)
+        public async Task<EventDTOResponse> AddEventAsync(string user, EventDTO addEventDto)
         {
             var existingEventType = await _eventTypeRepository.GetByIdAsync(addEventDto.EventTypeID);
             if (existingEventType == null)
@@ -88,7 +88,7 @@ namespace EventGate.Business.Services
                 }
             }
 
-            return result;
+            return _mapper.Map<EventDTOResponse>(eventExist);
         }
 
         // Update Event

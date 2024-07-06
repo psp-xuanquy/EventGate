@@ -73,8 +73,8 @@ namespace EventGate.API.Controllers
             try
             {
                 string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                await _eventService.AddEventAsync(user, eventDto);
-                return Ok($"SUCCESS: Event '{eventDto.EventTypeID}' CREATED successfully");
+                var result = await _eventService.AddEventAsync(user, eventDto);
+                return Ok(result);
             }
             catch (Exception ex)
             {
