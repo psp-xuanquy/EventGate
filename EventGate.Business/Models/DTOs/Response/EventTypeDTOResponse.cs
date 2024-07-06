@@ -3,18 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace EventGate.Business.Models.DTOs.Request
+namespace EventGate.Business.Models.DTOs.Response
 {
-    public class EventTypeDTO
+    public class EventTypeDTOResponse
     {
-
         [Required(ErrorMessage = "EventTypeName is required")]
         public string EventTypeName { get; set; }
-       
-
-
+        public string EventTypeID { get; set; }
     }
 }
