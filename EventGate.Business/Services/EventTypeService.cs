@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Response;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
 using EventGate.Data.Repositories.Interface;
@@ -23,21 +24,21 @@ namespace EventGate.Business.Services
         }
 
         // Get all EventType
-        public async Task<List<EventTypeDTO>> GetAllEventTypesAsync()
+        public async Task<List<EventTypeDTOResponse>> GetAllEventTypesAsync()
         {
             var eventTypes = await _eventTypeRepository.GetAllAsync();
-            return _mapper.Map<List<EventTypeDTO>>(eventTypes);
+            return _mapper.Map<List<EventTypeDTOResponse>>(eventTypes);
         }
 
         // Get EventType by ID
-        public async Task<EventTypeDTO> GetEventTypeByIdAsync(string eventTypeId)
+        public async Task<EventTypeDTOResponse> GetEventTypeByIdAsync(string eventTypeId)
         {
             var eventType = await _eventTypeRepository.GetByIdAsync(eventTypeId);
             if (eventType == null)
             {
                 throw new Exception($"EventType with ID ( {eventTypeId} ) NOT FOUND");
             }
-            return _mapper.Map<EventTypeDTO>(eventType);
+            return _mapper.Map<EventTypeDTOResponse>(eventType);
         }
 
         // Add EventType
