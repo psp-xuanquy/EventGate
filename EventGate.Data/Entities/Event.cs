@@ -20,6 +20,7 @@ namespace EventGate.Data.Entity
         public int TicketQuantity { get; set; }
         public string? PosterImage { get; set; }
         public byte[]? QRCode { get; set; }
+        public decimal? Price { get; set; }
         public bool IsDeleted { get; set; }
 
         [ForeignKey("EventType")]

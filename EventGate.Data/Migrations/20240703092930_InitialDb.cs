@@ -554,6 +554,7 @@ namespace EventGate.Data.Migrations
                     TicketQuantity = table.Column<int>(type: "int", nullable: false),
                     PosterImage = table.Column<byte[]>(type: "nvarchar(max)", nullable: true),
                     QRCode = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     EventTypeID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
