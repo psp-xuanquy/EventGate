@@ -71,6 +71,7 @@ namespace EventGate.Data.Repositories
                 existingEvent.TicketQuantity = updateEvent.TicketQuantity;
                 existingEvent.PosterImage = updateEvent.PosterImage;
                 existingEvent.QRCode = updateEvent.QRCode;
+                existingEvent.Price = updateEvent.Price;
                 existingEvent.IsDeleted = updateEvent.IsDeleted;
 
                 existingEvent.LastUpdatedBy = user;
