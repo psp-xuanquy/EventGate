@@ -51,6 +51,21 @@ namespace EventGate.API.Controllers
             }
         }
 
+        [HttpGet("{eventId}/tickets")]
+        [SwaggerOperation(Summary = "This API is used to 'Get All Tickets by Event ID'")]
+        public async Task<IActionResult> GetTicketsByEventIdAsync(string eventId)
+        {
+            try
+            {
+                var tickets = await _eventService.GetTicketsByEventIdAsync(eventId);
+                return Ok(tickets);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost]
         [SwaggerOperation(Summary = "This API is used to 'Add Event'")]
         public async Task<IActionResult> AddEventAsync([FromBody] EventDTO eventDto)

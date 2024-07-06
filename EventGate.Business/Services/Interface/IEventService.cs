@@ -12,6 +12,7 @@ namespace EventGate.Business.Services.Interface
     {
         Task<List<EventDTOResponse>> GetAllEventsAsync();
         Task<EventDTOResponse> GetEventByIdAsync(string eventId);
+        Task<List<TicketDTO>> GetTicketsByEventIdAsync(string eventId);
         Task<int> AddEventAsync(string user, EventDTO addEventDto);
         Task<int> UpdateEventAsync(string user, string eventId, EventDTO updateEventDto);
         Task<int> DeleteEventAsync(string user, string eventId);

@@ -53,6 +53,13 @@ namespace EventGate.Business.Services
             return _mapper.Map<EventDTOResponse>(existingEvent);
         }
 
+        // Get All Tickets by EventID
+        public async Task<List<TicketDTO>> GetTicketsByEventIdAsync(string eventId)
+        {
+            var tickets = await _eventRepository.GetTicketsByEventIdAsync(eventId);
+            return _mapper.Map<List<TicketDTO>>(tickets);
+        }
+
         // Add Event
         public async Task<int> AddEventAsync(string user, EventDTO addEventDto)
         {

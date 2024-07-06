@@ -44,6 +44,14 @@ namespace EventGate.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        // Get All Tickets by EventID
+        public async Task<List<Ticket>> GetTicketsByEventIdAsync(string eventId)
+        {
+            return await _context.Tickets
+                .Where(t => t.EventID == eventId && t.DeletedTime == null)
+                .ToListAsync();
+        }
+
         // Add Event 
         public async Task<int> AddAsync(string user, Event addEvent)
         {
