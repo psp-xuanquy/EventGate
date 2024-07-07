@@ -43,7 +43,7 @@ namespace EventGate.Business.Services
         public async Task<IActionResult> GetAllAsync()
         {
             List<User> users = await _userRepository.GetAllAsync();
-            return new OkObjectResult(_mapper.Map<List<UserDTOResponse>>(users));
+            return new OkObjectResult(_mapper.Map<List<UserInfoDTOResponse>>(users));
         }
 
         //Find By Id
