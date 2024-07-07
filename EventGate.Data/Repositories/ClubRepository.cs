@@ -86,5 +86,9 @@ namespace EventGate.Data.Repositories
             return 0;
         }
 
+        public async Task<Club> GetClubByUserId(string userId)
+        {
+            return await _context.Clubs.FirstOrDefaultAsync(c => c.PresidentID == userId && c.DeletedTime == null);
+        }
     }
 }

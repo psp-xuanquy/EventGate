@@ -1,5 +1,6 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Security.Claims;
