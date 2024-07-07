@@ -1,5 +1,6 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Services.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -16,6 +17,13 @@ namespace EventGate.API.Controllers
         public SeatController(ISeatService seatService)
         {
             _seatService = seatService;
+        }
+
+        [HttpGet("claims")]
+        public IActionResult GetClaims()
+        {
+            var claims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+            return Ok(claims);
         }
 
         [HttpGet]
@@ -69,6 +77,7 @@ namespace EventGate.API.Controllers
         }
 
         [HttpPut("{seatId}")]
+        [Authorize]
         [SwaggerOperation(Summary = "This API is used to 'Update Seat'")]
         public async Task<IActionResult> UpdateSeatAsync(string seatId, [FromBody] SeatDTO seatDto)
         {

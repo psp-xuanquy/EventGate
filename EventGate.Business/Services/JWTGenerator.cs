@@ -17,7 +17,7 @@ namespace EventGate.Business.Services
         public static async Task<string> GenerateToken(User user, List<string> roles, IUserPropository userRepository)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("de455d3d7f83bf393eea5aef43f474f4aac57e3e8d75f9118e60d526453002dc");
+            var key = Encoding.UTF8.GetBytes("741bac7a1a7d01972e27a30532983596f1322e5b645f7d68d40d96eccaaedb1f");
 
             var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
             var localExpirationTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow.AddHours(1), vietnamTimeZone);
