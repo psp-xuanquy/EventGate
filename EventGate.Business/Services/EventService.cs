@@ -21,11 +21,13 @@ namespace EventGate.Business.Services
         private readonly IEventRepository _eventRepository;
         private readonly IEventTypeRepository _eventTypeRepository;
         private readonly ITicketRepository _ticketRepository;
+        private readonly IEventClubsRepository _eventClubsRepository;
+        private readonly IClubRepository _clubRepository;
         private readonly IUserPropository _userRepository;
         private readonly IEventHistoryRepository _eventHistoryRepository;
         private readonly IMapper _mapper;
 
-        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository, ITicketRepository ticketRepository)
+        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository, ITicketRepository ticketRepository, IEventClubsRepository eventClubsRepository, IClubRepository clubRepository)
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
@@ -33,6 +35,8 @@ namespace EventGate.Business.Services
             _eventTypeRepository = eventTypeRepository;
             _eventHistoryRepository = eventHistoryRepository;
             _ticketRepository = ticketRepository;
+            _eventClubsRepository = eventClubsRepository;
+            _clubRepository = clubRepository;
         }
 
         // Get all Event
@@ -76,6 +80,19 @@ namespace EventGate.Business.Services
 
             var eventExist = _mapper.Map<Event>(addEventDto);
             var result = await _eventRepository.AddAsync(user, eventExist);
+
+            //var club = _clubRepository.GetClubByUserId(user);
+
+            //if(club == null)
+            //{
+            //    throw new Exception("Your are not the President of any Club");
+            //}
+
+            //EventClub newEventClub = new EventClub();
+            //newEventClub.EventID = eventExist.EventID;
+            //newEventClub.ClubID = club.Id.ToString();
+
+            //await _eventClubsRepository.AddEventClub(newEventClub);
 
             if(result != 0)
             {

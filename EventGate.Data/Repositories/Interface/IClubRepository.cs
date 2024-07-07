@@ -15,5 +15,6 @@ namespace EventGate.Data.Repositories.Interface
         Task<int> AddAsync(string user, Club addClub);
         Task<int> UpdateAsync(string user, string clubId, Club updateClub);
         Task<int> DeleteAsync(string user, string clubId);
+        Task<Club> GetClubByUserId(string userId);
     }
 }
