@@ -22,7 +22,8 @@ namespace EventGate.Business.Mappers
         public Mapper()
         {
             CreateMap<User, UserDTORequest>().ReverseMap();
-            CreateMap<User, UserDTOResponse>().ReverseMap();
+            CreateMap<User, UserDTOResponse>().ReverseMap()
+            .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.Avatar));
             CreateMap<User, UpdateUserDTORequest>().ReverseMap();
             CreateMap<User, UserInfoDTOResponse>().ReverseMap();
             CreateMap<UserChatRoomAdd, UserChatRoom>();

@@ -39,6 +39,7 @@ namespace EventGate.API.Controllers
                 return Ok(new
                 {
                     userName = serviceResult.Data.UserName,
+                    avatar = serviceResult.Data.Avatar,
                     role = serviceResult.Data.Role,
                     token = serviceResult.Token
                 });
