@@ -142,6 +142,11 @@ namespace EventGate
             builder.Services.AddScoped<IUserEventHistoryRepository, UserEventHistoryRepository>();
             builder.Services.AddScoped<IUserEventHistoryService, UserEventHistoryService>();
 
+            // --Blog--
+            builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+            builder.Services.AddScoped<IBlogService, BlogService>();
+
+
             builder.Services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
