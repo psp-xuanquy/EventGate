@@ -56,7 +56,8 @@ namespace EventGate
             // Add Identity services
             builder.Services.AddIdentityCore<User>()
                 .AddRoles<IdentityRole>()
-                .AddSignInManager<SignInManager<User>>()
+                //.AddSignInManager<SignInManager<User>>()
+                .AddSignInManager()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -162,15 +163,29 @@ namespace EventGate
             })
             .AddJwtBearer(options =>
             {
+                var secretKey = builder.Configuration["JwtSettings:SecretKey"];
+                if (string.IsNullOrEmpty(secretKey))
+                {
+                    throw new ArgumentNullException(nameof(secretKey), "Secret key is missing in configuration");
+                }
+
+                //options.Audience = "My Audience";
+                //options.Authority = "My issuer";
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = false,
+                    //ValidateIssuer = true,
+                    //ValidateAudience = true,
+                    //ValidateLifetime = true,
+                    //ValidateIssuerSigningKey = true,
+                    //ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    //ValidAudience = builder.Configuration["Jwt:Audience"],
                     ValidateAudience = false,
+                    ValidateIssuer = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("de455d3d7f83bf393eea5aef43f474f4aac57e3e8d75f9118e60d526453002dc"))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
-
+                options.RequireHttpsMetadata = false;
                 options.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
@@ -213,6 +228,18 @@ namespace EventGate
                     Type = SecuritySchemeType.Http,
                     BearerFormat = "JWT",
                     Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference{
+                                Id = "Bearer",
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },
+                        new List<string>()
+                    }
                 });
 
                 c.EnableAnnotations();
