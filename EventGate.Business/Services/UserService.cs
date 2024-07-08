@@ -145,7 +145,7 @@ namespace EventGate.Business.Services
             result.IsSuccess = true;
             result.Data = userDto;
             result.Token = token;
-
+            
             return result;
         }
 
