@@ -55,6 +55,8 @@ namespace EventGate.Business.Mappers
 
             // Mapping for Order
             CreateMap<Order, OrderDTO>().ReverseMap();
+            CreateMap<Order, OrderDTO>()
+                .ForMember(dest => dest.EventID, opt => opt.MapFrom(src => src.OrderDetails.FirstOrDefault().Ticket.EventID));
             CreateMap<AddOrderDTO, Order>();
             CreateMap<UpdateOrderDTO, Order>();
 
