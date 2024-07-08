@@ -48,7 +48,7 @@ namespace EventGate.Data.Repositories
         public async Task<List<Ticket>> GetTicketsByEventIdAsync(string eventId)
         {
             return await _context.Tickets
-                .Where(t => t.EventID == eventId && t.DeletedTime == null)
+                .Where(t => t.EventID == eventId && t.DeletedTime == null && t.IsUsed == false)
                 .ToListAsync();
         }
 
