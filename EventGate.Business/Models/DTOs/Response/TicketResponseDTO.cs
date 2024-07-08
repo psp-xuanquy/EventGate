@@ -5,12 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EventGate.Business.Models.DTOs.Request
+namespace EventGate.Business.Models.DTOs.Response
 {
-    public class TicketDTO
+    public class TicketResponseDTO
     {
-        //public string TicketID { get; set; }
-       
+        public string TicketID { get; set; }
+
         public string Gate { get; set; }
 
         //public byte[] QRCode { get; set; }

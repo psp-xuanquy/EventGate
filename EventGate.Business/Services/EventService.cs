@@ -2,6 +2,7 @@
 using EventGate.Business.Models.DTOs.Request;
 using EventGate.Business.Models.DTOs.Request.EventHistory;
 using EventGate.Business.Models.DTOs.Request.User;
+using EventGate.Business.Models.DTOs.Response;
 using EventGate.Business.Models.DTOs.Response.Event;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
@@ -54,10 +55,10 @@ namespace EventGate.Business.Services
         }
 
         // Get All Tickets by EventID
-        public async Task<List<TicketDTO>> GetTicketsByEventIdAsync(string eventId)
+        public async Task<List<TicketResponseDTO>> GetTicketsByEventIdAsync(string eventId)
         {
             var tickets = await _eventRepository.GetTicketsByEventIdAsync(eventId);
-            return _mapper.Map<List<TicketDTO>>(tickets);
+            return _mapper.Map<List<TicketResponseDTO>>(tickets);
         }
 
         // Add Event
