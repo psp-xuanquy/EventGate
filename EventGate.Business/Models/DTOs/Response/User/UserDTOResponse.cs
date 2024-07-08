@@ -8,7 +8,7 @@ namespace EventGate.Business.Models.DTOs.Response.User
 {
     public class UserDTOResponse
     {
-        //public Guid Id { get; set; }
+        public Guid Id { get; set; }
         //public string? UserName { get; set; }
         //public string? PhoneNumber { get; set; }
         public string? Email { get; set; }
