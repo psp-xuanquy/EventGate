@@ -31,6 +31,8 @@ namespace EventGate.Business.Models.DTOs.Request.Order
         [Required(ErrorMessage = "UserID is required")]
         public string UserID { get; set; }
 
+        public string EventID { get; set; }
+
         public List<OrderDetailDTO> OrderDetails { get; set; }
     }
 }
