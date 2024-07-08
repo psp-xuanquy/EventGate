@@ -70,6 +70,7 @@ namespace EventGate.Business.Mappers
 
             CreateMap<Blog,BlogDTO>().ReverseMap();
             CreateMap<EventType,EventTypeDTOResponse>().ReverseMap();
+            CreateMap<TicketResponseDTO, Ticket>().ReverseMap();
         }
     }
 }
