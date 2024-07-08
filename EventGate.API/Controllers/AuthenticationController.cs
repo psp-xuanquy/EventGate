@@ -41,7 +41,8 @@ namespace EventGate.API.Controllers
                     userName = serviceResult.Data.UserName,
                     avatar = serviceResult.Data.Avatar,
                     role = serviceResult.Data.Role,
-                    token = serviceResult.Token
+                    token = serviceResult.Token,
+                    gmail = serviceResult.Data.Email,
                 });
             }
             catch (UnauthorizedAccessException ex)
