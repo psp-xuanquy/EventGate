@@ -61,7 +61,7 @@ namespace EventGate.API.Controllers
             {
                 var user = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var result = await _orderService.AddOrderAsync(user, orderDto);
-                return Ok($"SUCCESS: Order CREATED successfully");
+                return Ok(result.OrderID);
 
             }
             catch (Exception ex)
