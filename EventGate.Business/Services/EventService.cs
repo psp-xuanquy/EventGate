@@ -9,6 +9,7 @@ using EventGate.Data.Entity;
 using EventGate.Data.Repositories;
 using EventGate.Data.Repositories.Interface;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace EventGate.Business.Services
 {
     public class EventService : IEventService
     {
+        
+        private List<char> chars = new List<char> { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' };
         private readonly IEventRepository _eventRepository;
         private readonly IEventTypeRepository _eventTypeRepository;
         private readonly ITicketRepository _ticketRepository;
@@ -27,8 +30,9 @@ namespace EventGate.Business.Services
         private readonly IUserPropository _userRepository;
         private readonly IEventHistoryRepository _eventHistoryRepository;
         private readonly IMapper _mapper;
+        private readonly ISeatRepository _seatRepository;
 
-        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository, ITicketRepository ticketRepository, IEventClubsRepository eventClubsRepository, IClubRepository clubRepository)
+        public EventService(IEventRepository eventRepository, IUserPropository userRepository, IMapper mapper, IEventTypeRepository eventTypeRepository, IEventHistoryRepository eventHistoryRepository, ITicketRepository ticketRepository, IEventClubsRepository eventClubsRepository, IClubRepository clubRepository, ISeatRepository seatRepository)
         {
             _eventRepository = eventRepository;
             _userRepository = userRepository;
@@ -38,6 +42,7 @@ namespace EventGate.Business.Services
             _ticketRepository = ticketRepository;
             _eventClubsRepository = eventClubsRepository;
             _clubRepository = clubRepository;
+            _seatRepository = seatRepository;
         }
 
         // Get all Event
@@ -74,7 +79,7 @@ namespace EventGate.Business.Services
                 throw new Exception($"EventType with the ID '{addEventDto.EventTypeID}' DOES NOT EXIST");
             }
 
-            if(addEventDto.TicketQuantity > 30)
+            if(addEventDto.TicketQuantity > 100)
             {
                 throw new Exception("Ticket quantity must be less than or equal to 30");
             }
@@ -95,16 +100,43 @@ namespace EventGate.Business.Services
 
             //await _eventClubsRepository.AddEventClub(newEventClub);
 
-            if(result != 0)
+            //if(result != 0)
+            //{
+            //    for(var i = 0; i < addEventDto.TicketQuantity; i++)
+            //    {
+            //        Ticket newTicket = new Ticket();
+            //        newTicket.EventID = eventExist.EventID;
+            //        newTicket.Price = addEventDto.Price??0;
+            //        await _ticketRepository.AddAsync(user, newTicket);
+            //    }
+            //}
+            int numberRow = addEventDto.TicketQuantity / 10;
+            int checkQuantity = addEventDto.TicketQuantity % 10;
+            if (checkQuantity != 0)
             {
-                for(var i = 0; i < addEventDto.TicketQuantity; i++)
+                throw new Exception("Ticket quantity must be must be divisible by 10");
+            }
+            if (result != 0)
+            {
+                for (global::System.Int32 i = 0; i < numberRow; i++)
                 {
-                    Ticket newTicket = new Ticket();
-                    newTicket.EventID = eventExist.EventID;
-                    newTicket.Price = addEventDto.Price??0;
-                    await _ticketRepository.AddAsync(user, newTicket);
+                    for (global::System.Int32 j = 1; j < 11; j++)
+                    {
+                        Seat newSeat = new Seat();
+                        newSeat.IsAvailable = true;
+                        newSeat.Number = j;
+                        newSeat.Row = chars[i].ToString();
+                        newSeat.CreatedTime = DateTime.Now;
+                        await _seatRepository.AddAsync(user, newSeat);
+                        Ticket newTicket = new Ticket();
+                        newTicket.EventID = eventExist.EventID;
+                        newTicket.Price = addEventDto.Price ?? 0;
+                        newTicket.SeatID = newSeat.SeatID;
+                        await _ticketRepository.AddAsync(user, newTicket);
+                    }
                 }
             }
+
 
             return _mapper.Map<EventDTOResponse>(eventExist);
         }
