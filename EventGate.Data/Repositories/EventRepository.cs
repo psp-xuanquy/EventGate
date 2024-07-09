@@ -27,7 +27,7 @@ namespace EventGate.Data.Repositories
                     .ThenInclude(ec => ec.Club)
                         .ThenInclude(c => c.President)
                 .Include(e => e.Tickets)
-                .Where(e => e.DeletedTime == null)
+                .Where(e => e.DeletedTime == null && e.IsDeleted == false)
                 .ToListAsync();
         }
 
