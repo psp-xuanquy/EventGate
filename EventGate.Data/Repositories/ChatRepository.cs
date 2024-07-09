@@ -1,44 +1,48 @@
 ﻿using EventGate.Data.Entities;
 using EventGate.Data.Entity;
-using EventGate.Data.Repositories.Interface;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace EventGate.Data.Repositories
 {
-   public class ChatRepository: Hub, IChatRepository
-
+    public class ChatRepository : Hub
     {
         private readonly AppDbContext _appDbContext;
+
         public ChatRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public async Task<int> AddUsertoRoom(string UserID, string ChatRoomID)
+        public async Task<bool> IsUserInGroup(string userId, string chatRoomId)
         {
-            var UserName = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == UserID);
-            var ChatRoomName = await _appDbContext.ChatRooms.FirstOrDefaultAsync(x => x.ChatRoomID ==ChatRoomID && x.DeletedTime == null);
+            var userInGroup = await _appDbContext.UserChatRooms
+                .AnyAsync(x => x.ChatRoomID == chatRoomId && x.UserID == userId && x.DeletedTime == null);
+            return userInGroup;
+        }
 
-            var AddCheck = await _appDbContext.UserChatRooms.FirstOrDefaultAsync(x => x.ChatRoomID == ChatRoomID && x.UserID == UserID && x.DeletedTime == null);
+        public async Task JoinChat(UserChatRoom chat)
+        {
+            await Clients.All.SendAsync("ReceiveMessage", "admin", $"{chat.UserID} has Joined");
+        }
+
+        public async Task AddToGroup(UserChatRoom chat)
+        {
+            var UserName = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == chat.UserID);
+            var ChatRoomName = await _appDbContext.ChatRooms.FirstOrDefaultAsync(x => x.ChatRoomID == chat.ChatRoomID && x.DeletedTime == null);
+
+            var AddCheck = await _appDbContext.UserChatRooms.FirstOrDefaultAsync(x => x.ChatRoomID == chat.ChatRoomID && x.UserID == chat.UserID && x.DeletedTime == null);
             if (AddCheck == null)
             {
-                UserChatRoom Chat = new UserChatRoom 
-                { 
-                    UserID = UserID,
-                    ChatRoomID = ChatRoomID,
+                await Groups.AddToGroupAsync(Context.ConnectionId, chat.ChatRoomID);
+                await Clients.Group(chat.ChatRoomID!).SendAsync("ReceiveMessage", "admin", $"{UserName.UserName} has Join the Group !");
+                UserChatRoom Chat = new UserChatRoom
+                {
+                    UserID = chat.UserID,
+                    ChatRoomID = chat.ChatRoomID,
                 };
                 await _appDbContext.UserChatRooms.AddAsync(Chat);
                 await _appDbContext.SaveChangesAsync();
-                await Groups.AddToGroupAsync(Context.ConnectionId, ChatRoomID);
-                await Clients.Group(ChatRoomID).SendAsync("admin", $"{UserName.UserName} has joined Group Chat {ChatRoomName.RoomName}");
-                return 1; 
             }
             else
             {
@@ -46,49 +50,30 @@ namespace EventGate.Data.Repositories
             }
         }
 
-        public async Task<int> Chat(string Message, string idUser, string idChatRoom)
+        public async Task Chat(UserChatRoom chatRoom, string message)
         {
-            var check = await _appDbContext.UserChatRooms.FirstOrDefaultAsync(x => x.ChatRoomID == idChatRoom && x.UserID == idUser && x.DeletedTime == null);
-            if (check == null)
+            var user = await _appDbContext.Users.FirstOrDefaultAsync(x => x.Id == chatRoom.UserID);
+            var check = await _appDbContext.UserChatRooms.FirstOrDefaultAsync(x => x.ChatRoomID == chatRoom.ChatRoomID && x.UserID == chatRoom.UserID && x.DeletedTime == null);
+
+            if (check != null)
             {
-                throw new Exception("Add user to chat room Pls!");
+                await Clients.Group(chatRoom.ChatRoomID).SendAsync("ReceiveMessage", user.UserName, message);
+
+                var chatMessage = new Chat
+                {
+                    Message = message,
+                    SenderID = chatRoom.UserID,
+                    ChatRoomID = chatRoom.ChatRoomID,
+                    CreatedTime = DateTime.Now,
+                };
+
+                await _appDbContext.Chats.AddAsync(chatMessage);
+                await _appDbContext.SaveChangesAsync();
             }
-            Chat chat = new Chat
+            else
             {
-                Message = Message,
-                SenderID = idUser,
-                ChatRoomID = idChatRoom,
-                CreatedTime = DateTime.Now,
-            };
-            await _appDbContext.Chats.AddAsync(chat);
-            await Clients.Group(idChatRoom).SendAsync(idUser, Message);
-            return await _appDbContext.SaveChangesAsync();
+                throw new Exception("User is not part of this chat room.");
+            }
         }
     }
-
-
-
-    /*     public async Task<int> MarkAsRead(string messageId, string userId)
-         {
-             var chat = await _appDbContext.Chats.FirstOrDefaultAsync(x => x.ChatID == messageId && x.IsDeleted == false); 
-             if(chat != null)
-             {
-                 var messageReceipt = await _appDbContext.ChatReceivers
-                 .FirstOrDefaultAsync(r => r.ChatID == messageId && r.ReceiverID == userId);
-                 if (messageReceipt != null)
-                 {
-                    messageReceipt.ChatID= messageId;
-                    messageReceipt.ReceiverID = userId;
-                 }
-             }
-             else 
-             {
-                 throw new Exception("Can't find this chat");
-             }
-
-             await Clients.Group((await _appDbContext.Chats.FindAsync(messageId)).ChatRoomID.ToString())
-                 .SendAsync("MessageRead", messageId, userId);
-            return await _appDbContext.SaveChangesAsync();  
-         }*/
-
 }

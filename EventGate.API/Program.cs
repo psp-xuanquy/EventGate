@@ -73,7 +73,7 @@ namespace EventGate
             builder.Services.AddScoped<IChatRoomServices, ChatRoomServices>();
             
             //--Chat--
-            builder.Services.AddScoped<IChatRepository, ChatRepository>();
+       /*     builder.Services.AddScoped<IChatRepository, ChatRepository>();*/
             
             //-- Club -- 
             builder.Services.AddScoped<IClubRepository, ClubRepository>();
@@ -270,10 +270,10 @@ namespace EventGate
             app.UseAuthorization();
 
             app.UseCors("AllowOrigin");
-           
+            app.MapHub<ChatRepository>("/chathub");
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ChatRepository>("/Chathub");
+                
                 endpoints.MapControllers();
             });
 
