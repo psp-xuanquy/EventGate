@@ -92,5 +92,12 @@ namespace EventGate.Data.Repositories
                 .Where(c => c.DeletedTime == null)
                 .FirstOrDefaultAsync(t => t.EventID == eventId);
         }
+        public async Task<Seat> GetSeatByTicketIdAsync(string ticketId)
+        {
+            return await _context.Tickets
+                .Where(t => t.DeletedTime == null && t.TicketID == ticketId)
+                .Select(t => t.Seat) // Select the Seat related to the Ticket
+                .FirstOrDefaultAsync();
+        }
     }
 }
