@@ -15,5 +15,6 @@ namespace EventGate.Business.Services.Interface
         Task<int> AddTicketAsync(string user, TicketDTO addTicketDto);
         Task<int> UpdateTicketAsync(string user, string ticketId, TicketDTO updateTicketDto);
         Task<int> DeleteTicketAsync(string user, string ticketId);
+        Task<bool> CheckinTicketAsync(byte[] qrCode);
     }
 }

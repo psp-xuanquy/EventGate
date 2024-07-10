@@ -19,13 +19,6 @@ namespace EventGate.API.Controllers
             _seatService = seatService;
         }
 
-        [HttpGet("claims")]
-        public IActionResult GetClaims()
-        {
-            var claims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-            return Ok(claims);
-        }
-
         [HttpGet]
         [SwaggerOperation(Summary = "This API is used to 'Get All Seats'")]
         public async Task<IActionResult> GetAllSeatsAsync()

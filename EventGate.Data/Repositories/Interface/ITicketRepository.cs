@@ -17,5 +17,6 @@ namespace EventGate.Data.Repositories.Interface
         Task<bool> IsSeatAssociatedWithAnotherTicketAsync(string seatId);
         Task<Ticket> GetTicketByEventID(string eventId);
         Task<Seat> GetSeatByTicketIdAsync(string ticketId);
+        Task<Ticket> GetByQrCodeAsync(byte[] qrCode);
     }
 }

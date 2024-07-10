@@ -163,5 +163,25 @@ namespace EventGate.Business.Services
                 }
             }
         }
+
+        public async Task<bool> CheckinTicketAsync(byte[] qrCode)
+        {
+            var ticket = await _ticketRepository.GetByQrCodeAsync(qrCode);
+            if (ticket == null)
+            {
+                throw new Exception("Ticket not found.");
+            }
+
+            var seat = await _seatRepository.GetByIdAsync(ticket.SeatID);
+            if (seat == null || !seat.IsAvailable)
+            {
+                throw new Exception("Seat is not available or not found.");
+            }
+
+            seat.IsAvailable = false;
+            await _seatRepository.UpdateAsync("system", seat.SeatID, seat);
+
+            return true;
+        }
     }
 }

@@ -99,5 +99,11 @@ namespace EventGate.Data.Repositories
                 .Select(t => t.Seat) // Select the Seat related to the Ticket
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Ticket> GetByQrCodeAsync(byte[] qrCode)
+        {
+            return await _context.Tickets
+                .FirstOrDefaultAsync(t => t.QRCode == qrCode);
+        }
     }
 }
