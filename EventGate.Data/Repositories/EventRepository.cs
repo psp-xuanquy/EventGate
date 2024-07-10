@@ -48,10 +48,10 @@ namespace EventGate.Data.Repositories
         public async Task<List<Ticket>> GetTicketsByEventIdAsync(string eventId)
         {
             return await _context.Tickets
+                .Include(t => t.Seat) // Include the related Seat entity
                 .Where(t => t.EventID == eventId && t.DeletedTime == null && t.IsUsed == false)
                 .ToListAsync();
         }
-
         // Add Event 
         public async Task<int> AddAsync(string user, Event addEvent)
         {
