@@ -49,7 +49,7 @@ namespace EventGate.Data.Repositories
         {
             return await _context.Tickets
                 .Include(t => t.Seat) // Include the related Seat entity
-                .Where(t => t.EventID == eventId && t.DeletedTime == null && t.IsUsed == false)
+                .Where(t => t.EventID == eventId && t.DeletedTime == null)
                 .ToListAsync();
         }
         // Add Event 
