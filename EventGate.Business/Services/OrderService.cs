@@ -17,6 +17,7 @@ namespace EventGate.Business.Services
         private readonly IUserPropository _userRepository;
         private readonly ITicketRepository _ticketRepository;
         private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly ISeatRepository _seatRepository;
         private readonly IMapper _mapper;
 
         public OrderService(
@@ -24,13 +25,15 @@ namespace EventGate.Business.Services
             IUserPropository userRepository,
             ITicketRepository ticketRepository,
             IOrderDetailRepository orderDetailRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ISeatRepository seatRepository)
         {
             _orderRepository = orderRepository;
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
             _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
+            _seatRepository = seatRepository;
         }
 
         // Get all Orders
@@ -78,8 +81,10 @@ namespace EventGate.Business.Services
                     TicketID = orderDetailDto.TicketID
                 };
 
-                existingTicket.IsUsed = true;
-
+                //existingTicket.IsUsed = true;
+                var seatChoose = await _ticketRepository.GetSeatByTicketIdAsync(orderDetailDto.TicketID);
+                seatChoose.IsAvailable = false;
+                _seatRepository.UpdateAsync(existingUser.Id,seatChoose.SeatID,seatChoose);
                 orderDetails.Add(orderDetail);
             }
 
