@@ -82,7 +82,7 @@ namespace EventGate.Business.Services
         }
 
         // Update Ticket
-        public async Task<int> UpdateTicketAsync(string user, string ticketId, TicketDTO updateTicketDto)
+        public async Task<int> UpdateTicketAsync(string ticketId, TicketDTO updateTicketDto)
         {
             var existingTicket = await _ticketRepository.GetByIdAsync(ticketId);
             if (existingTicket == null)
@@ -116,7 +116,30 @@ namespace EventGate.Business.Services
 
             var ticket = _mapper.Map<Ticket>(updateTicketDto);
             ticket.QRCode = qrCodeImageBytes;
-            return await _ticketRepository.UpdateAsync(user, ticketId, ticket);
+            return await _ticketRepository.UpdateAsync( ticketId, ticket);
+        }
+
+        public async Task<int> UpdateQRCodeTicketAsync( string ticketId, string? QRCodeBase64)
+        {
+            var existingTicket = await _ticketRepository.GetByIdAsync(ticketId);
+            if (existingTicket == null)
+            {
+                throw new Exception($"Ticket with ID ( {ticketId} ) NOT FOUND");
+            }
+
+            // Chuyển đổi mã QR từ Base64 sang mảng byte
+            byte[] qrCodeBytes = null;
+            if (!string.IsNullOrEmpty(QRCodeBase64))
+            {
+                qrCodeBytes = Convert.FromBase64String(QRCodeBase64);
+            }
+
+            // Cập nhật vé với mã QR đã chuyển đổi
+            existingTicket.QRCode = qrCodeBytes;
+
+            // Lưu thay đổi vào cơ sở dữ liệu
+            return await _ticketRepository.UpdateAsync(ticketId,existingTicket);
+        
         }
 
         // Delete Ticket

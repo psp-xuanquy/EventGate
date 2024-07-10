@@ -46,7 +46,7 @@ namespace EventGate.Data.Repositories
         }
 
         // Update Ticket
-        public async Task<int> UpdateAsync(string user, string ticketId, Ticket updateTicket)
+        public async Task<int> UpdateAsync(string ticketId, Ticket updateTicket)
         {
             var existingTicket = await _context.Tickets.FirstOrDefaultAsync(t => t.TicketID == ticketId && t.DeletedTime == null);
             if (existingTicket != null)
@@ -58,7 +58,7 @@ namespace EventGate.Data.Repositories
                 existingTicket.IsUsed = updateTicket.IsUsed;
                 existingTicket.SeatID = updateTicket.SeatID;
                 existingTicket.EventID = updateTicket.EventID;
-                existingTicket.LastUpdatedBy = user;
+                //existingTicket.LastUpdatedBy = user;
                 existingTicket.LastUpdatedTime = DateTime.Now;
 
                 return await _context.SaveChangesAsync();
