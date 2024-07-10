@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using ZXing;
 using ZXing.Common;
 using System.Drawing.Imaging;
+using EventGate.Business.Models.DTOs.Response;
 
 namespace EventGate.Business.Services
 {
@@ -38,7 +39,7 @@ namespace EventGate.Business.Services
         }
 
         // Get Ticket by ID
-        public async Task<TicketDTO> GetTicketByIdAsync(string ticketId)
+        public async Task<TicketResponseDTO> GetTicketByIdAsync(string ticketId)
         {
             var ticket = await _ticketRepository.GetByIdAsync(ticketId);
             if (ticket == null)
@@ -46,7 +47,7 @@ namespace EventGate.Business.Services
                 throw new Exception($"Ticket with ID ( {ticketId} ) NOT FOUND");
             }
 
-            return _mapper.Map<TicketDTO>(ticket);
+            return _mapper.Map<TicketResponseDTO>(ticket);
         }
 
         // Add Ticket

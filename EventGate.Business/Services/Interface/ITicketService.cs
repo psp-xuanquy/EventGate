@@ -1,4 +1,5 @@
 ﻿using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Response;
 using EventGate.Data.Entity;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace EventGate.Business.Services.Interface
     public interface ITicketService
     {
         Task<List<TicketDTO>> GetAllTicketsAsync();
-        Task<TicketDTO> GetTicketByIdAsync(string ticketId);
+        Task<TicketResponseDTO> GetTicketByIdAsync(string ticketId);
         Task<int> AddTicketAsync(string user, TicketDTO addTicketDto);
         Task<int> UpdateTicketAsync(string user, string ticketId, TicketDTO updateTicketDto);
         Task<int> DeleteTicketAsync(string user, string ticketId);
