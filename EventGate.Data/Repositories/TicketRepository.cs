@@ -29,7 +29,7 @@ namespace EventGate.Data.Repositories
         // Get Ticket by ID
         public async Task<Ticket> GetByIdAsync(string ticketId)
         {
-            return await _context.Tickets
+            return await _context.Tickets.Include(e => e.Seat)
                 .Where(c => c.DeletedTime == null)
                 .FirstOrDefaultAsync(t => t.TicketID == ticketId);
         }
