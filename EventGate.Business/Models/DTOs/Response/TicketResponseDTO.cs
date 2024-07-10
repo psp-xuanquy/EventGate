@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EventGate.Data.Entity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,9 +30,11 @@ namespace EventGate.Business.Models.DTOs.Response
         public bool IsUsed { get; set; }
 
         [Required(ErrorMessage = "SeatID is required")]
-        public string SeatID { get; set; }
+        public Seat? Seat { get; set; }
 
         [Required(ErrorMessage = "EventID is required")]
         public string EventID { get; set; }
+
+
     }
 }
