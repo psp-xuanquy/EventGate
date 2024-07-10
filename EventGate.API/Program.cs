@@ -145,6 +145,9 @@ namespace EventGate
             // --Blog--
             builder.Services.AddScoped<IBlogRepository, BlogRepository>();
             builder.Services.AddScoped<IBlogService, BlogService>();
+            // --chat--
+            builder.Services.AddScoped<IChatService, ChatService>();
+            builder.Services.AddScoped<IChatRepository, ChatRepository>();
 
 
             builder.Services.Configure<IdentityOptions>(options =>
@@ -270,7 +273,7 @@ namespace EventGate
             app.UseAuthorization();
 
             app.UseCors("AllowOrigin");
-            app.MapHub<ChatRepository>("/chathub");
+            app.MapHub<ChatHub>("/chathub");
             app.UseEndpoints(endpoints =>
             {
                 

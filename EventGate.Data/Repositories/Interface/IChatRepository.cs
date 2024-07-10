@@ -10,8 +10,6 @@ namespace EventGate.Data.Repositories.Interface
 {
     public interface IChatRepository
     {
-        Task<int> AddUsertoRoom(string UserID, string ChatRoomID);
-         Task<int> Chat(string Message, string idUser, string idChatRoom);
-        /*Task<int> MarkAsRead(string messageId, string userId);*/
+        Task<IEnumerable<Chat>> GetAllChat(string idchatRom);
     }
 }
