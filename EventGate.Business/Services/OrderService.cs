@@ -84,7 +84,7 @@ namespace EventGate.Business.Services
                 //existingTicket.IsUsed = true;
                 var seatChoose = await _ticketRepository.GetSeatByTicketIdAsync(orderDetailDto.TicketID);
                 seatChoose.IsAvailable = false;
-                _seatRepository.UpdateAsync(existingUser.Id,seatChoose.SeatID,seatChoose);
+                await _seatRepository.UpdateAsync(existingUser.Id,seatChoose.SeatID,seatChoose);
                 orderDetails.Add(orderDetail);
             }
 
