@@ -74,8 +74,8 @@ namespace EventGate.API.Controllers
         {
             try
             {
-                string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var result = await _ticketService.UpdateTicketAsync(user, ticketId, ticketDto);
+                //string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _ticketService.UpdateTicketAsync( ticketId, ticketDto);
                 return Ok($"SUCCESS: Ticket with ID '{ticketId}' UPDATED successfully");
             }
             catch (Exception ex)
@@ -83,6 +83,22 @@ namespace EventGate.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("{ticketId}/QRcode")]
+        [SwaggerOperation(Summary = "This API is used to 'Update Ticket'")]
+        public async Task<IActionResult> UpdateQRTicketAsync(string ticketId, string ?QRCOde)
+        {
+            try
+            {
+                //string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var result = await _ticketService.UpdateQRCodeTicketAsync( ticketId, QRCOde);
+                return Ok($"SUCCESS: Ticket with ID '{ticketId}' UPDATED successfully");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpDelete("{ticketId}")]
         [SwaggerOperation(Summary = "This API is used to 'Delete Ticket'")]

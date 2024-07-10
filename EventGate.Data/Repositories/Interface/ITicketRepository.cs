@@ -12,7 +12,7 @@ namespace EventGate.Data.Repositories.Interface
         Task<List<Ticket>> GetAllAsync();
         Task<Ticket> GetByIdAsync(string ticketId);
         Task<int> AddAsync(string user, Ticket addTicket);
-        Task<int> UpdateAsync(string user, string ticketId, Ticket updateTicket);
+        Task<int> UpdateAsync( string ticketId, Ticket updateTicket);
         Task<int> DeleteAsync(string user, string ticketId);
         Task<bool> IsSeatAssociatedWithAnotherTicketAsync(string seatId);
         Task<Ticket> GetTicketByEventID(string eventId);
