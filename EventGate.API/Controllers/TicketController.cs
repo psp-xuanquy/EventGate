@@ -83,14 +83,19 @@ namespace EventGate.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        public class UpdateQRCodeRequest
+        {
+            public string QRCodeBase64 { get; set; }
+        }
+
         [HttpPut("{ticketId}/QRcode")]
         [SwaggerOperation(Summary = "This API is used to 'Update Ticket'")]
-        public async Task<IActionResult> UpdateQRTicketAsync(string ticketId, string ?QRCOde)
+        public async Task<IActionResult> UpdateQRTicketAsync(string ticketId, [FromBody] UpdateQRCodeRequest request)
         {
             try
             {
                 //string user = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var result = await _ticketService.UpdateQRCodeTicketAsync( ticketId, QRCOde);
+                var result = await _ticketService.UpdateQRCodeTicketAsync( ticketId, request.QRCodeBase64);
                 return Ok($"SUCCESS: Ticket with ID '{ticketId}' UPDATED successfully");
             }
             catch (Exception ex)
