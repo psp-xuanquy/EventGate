@@ -47,13 +47,15 @@ namespace EventGate.Business.Services
                 throw new Exception($"Ticket with ID ( {ticketId} ) NOT FOUND");
             }
 
-            string qrCodeBase64 = Convert.ToBase64String(ticket.QRCode);
-
-            // Map ticket to TicketResponseDTO
             var ticketResponse = _mapper.Map<TicketResponseDTO>(ticket);
 
-            // Set the base64 QR code string in the response DTO
-            ticketResponse.QRCodeBase64 = qrCodeBase64;
+            if (ticket.QRCode != null)
+            {
+                string qrCodeBase64 = Convert.ToBase64String(ticket.QRCode);
+
+                // Set the base64 QR code string in the response DTO
+                ticketResponse.QRCodeBase64 = qrCodeBase64;
+            }
 
             return ticketResponse;
         }
