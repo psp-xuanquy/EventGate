@@ -17,7 +17,7 @@ namespace EventGate.API.Controllers
 
 
         [HttpGet]
-        [SwaggerOperation(Summary = "This API is to Get All UserHistory")]
+        [SwaggerOperation(Summary = "This API is to Get All EventHistory")]
         public async Task<IActionResult> GetAll()
         {
             return await _eventHistoryService.GetAllAsync();

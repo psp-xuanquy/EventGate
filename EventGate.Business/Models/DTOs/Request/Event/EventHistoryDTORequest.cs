@@ -18,6 +18,7 @@ namespace EventGate.Business.Models.DTOs.Request.EventHistory
         public bool Status { get; set; }
         public string? PosterImage { get; set; }
         public int TicketQuantity { get; set; }
+        public decimal Price { get; set; }
         public byte[]? QRCode { get; set; }
         public DateTime ArchiveDate { get; set; }
         public string? EventID { get; set; }
