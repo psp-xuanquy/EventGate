@@ -98,6 +98,7 @@ namespace EventGate.Business.Mappers
                 .ForMember(dest => dest.TicketQuantity, opt => opt.MapFrom(src => src.TicketQuantity))
                 .ForMember(dest => dest.PosterImage, opt => opt.MapFrom(src => src.PosterImage))
                 .ForMember(dest => dest.QRCode, opt => opt.MapFrom(src => src.QRCode))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.EventTypeID, opt => opt.MapFrom(src => src.EventTypeID))
                 .ReverseMap();
@@ -113,6 +114,7 @@ namespace EventGate.Business.Mappers
                 .ForMember(dest => dest.TicketQuantity, opt => opt.MapFrom(src => src.TicketQuantity))
                 .ForMember(dest => dest.PosterImage, opt => opt.MapFrom(src => src.PosterImage))
                 .ForMember(dest => dest.QRCode, opt => opt.MapFrom(src => src.QRCode))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.ArchiveDate, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.EventTypeID, opt => opt.MapFrom(src => src.EventTypeID));
 

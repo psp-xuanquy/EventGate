@@ -18,6 +18,7 @@ namespace EventGate.Business.Models.DTOs.Response.Event
         public string? PosterImage { get; set; }
         public int TicketQuantity { get; set; }
         public byte[]? QRCode { get; set; }
+        public decimal? Price { get; set; }
         public string? ArchiveDate { get; set; }
         public string? EventID { get; set; }
         public EventTypeDTO EventType { get; set; }
