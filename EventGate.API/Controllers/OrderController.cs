@@ -34,13 +34,32 @@ namespace EventGate.API.Controllers
             }
         }
 
-        [HttpGet("{orderId}")]
+        [HttpGet("byId/{orderId}")]
         [SwaggerOperation(Summary = "This API is used to 'Get Order By ID'")]
         public async Task<IActionResult> GetOrderByIdAsync(string orderId)
         {
             try
             {
                 var order = await _orderService.GetOrderByIdAsync(orderId);
+                if (order == null)
+                {
+                    return NotFound();
+                }
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("byUserId/{userId}")]
+        [SwaggerOperation(Summary = "This API is used to 'Get Order By UserID'")]
+        public async Task<IActionResult> GetOrderByUserIdAsync(string userId)
+        {
+            try
+            {
+                var order = await _orderService.GetOrderByUserIdAsync(userId);
                 if (order == null)
                 {
                     return NotFound();

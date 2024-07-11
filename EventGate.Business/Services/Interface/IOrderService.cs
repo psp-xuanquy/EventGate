@@ -12,6 +12,7 @@ namespace EventGate.Business.Services.Interface
     {
         Task<List<OrderDTO>> GetAllOrdersAsync();
         Task<OrderDTO> GetOrderByIdAsync(string orderId);
+        Task<OrderDTO> GetOrderByUserIdAsync(string userId);
         Task<Order> AddOrderAsync(string user, AddOrderDTO addOrderDto);
         Task<int> UpdateOrderAsync(string user, string orderId, UpdateOrderDTO updateOrderDto);
         Task<int> DeleteOrderAsync(string user, string orderId);

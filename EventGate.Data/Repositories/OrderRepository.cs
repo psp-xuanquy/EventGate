@@ -37,6 +37,16 @@ namespace EventGate.Data.Repositories
                 .FirstOrDefaultAsync(o => o.OrderID == orderId);
         }
 
+        // Get Order by ID
+        public async Task<Order> GetByUserIdAsync(string userId)
+        {
+            return await _context.Orders
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Ticket)
+                .Where(o => o.DeletedTime == null)
+                .FirstOrDefaultAsync(o => o.UserID == userId);
+        }
+
         // Add Order
         public async Task<Order> AddAsync(string user, Order order, List<OrderDetail> orderDetails)
         {
