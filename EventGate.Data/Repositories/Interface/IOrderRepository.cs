@@ -11,6 +11,7 @@ namespace EventGate.Data.Repositories.Interface
     {
         Task<List<Order>> GetAllAsync();
         Task<Order> GetByIdAsync(string orderId);
+        Task<Order> GetByUserIdAsync(string userId);
         Task<Order> AddAsync(string user, Order order, List<OrderDetail> orderDetails);
         Task<int> UpdateAsync(string user, string orderId, Order order, List<OrderDetail> orderDetails);
         Task<int> DeleteAsync(string user, string orderId);

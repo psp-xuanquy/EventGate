@@ -150,5 +150,21 @@ namespace EventGate.Business.Services
             await _orderDetailRepository.DeleteByOrderIdAsync(user, orderId);
             return await _orderRepository.DeleteAsync(user, orderId);
         }
+
+        public async Task<OrderDTO> GetOrderByUserIdAsync(string userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception($"User with ID ({userId}) NOT FOUND");
+            }
+
+            var order = await _orderRepository.GetByUserIdAsync(userId);
+            if (order == null)
+            {
+                throw new Exception($"Order with UserID ({userId}) NOT FOUND");
+            }
+            return _mapper.Map<OrderDTO>(order);
+        }
     }
 }
