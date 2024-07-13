@@ -70,6 +70,15 @@ namespace EventGate.Data.Repositories
             }
             return user;
         }
+        public async Task<User> VerifyLoginEmailAsync(string userName)
+        {
+            var user = await _appDbContext.Users.SingleOrDefaultAsync(u =>  u.Email == userName && u.DeletedTime == null);
+            if (user == null )
+            {
+                return null;
+            }
+            return user;
+        }
 
         //Verify Password
         private bool VerifyPassword(User user, string password)

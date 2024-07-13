@@ -148,6 +148,36 @@ namespace EventGate.Business.Services
             
             return result;
         }
+        public async Task<ServiceResult<UserDTOResponse>> LoginbyGmail(string email)
+        {
+            var result = new ServiceResult<UserDTOResponse>();
+
+            var user = await _userRepository.VerifyLoginEmailAsync(email);
+            if (user == null)
+            {
+                throw new Exception("Wrong User Name or Password");
+            }
+
+            if (user.EmailConfirmed == false)
+            {
+                throw new Exception("Email has not verified yet. Please verify by checking your mail");
+            }
+
+            // Generate JWT token
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var token = await JwtGenerator.GenerateToken(user, userRoles.ToList(), _userRepository);
+            var userDto = _mapper.Map<UserDTOResponse>(user);
+            userDto.Role = userRoles.FirstOrDefault();
+
+            result.Status = 1;
+            //result.ErrorMessage = "Login Successfully";
+            result.IsSuccess = true;
+            result.Data = userDto;
+            result.Token = token;
+
+            return result;
+        }
+
 
         //Register
         public async Task<ServiceResult<RegisterUserDTO>> RegisterByRole(RegisterUserDTO registerDTO, string role)
