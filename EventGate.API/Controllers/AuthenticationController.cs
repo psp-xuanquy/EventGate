@@ -56,15 +56,27 @@ namespace EventGate.API.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
-
+        public class LoginRequest
+        {
+            public string Email { get; set; }
+        }
         [HttpPost]
         [Route("loginByGoogleMail")]
-        public async Task<IActionResult> LoginGoogleAsync([FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> LoginGoogleAsync([FromBody] LoginRequest request)
         {
             try
             {
-                var token = await _userService.Login(loginDTO);
-                return Ok(new { token });
+                var serviceResult = await _userService.LoginbyGmail(request.Email);
+                return Ok(new
+                {
+                    userName = serviceResult.Data.UserName,
+                    avatar = serviceResult.Data.Avatar,
+                    role = serviceResult.Data.Role,
+                    token = serviceResult.Token,
+                    gmail = serviceResult.Data.Email,
+                    userId = serviceResult.Data.Id
+
+                });
             }
             catch (UnauthorizedAccessException ex)
             {

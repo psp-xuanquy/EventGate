@@ -15,5 +15,6 @@ namespace EventGate.Data.Repositories.Interface
         Task<int> DeleteAsync(User user);
         Task<User> GetUserByEmail(string email);
         Task<User> VerifyLoginAsync(string username, string password);
+        Task<User> VerifyLoginEmailAsync(string userName);
     }
 }

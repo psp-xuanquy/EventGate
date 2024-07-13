@@ -25,5 +25,6 @@ namespace EventGate.Business.Services.Interface
         Task<ServiceResult<UserDTOResponse>> Login(LoginDTO loginUser);
         Task<ServiceResult<RegisterUserDTO>> RegisterByRole(RegisterUserDTO registerMentorDTO, string member);
         Task<ServiceResult<string>> ConfirmEmailUser(string userId);
+        Task<ServiceResult<UserDTOResponse>> LoginbyGmail(string email);
     }
 }
