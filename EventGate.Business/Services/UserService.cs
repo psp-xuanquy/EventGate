@@ -25,17 +25,20 @@ namespace EventGate.Business.Services
         private readonly UserManager<User> _userManager;
         private readonly IMapper _mapper;
         private readonly AppDbContext _appDbContext;
+        private readonly IEmailService _emailService;
         public UserService(IUserPropository userPropository,
             UserManager<User> userManager,
             IMapper mapper,
             AppDbContext appDbContext,
-            IUserHistoryRepository userHistoryRepository)
+            IUserHistoryRepository userHistoryRepository,
+            IEmailService emailService)
         {
             _userRepository = userPropository;
             _userManager = userManager;
             _mapper = mapper;
             _userHistoryRepository = userHistoryRepository;
             _appDbContext = appDbContext;
+            _emailService = emailService;
         }
 
 
@@ -223,6 +226,54 @@ namespace EventGate.Business.Services
             return result;
 
         }
+        public async Task<ServiceResult<RegisterUserWithAvatarDTO>> RegisterByRole2(RegisterUserWithAvatarDTO registerDTO, string role,string avatar)
+        {
+            registerDTO.Password = GeneratePassword();
+            registerDTO.ConfirmedPassword = registerDTO.Password;
+        
+            var result = new ServiceResult<RegisterUserWithAvatarDTO>();
+            var userExists = await _userManager.FindByNameAsync(registerDTO.Username)
+                              ?? await _userManager.FindByEmailAsync(registerDTO.Email);
+            if (userExists != null)
+            {
+                throw new Exception("User already exists");
+            }
+
+            if (!registerDTO.Email.EndsWith("@fpt.edu.vn", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new Exception("Email must ends with @fpt.edu.vn");
+            }
+
+            var user = new User
+            {
+                UserName = registerDTO.Username,
+                Email = registerDTO.Email,
+                isConfirmed = false,
+                EmailConfirmed = false,
+                Avatar = avatar
+            };
+
+            var newUser = await _userManager.CreateAsync(user, registerDTO.Password);
+
+            if (!newUser.Succeeded)
+            {
+                throw new Exception("Register Failed");
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, role);
+            if (!roleResult.Succeeded)
+            {
+                throw new Exception("Cannot add role to User");
+            }
+            await _emailService.SendPasswordEmailAsync(registerDTO.Email, registerDTO.Password);
+
+            result.Status = 1;
+            result.Data = registerDTO;
+            result.IsSuccess = true;
+            result.ErrorMessage = "Add Successfully";
+
+            return result;
+        }
 
         public async Task<ServiceResult<string>> ConfirmEmailUser(string userId)
         {
@@ -240,6 +291,35 @@ namespace EventGate.Business.Services
             result.ErrorMessage = "Confirm Email Successfully";
 
             return result;
+        }
+        private static Random random = new Random();
+
+        public static string GeneratePassword(int length = 8)
+        {
+            const string lower = "abcdefghijklmnopqrstuvwxyz";
+            const string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string digits = "0123456789";
+            const string special = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~";
+
+            if (length < 8)
+            {
+                throw new ArgumentException("Password length must be at least 8 characters.");
+            }
+
+            StringBuilder password = new StringBuilder();
+            password.Append(lower[random.Next(lower.Length)]);
+            password.Append(upper[random.Next(upper.Length)]);
+            password.Append(digits[random.Next(digits.Length)]);
+            password.Append(special[random.Next(special.Length)]);
+
+            string allChars = lower + upper + digits + special;
+
+            while (password.Length < length)
+            {
+                password.Append(allChars[random.Next(allChars.Length)]);
+            }
+
+            return new string(password.ToString().ToCharArray().OrderBy(s => (random.Next(2) % 2) == 0).ToArray());
         }
     }
 }

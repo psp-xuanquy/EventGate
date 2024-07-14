@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EventGate.Business.Models.DTOs;
 using EventGate.Business.Models.DTOs.Request;
+using EventGate.Business.Models.DTOs.Request.User;
 using EventGate.Business.Services;
 using EventGate.Business.Services.Interface;
 using EventGate.Data.Entity;
@@ -87,6 +88,7 @@ namespace EventGate.API.Controllers
                 return BadRequest($"Error: {ex.Message}");
             }
         }
+       
 
         [HttpPost]
         [Route("register/member")]
@@ -100,6 +102,31 @@ namespace EventGate.API.Controllers
             try
             {
                 await _userService.RegisterByRole(registerMemberDTO, Roles.MEMBER);
+                await _emailService.SendConfirmEmailAsync(registerMemberDTO.Email);
+                return Ok($"Success: Register Successfully");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        [Route("register/member/byGG")]
+        [SwaggerOperation(Description = "Example: <br> " +
+       "{ <br> \"username\": \"crimson\", <br>" +
+       "\"email\": \"dungnxse161720@fpt.edu.vn\", <br>" +
+       "\"password\": \"Dung@123\", <br>" +
+       "\"confirmedPassword\": \"Dung@123\" <br> }")]
+        public async Task<IActionResult> RegisterMember2([FromBody] RegisterUserWithAvatarDTO registerMemberDTO)
+        {
+            try
+            {
+                await _userService.RegisterByRole2(registerMemberDTO, Roles.MEMBER,registerMemberDTO.Avatar);
                 await _emailService.SendConfirmEmailAsync(registerMemberDTO.Email);
                 return Ok($"Success: Register Successfully");
             }
