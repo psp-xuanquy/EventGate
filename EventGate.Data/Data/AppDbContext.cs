@@ -242,7 +242,7 @@ namespace EventGate.Data
                 .WithMany(et => et.EventRules)
                 .HasForeignKey(er => er.EventTypeID);
 
-            modelBuilder.Entity<Seat>().HasData(GenerateSeats());
+           // modelBuilder.Entity<Seat>().HasData(GenerateSeats());
 
             base.OnModelCreating(modelBuilder);
         }
