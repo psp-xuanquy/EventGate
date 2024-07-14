@@ -101,5 +101,30 @@ namespace EventGate.Business.Services
             }
             throw new FileNotFoundException("Email template not found", templatePath);
         }
+        public async Task<ServiceResult<string>> SendPasswordEmailAsync(string email, string password)
+        {
+            var baseDirectory = AppContext.BaseDirectory;
+            var templatePath = Path.Combine(baseDirectory, "EmailTemplate", "EmailPassword.html");
+            var htmlContent = GetEmailTemplate(templatePath);
+
+            var userExist = await _userRepository.GetUserByEmail(email);
+
+            if (userExist == null)
+            {
+                throw new Exception("User does not exist");
+            }
+
+            htmlContent = htmlContent.Replace("{{UserName}}", userExist.UserName).Replace("{{Password}}", password);
+
+            var message = new Message(new string[] { userExist.Email }, "[Password] Your password for Event Gate", htmlContent, true);
+            SendEmail(message);
+
+            var result = new ServiceResult<string>();
+            result.Status = 1;
+            result.IsSuccess = true;
+            result.Data = null;
+            result.ErrorMessage = "Password sent successfully";
+            return result;
+        }
     }
 }

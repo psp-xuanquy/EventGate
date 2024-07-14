@@ -12,5 +12,6 @@ namespace EventGate.Business.Services.Interface
         void SendEmail(Message message);
         string GetEmailTemplate(string template);
         Task<ServiceResult<string>> SendConfirmEmailAsync(string email);
+        Task<ServiceResult<string>> SendPasswordEmailAsync(string email, string password);
     }
 }
