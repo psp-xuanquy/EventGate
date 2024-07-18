@@ -167,6 +167,7 @@ namespace EventGate.API.Controllers
             try
             {
                 await _userService.RegisterByRole(registerAdminDTO, Roles.ADMIN);
+                await _emailService.SendConfirmEmailAsync(registerAdminDTO.Email);
                 return Ok($"Success: Register Successfully");
             }
             catch (UnauthorizedAccessException ex)
